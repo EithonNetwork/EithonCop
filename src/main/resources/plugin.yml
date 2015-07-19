@@ -1,0 +1,19 @@
+name: EithonCop
+main: net.eithon.plugin.cop.Plugin
+version: 0.1
+author: vanbrayne
+depend: [EithonLibrary]
+description: A Minecraft plugin
+commands:
+  cop:
+    description: Police activities
+    usage: /cop
+    permission-message: You don't have <permission>
+permissions:
+  cop.*:
+    description: Gives access to all cop commands
+    default: op
+    cop.staff: true
+  cop.noteligible:
+    description: No cop for some
+    default: op
