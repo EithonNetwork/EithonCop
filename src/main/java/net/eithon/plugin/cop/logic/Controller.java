@@ -9,21 +9,43 @@ import org.bukkit.entity.Player;
 public class Controller {
 
 	private Blacklist _blacklist;
+	private Whitelist _whitelist;
 
 	public Controller(EithonPlugin eithonPlugin){
 		this._blacklist = new Blacklist(eithonPlugin);
 		this._blacklist.delayedLoad();
+		this._whitelist = new Whitelist(eithonPlugin);
+		this._whitelist.delayedLoad();
 	}
-	
-	public boolean addProfanity(CommandSender sender, String word) {
+
+	public String addProfanity(CommandSender sender, String word) {
 		Profanity profanity = this._blacklist.getProfanity(word);
 		if (profanity == null) {
-			this._blacklist.add(word);
+			profanity = this._blacklist.add(word);
 			this._blacklist.delayedSave();
-			return true;
+			return profanity.getWord();
 		}
-		Config.M.profanityAlreadySaved.sendMessage(sender, word, profanity.getWord());
-		return false;
+		if (word.equalsIgnoreCase(profanity.getWord())) {
+			Config.M.duplicateProfanity.sendMessage(sender, word);
+		} else {
+			Config.M.probablyDuplicateProfanity.sendMessage(sender, word, profanity.getWord());
+		}
+		return null;
+	}
+
+	public String addAccepted(CommandSender sender, String word) {
+		Profanity profanity = this._blacklist.getProfanity(word);
+		if (profanity != null) {
+			if (word.equalsIgnoreCase(profanity.getWord())) {
+				Config.M.acceptedWordWasBlacklisted.sendMessage(sender, word);
+				return null;
+			}
+			this._whitelist.add(word);
+			this._whitelist.delayedSave();
+			return profanity.getWord();
+		}
+		Config.M.notBlacklisted.sendMessage(sender, word);
+		return null;
 	}
 
 	public String profanityFilter(Player player, String message) {
@@ -62,9 +84,12 @@ public class Controller {
 	}
 
 	private String replace(String transformedWord, String inWord) {
+		if (this._whitelist.isWhitelisted(transformedWord)) return inWord;
 		String outWord = this._blacklist.replaceIfBlacklisted(transformedWord);
 		if (outWord == null) return inWord;
-		return casifyAsReferenceWord(outWord, inWord);
+		String result = casifyAsReferenceWord(outWord, inWord);
+		if (Leet.isLeet(inWord)) return Leet.encode(result);
+		return result;
 	}
 
 	private String casifyAsReferenceWord(String outWord, String referenceWord) {

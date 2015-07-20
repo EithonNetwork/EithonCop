@@ -1,7 +1,11 @@
 package net.eithon.plugin.cop.logic;
 
 class Leet {
-
+	
+	public static boolean isLeet(String message) {
+		return !message.equalsIgnoreCase(decode(message));
+	}
+	
 	public static String decode(String message) {
 		StringBuilder result = new StringBuilder();
 		char[] input = message.toCharArray();
@@ -27,6 +31,7 @@ class Leet {
 			case '3':
 				newC = 'e';
 				break;
+			case '6':
 			case '&':
 				newC = 'g';
 				break;
@@ -45,8 +50,6 @@ class Leet {
 				newC = 's';
 				break;
 			case '7':
-				newC = 't';
-				break;
 			case '+':
 				newC = 't';
 				break;
@@ -87,6 +90,48 @@ class Leet {
 					i++;
 					break;
 				} else newC = c1;
+				break;
+			default:
+				newC = c1;
+			}
+			result.append(newC);
+		}
+		return result.toString();
+	}
+	
+	public static String encode(String message) {
+		StringBuilder result = new StringBuilder();
+		char[] input = message.toCharArray();
+		char newC;
+		for (int i = 0; i < input.length; i++) {
+			char c1 = input[i];
+			switch (c1) {
+			case 'a':
+				newC = '4';
+				break;
+			case 'b':
+				newC = '8';
+				break;
+			case 'e':
+				newC = '3';
+				break;
+			case 'g':
+				newC = '6';
+				break;
+			case 'h':
+				newC = '#';
+				break;
+			case 'i':
+				newC = '1';
+				break;
+			case 'o':
+				newC = '0';
+				break;
+			case 's':
+				newC = '5';
+				break;
+			case 't':
+				newC = '7';
 				break;
 			default:
 				newC = c1;

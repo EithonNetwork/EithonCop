@@ -35,10 +35,25 @@ messages:
   #
   # Parameters: <new word>(%s), <existing word>(%s)
   #
-  ProbablyDuplicateProfanity: "You specified the word \"%s\", but that word collides with existing profanity \"%s\"."
+  ProbablyDuplicateProfanity: "You specified the word \"%s\", but that word collides with existing blacklisted word \"%s\"."
 
   #
   # Parameters: <new word>(%s)
   #
-  ProfanityAdded: "Profanity \"%s\" has been added to the blacklist."
+  ProfanityAdded: "The word \"%s\" has been added to the blacklist."
+
+  #
+  # Parameters: <new word>(%s)
+  #
+  NotBlacklisted: "The word \"%s\" is not blacklisted, so it will not be added as whitelisted."
+
+  #
+  # Parameters: <new word>(%s), <blacklisted word>(%s)
+  #
+  AcceptedWordAdded: "The word \"%s\" is now whitelisted, to prevent it from being mixed up with the blacklisted word \"%s\"."
+
+  #
+  # Parameters: <new word>(%s)
+  #
+  AcceptedWordWasBlacklisted: "You can't whitelist \"%s\" because it is blacklisted with that spelling."
   

@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 
 public class CommandHandler implements ICommandHandler {
 	private static final String BLACKLIST_COMMAND = "/eithoncop blacklist <profanity>";
+	private static final String WHITELIST_COMMAND = "/eithoncop whitelist <accepted word>";
 	private Controller _controller;
 	private EithonPlugin _eithonPlugin;
 
@@ -22,14 +23,16 @@ public class CommandHandler implements ICommandHandler {
 		if (command == null) return false;
 
 		if (command.equals("blacklist")) {
-			addCommand(commandParser);
+			blacklistCommand(commandParser);
+		} else if (command.equals("whitelist")) {
+			whitelistCommand(commandParser);
 		} else {
 			commandParser.showCommandSyntax();
 		}
 		return true;
 	}
 
-	void addCommand(CommandParser commandParser)
+	void blacklistCommand(CommandParser commandParser)
 	{
 		if (!commandParser.hasPermissionOrInformSender("eithoncop.blacklist")) return;
 		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(2, 2)) return;
@@ -38,15 +41,31 @@ public class CommandHandler implements ICommandHandler {
 		if (profanity == null) return;
 
 		CommandSender sender = commandParser.getSender();
-		boolean success = this._controller.addProfanity(sender, profanity);
-		if (!success) return;
-		Config.M.profanityAdded.sendMessage(sender, profanity);
+		String addedWord = this._controller.addProfanity(sender, profanity);
+		if (addedWord == null) return;
+		Config.M.profanityAdded.sendMessage(sender, addedWord);
+	}
+
+	void whitelistCommand(CommandParser commandParser)
+	{
+		if (!commandParser.hasPermissionOrInformSender("eithoncop.whitelist")) return;
+		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(2, 2)) return;
+
+		String acceptedWord = commandParser.getArgumentStringAsLowercase();
+		if (acceptedWord == null) return;
+
+		CommandSender sender = commandParser.getSender();
+		String profanity = this._controller.addAccepted(sender, acceptedWord);
+		if (profanity == null) return;
+		Config.M.acceptedWordAdded.sendMessage(sender, acceptedWord, profanity);
 	}
 
 	@Override
 	public void showCommandSyntax(CommandSender sender, String command) {
 		if (command.equals("blacklist")) {
 			sender.sendMessage(BLACKLIST_COMMAND);
+		} else if (command.equals("whitelist")) {
+			sender.sendMessage(WHITELIST_COMMAND);
 		} else {
 			sender.sendMessage(String.format("Unknown command: %s.", command));
 		}

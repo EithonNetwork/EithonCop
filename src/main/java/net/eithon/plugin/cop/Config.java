@@ -1,7 +1,5 @@
 package net.eithon.plugin.cop;
 
-import java.util.List;
-
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.plugin.ConfigurableMessage;
 import net.eithon.library.plugin.Configuration;
@@ -49,14 +47,23 @@ public class Config {
 		public static ConfigurableMessage probablyDuplicateProfanity;
 		public static ConfigurableMessage duplicateProfanity;
 		public static ConfigurableMessage profanityAdded;
+		public static ConfigurableMessage notBlacklisted;
+		public static ConfigurableMessage acceptedWordAdded;
+		public static ConfigurableMessage acceptedWordWasBlacklisted;
 
 		static void load(Configuration config) {
 			duplicateProfanity = config.getConfigurableMessage("DuplicateProfanity", 1,
 					"You specified the word \"%s\", but that word has already been blacklisted.");
 			probablyDuplicateProfanity = config.getConfigurableMessage("ProbablyDuplicateProfanity", 2,
-					"You specified the word \"%s\", but that word collides with existing profanity \"%s\".");
+					"You specified the word \"%s\", but that word collides with existing blacklisted word \"%s\".");
 			profanityAdded = config.getConfigurableMessage("ProfanityAdded", 1,
-					"Profanity \"%s\" has been added to the blacklist.");
+					"The word \"%s\" has been added to the blacklist.");
+			notBlacklisted = config.getConfigurableMessage("NotBlacklisted", 1,
+					"The word \"%s\" is not blacklisted, so it will not be added as whitelisted.");
+			acceptedWordAdded = config.getConfigurableMessage("AcceptedWordAdded", 2,
+					"The word \"%s\" is now whitelisted, to prevent it from being mixed up with the blacklisted word \"%s\".");
+			acceptedWordWasBlacklisted = config.getConfigurableMessage("AcceptedWordWasBlacklisted", 1,
+					"You can't whitelist \"%s\" because it is blacklisted with that spelling.");
 		}		
 	}
 

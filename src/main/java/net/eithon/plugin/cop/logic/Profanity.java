@@ -44,8 +44,8 @@ class Profanity implements IJson<Profanity> {
 		synonyms.put(ProfanityType.DEROGATIVE, Config.V.categoryDerogative);
 	}
 
-	public Profanity(String profanity) {
-		this._word = profanity.toLowerCase();
+	public Profanity(String word) {
+		this._word = Leet.decode(word.toLowerCase());
 		this._type = ProfanityType.UNKNOWN;
 		prepare();
 	}

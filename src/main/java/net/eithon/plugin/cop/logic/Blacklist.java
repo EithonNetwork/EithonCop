@@ -6,10 +6,8 @@ import java.util.HashMap;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.json.FileContent;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
-import net.eithon.plugin.cop.logic.Profanity.ProfanityType;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -29,22 +27,13 @@ class Blacklist {
 	{
 		this._eithonPlugin = eithonPlugin;
 		this._hashMap = new HashMap<String, Profanity>();
-		Profanity word = new Profanity("hell");
-		word.setProfanityType(ProfanityType.LOCATION);
-		add(word);
-		word = new Profanity("shit");
-		word.setProfanityType(ProfanityType.BODY_CONTENT);
-		add(word);
-		word = new Profanity("dildo");
-		word.setProfanityType(ProfanityType.SEXUAL_NOUN);
-		add(word);
-		word = new Profanity("lars");
-		add(word);
-		delayedSave();
+		delayedLoad();
 	}
 	
-	public void add(String word) {
-		add(new Profanity(word));
+	public Profanity add(String word) {
+		Profanity profanity = new Profanity(word);
+		add(profanity);
+		return profanity;
 	}
 
 	private void add(Profanity word) {
