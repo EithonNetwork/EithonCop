@@ -23,6 +23,9 @@ public class Config {
 		public static String[] categorySexualNoun;
 		public static String[] categorySexualVerb;
 		public static String[] categoryDerogative;
+		public static int profanityLevel;
+		public static boolean saveSimilar;
+		
 		static void load(Configuration config) {
 			String[] sample = {""};
 			categoryUnknown = config.getStringList("CategoryUnknown").toArray(sample);
@@ -35,6 +38,8 @@ public class Config {
 			categorySexualNoun = config.getStringList("CategorySexualNoun").toArray(sample);
 			categorySexualVerb = config.getStringList("CategorySexualVerb").toArray(sample);
 			categoryDerogative = config.getStringList("CategoryDerogative").toArray(sample);
+			profanityLevel = config.getInt("ProfanityLevel", 0);
+			saveSimilar = config.getInt("SaveSimilar", 0) != 0;
 		}
 
 	}

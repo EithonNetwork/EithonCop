@@ -1,4 +1,22 @@
 #
+# How tough should we be at stopping profanity?
+#
+# A word is always decoded from leet speak. If the word is in the whitelist, it will never be stopped.
+#
+# 0 = Don't stop anything
+# 1 = Stop when spelled exactly as blacklisted word
+# 2 = Stop when not in whitelist, but similar to blacklisted word
+#
+ProfanityLevel: 1
+
+#
+# Should we save a file with all words that are similar to blacklisted words?
+#
+# 0 = NO
+#
+SaveSimilar: 1
+
+#
 # The following strings will replace any blacklisted word from that category
 #
 CategoryUnknown: ["****"]
@@ -23,7 +41,7 @@ eithon:
   #  2 = MINOR (also minor messages)
   #  3 = VERBOSE (all messages)
   #
-  DebugLevel: 3
+  DebugLevel: 2
 
 messages:
 

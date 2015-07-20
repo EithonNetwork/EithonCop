@@ -124,5 +124,10 @@ class Profanity implements IJson<Profanity> {
 	}
 	
 	@Override 
-	public String toString() { return String.format("%s (%d)", getWord(), profanityTypeToInteger.get(this._type)); }
+	public String toString() {
+		String result = String.format("%s (%d)", getWord(), profanityTypeToInteger.get(this._type));
+		if (hasSecondary()) result += String.format(" [%s, %s]", getPrimary(), getSecondary());
+		else result += String.format(" [%s]", getPrimary());
+		return result;
+	}
 }

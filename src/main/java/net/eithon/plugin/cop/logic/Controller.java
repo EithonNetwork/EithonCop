@@ -22,7 +22,7 @@ public class Controller {
 	}
 
 	public String addProfanity(CommandSender sender, String word) {
-		Profanity profanity = this._blacklist.getProfanity(word);
+		Profanity profanity = this._blacklist.getProfanity(word, Blacklist.PROFANITY_LEVEL_MAX);
 		if (profanity == null) {
 			profanity = this._blacklist.add(word);
 			this._blacklist.delayedSave();
@@ -46,7 +46,7 @@ public class Controller {
 			Config.M.duplicateAcceptedWord.sendMessage(sender, word);
 			return null;
 		}
-		Profanity profanity = this._blacklist.getProfanity(normalized);
+		Profanity profanity = this._blacklist.getProfanity(normalized, Blacklist.PROFANITY_LEVEL_MAX);
 		if (profanity != null) {
 			if (normalized.equalsIgnoreCase(profanity.getWord())) {
 				Config.M.acceptedWordWasBlacklisted.sendMessage(sender, word);
