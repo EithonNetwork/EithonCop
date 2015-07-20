@@ -4,6 +4,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 
 import net.eithon.library.json.IJson;
+import net.eithon.plugin.cop.Config;
 
 import org.json.simple.JSONObject;
 
@@ -31,18 +32,16 @@ class Profanity implements IJson<Profanity> {
 		addProfanityType(ProfanityType.SEXUAL_NOUN, 7);
 		addProfanityType(ProfanityType.SEXUAL_VERB, 8);
 		addProfanityType(ProfanityType.DEROGATIVE, 9);
-		String[] derogatives = new String [] {"dragon", "unicorn", "magic creature"};
-		synonyms.put(ProfanityType.UNKNOWN, new String [] {"****"});
-		synonyms.put(ProfanityType.BODY_CONTENT, new String [] {"casserole", "lasagna"});
-		synonyms.put(ProfanityType.BODY_PART, new String [] {"shoulder", "knee", "elbow"});
-		synonyms.put(ProfanityType.LOCATION, new String [] {"a warm place", "elsewhere"});
-		synonyms.put(ProfanityType.OFFENSIVE, new String [] {"tally ho", "count to 10"});
-		synonyms.put(ProfanityType.PROFESSION, new String [] {"dentist", "surgeon"});
-		synonyms.put(ProfanityType.PROFESSION, new String [] {"dentist", "surgeon"});
-		synonyms.put(ProfanityType.RACIST, derogatives);
-		synonyms.put(ProfanityType.SEXUAL_NOUN, new String [] {"chair", "pigeon"});
-		synonyms.put(ProfanityType.SEXUAL_VERB, new String [] {"run", "walk"});
-		synonyms.put(ProfanityType.DEROGATIVE, derogatives);
+		synonyms.put(ProfanityType.UNKNOWN, Config.V.categoryUnknown);
+		synonyms.put(ProfanityType.BODY_CONTENT, Config.V.categoryBodyContent);
+		synonyms.put(ProfanityType.BODY_PART, Config.V.categoryBodyPart);
+		synonyms.put(ProfanityType.LOCATION, Config.V.categoryLocation);
+		synonyms.put(ProfanityType.OFFENSIVE, Config.V.categoryOffensive);
+		synonyms.put(ProfanityType.PROFESSION, Config.V.categoryProfession);
+		synonyms.put(ProfanityType.RACIST, Config.V.categoryRacist);
+		synonyms.put(ProfanityType.SEXUAL_NOUN, Config.V.categorySexualNoun);
+		synonyms.put(ProfanityType.SEXUAL_VERB, Config.V.categorySexualVerb);
+		synonyms.put(ProfanityType.DEROGATIVE, Config.V.categoryDerogative);
 	}
 
 	public Profanity(String profanity) {
