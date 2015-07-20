@@ -27,8 +27,6 @@ class Blacklist {
 	private HashMap<String, Profanity> _wordList;
 	private HashMap<String, Profanity> _similarWords;
 	private static Metaphone3 metaphone3;
-	private static final int PROFANITY_LEVEL_LITERAL = 1;
-	static final int PROFANITY_LEVEL_MAX = 2;
 
 	static {
 		metaphone3 = new Metaphone3();
@@ -46,7 +44,7 @@ class Blacklist {
 	}
 
 	public Profanity add(String word) {
-		Profanity profanity = getProfanity(word, PROFANITY_LEVEL_MAX);
+		Profanity profanity = getProfanity(word);
 		if (profanity != null) {
 			this._eithonPlugin.getEithonLogger().warning("Blacklist.add: Trying to add a word that already exists: \"%s\".", word);
 			return profanity;
@@ -62,16 +60,33 @@ class Blacklist {
 		if (profanity.hasSecondary()) this._metaphoneList.put(profanity.getSecondary(), profanity);
 	}
 
-	public boolean isBlacklisted(String word) { return getProfanity(word, Config.V.profanityLevel) != null; }
-
-	public String replaceIfBlacklisted(String word) {
-		Profanity profanity = getProfanity(word, Config.V.profanityLevel);
-		if (profanity == null) return null;
-		return profanity.getSynonym();
+	public boolean isBlacklisted(String word) {
+		Profanity profanity = getProfanity(word);
+		return (profanity != null) && (profanity.getProfanityLevel(word) <= Config.V.profanityLevel); 
 	}
 
-	public Profanity getProfanity(String word, int profanityLevel) {
-		if (profanityLevel < 1) return null;
+	public String replaceIfBlacklisted(String word) {
+		Profanity profanity = getProfanity(word);
+		if (profanity == null) return null;
+		if (Config.V.saveSimilar 
+				&& !profanity.isSameWord(word)
+				&& !this._similarWords.containsKey(word)) {
+			delayedSaveSimilar(word, profanity);
+		}
+		if (profanity.getProfanityLevel(word) > Config.V.profanityLevel) {
+			if (Config.V.markSimilar && !profanity.isSameWord(word)) {
+				return String.format("%s%s%s", Config.V.markSimilarPrefix, word, Config.V.markSimilarPostfix);
+			}
+			return null;
+		}
+		String synonym = profanity.getSynonym();
+		if (Config.V.markReplacement) {
+			return String.format("%s%s%s", Config.V.markReplacementPrefix, synonym, Config.V.markReplacementPostfix);
+		}
+		return synonym;
+	}
+
+	public Profanity getProfanity(String word) {
 		String normalized = Profanity.normalize(word);
 		Profanity profanity = this._wordList.get(normalized);
 		if (profanity != null) return profanity;
@@ -85,11 +100,7 @@ class Blacklist {
 				if (encoding.length() > 0) profanity = this._metaphoneList.get(encoding);
 			}
 		}
-		if (profanityLevel > 1) return profanity;
-		if ((profanity != null) && Config.V.saveSimilar && !this._similarWords.containsKey(word)) {
-			delayedSaveSimilar(word, profanity);
-		}
-		return null;
+		return profanity;
 	}
 
 	private void delayedSaveSimilar(String similarWord, Profanity profanity) {
@@ -135,19 +146,20 @@ class Blacklist {
 			File file = getSimilarStorageFile();
 			if (!file.exists()) return;
 			try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-			    String line;
-			    while ((line = br.readLine()) != null) {
-			       int pos = line.indexOf(" ~ ");
-			       if (pos < 0) continue;
-			       String similarWord = line.substring(0, pos);
-			       String rest = line.substring(pos+3);
-			       pos = rest.indexOf(" (");
-			       if (pos < 0) continue;
-			       String word = rest.substring(0, pos);
-			       Profanity profanity = getProfanity(word, PROFANITY_LEVEL_LITERAL);
-			       if (profanity == null) continue;
-			       this._similarWords.put(similarWord, profanity);
-			    }
+				String line;
+				while ((line = br.readLine()) != null) {
+					int pos = line.indexOf(" ~ ");
+					if (pos < 0) continue;
+					String similarWord = line.substring(0, pos);
+					String rest = line.substring(pos+3);
+					pos = rest.indexOf(" (");
+					if (pos < 0) continue;
+					String word = rest.substring(0, pos);
+					Profanity profanity = getProfanity(word);
+					if (profanity == null) continue;
+					if (!profanity.isSameWord(word)) continue;
+					this._similarWords.put(similarWord, profanity);
+				}
 			} catch (FileNotFoundException e) {
 				this._eithonPlugin.getEithonLogger().error("(1) Could not read from file %s: %s", file.getName(), e.getMessage());
 				e.printStackTrace();

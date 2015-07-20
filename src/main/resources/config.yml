@@ -17,6 +17,24 @@ ProfanityLevel: 1
 SaveSimilar: 1
 
 #
+# Should we mark the words that replaces a profanity?
+#
+# 0 = NO
+#
+MarkReplacement: 1
+MarkReplacementPrefix: "_"
+MarkReplacementPostfix: "_"
+
+#
+# Should we mark the words that are similar to profanities?
+#
+# 0 = NO
+#
+MarkSimilar: 1
+MarkSimilarPrefix: "<"
+MarkSimilarPostfix: ">"
+
+#
 # The following strings will replace any blacklisted word from that category
 #
 CategoryUnknown: ["****"]

@@ -17,7 +17,11 @@ class Profanity implements IJson<Profanity> {
 	private static EnumMap<ProfanityType, Integer> profanityTypeToInteger = new EnumMap<Profanity.ProfanityType, Integer>(ProfanityType.class);
 	private static HashMap<Integer, ProfanityType> integerToProfanityType = new HashMap<Integer, Profanity.ProfanityType>();
 	private static EnumMap<ProfanityType, String[]> synonyms = new EnumMap<Profanity.ProfanityType, String[]>(ProfanityType.class);
-
+	static final int PROFANITY_LEVEL_NONE = 0;
+	static final int PROFANITY_LEVEL_LITERAL = 1;
+	static final int PROFANITY_LEVEL_SIMILAR = 2;
+	static final int PROFANITY_LEVEL_MAX = 2;
+	
 	static {
 		metaphone3 = new Metaphone3();
 		metaphone3.SetEncodeVowels(true);
@@ -81,6 +85,10 @@ class Profanity implements IJson<Profanity> {
 	public ProfanityType getProfanityType() { return this._type; }
 	public void setProfanityType(ProfanityType type) { this._type = type; }
 	public boolean isSameWord(String word) {return this._word.equalsIgnoreCase(normalize(word)); }
+	public int getProfanityLevel(String word) { 
+		if (isSameWord(word)) return PROFANITY_LEVEL_LITERAL;
+		return PROFANITY_LEVEL_SIMILAR;
+	}
 	
 	public String getSynonym() {
 		String[] array = getSynonyms();

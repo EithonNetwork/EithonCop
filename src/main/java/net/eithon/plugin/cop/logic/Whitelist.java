@@ -27,7 +27,7 @@ class Whitelist {
 	public Profanity add(String word) {
 		String normalized = Profanity.normalize(word);
 		if (isWhitelisted(normalized)) return null;
-		Profanity profanity = this._blacklist.getProfanity(normalized, Blacklist.PROFANITY_LEVEL_MAX);
+		Profanity profanity = this._blacklist.getProfanity(normalized);
 		this._hashMap.put(normalized, profanity);
 		return profanity;
 	}
