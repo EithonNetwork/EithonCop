@@ -22,8 +22,8 @@ SaveSimilar: 1
 # 0 = NO
 #
 MarkReplacement: 1
-MarkReplacementPrefix: "_"
-MarkReplacementPostfix: "_"
+MarkReplacementPrefix: "\""
+MarkReplacementPostfix: "\""
 
 #
 # Should we mark the words that are similar to profanities?
