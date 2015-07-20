@@ -47,6 +47,9 @@ class Leet {
 			case '7':
 				newC = 't';
 				break;
+			case '+':
+				newC = 't';
+				break;
 			case '%':
 				newC = 'x';
 				break;

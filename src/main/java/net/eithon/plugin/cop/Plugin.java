@@ -2,6 +2,7 @@ package net.eithon.plugin.cop;
 
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.plugin.cop.logic.Controller;
+import net.eithon.plugin.cop.CommandHandler;
 
 public final class Plugin extends EithonPlugin {
 	private Controller _controller;
@@ -12,8 +13,9 @@ public final class Plugin extends EithonPlugin {
 		super.onEnable();
 		Config.load(this);
 		this._controller = new Controller(this);
+		CommandHandler commandHandler = new CommandHandler(this, this._controller);
 		this._eventListener = new EventListener(this, this._controller);
-		super.activate(null, this._eventListener);
+		super.activate(commandHandler, this._eventListener);
 	}
 
 	@Override

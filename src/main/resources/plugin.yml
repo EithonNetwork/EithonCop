@@ -5,15 +5,19 @@ author: vanbrayne
 depend: [EithonLibrary]
 description: A Minecraft plugin
 commands:
-  cop:
+  eithoncop:
     description: Police activities
-    usage: /cop
+    usage: /eithoncop blacklist | whitelist
     permission-message: You don't have <permission>
 permissions:
-  cop.*:
-    description: Gives access to all cop commands
+  eithoncop.*:
+    description: Gives access to all eithoncop commands
     default: op
-    cop.staff: true
-  cop.noteligible:
-    description: No cop for some
+    cop.blacklist: true
+    cop.whitelist: true
+  cop.blacklist:
+    description: Access to /eithoncop blacklist command
+    default: op
+  cop.whitelist:
+    description: Access to /eithoncop whitelist command
     default: op

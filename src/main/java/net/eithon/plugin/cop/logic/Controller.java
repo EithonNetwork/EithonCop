@@ -1,7 +1,9 @@
 package net.eithon.plugin.cop.logic;
 
 import net.eithon.library.extensions.EithonPlugin;
+import net.eithon.plugin.cop.Config;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Controller {
@@ -9,7 +11,19 @@ public class Controller {
 	private Blacklist _blacklist;
 
 	public Controller(EithonPlugin eithonPlugin){
-		this._blacklist = new Blacklist();
+		this._blacklist = new Blacklist(eithonPlugin);
+		this._blacklist.delayedLoad();
+	}
+	
+	public boolean addProfanity(CommandSender sender, String word) {
+		Profanity profanity = this._blacklist.getProfanity(word);
+		if (profanity == null) {
+			this._blacklist.add(word);
+			this._blacklist.delayedSave();
+			return true;
+		}
+		Config.M.profanityAlreadySaved.sendMessage(sender, word, profanity.getWord());
+		return false;
 	}
 
 	public String profanityFilter(Player player, String message) {
