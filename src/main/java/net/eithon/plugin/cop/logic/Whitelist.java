@@ -6,6 +6,7 @@ import java.util.HashMap;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.json.FileContent;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
+import net.eithon.library.time.TimeMisc;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -13,26 +14,28 @@ import org.json.simple.JSONArray;
 
 class Whitelist {
 	private EithonPlugin _eithonPlugin;
+	private Blacklist _blacklist;
 	private HashMap<String, Profanity> _hashMap;
 
-	public Whitelist(EithonPlugin eithonPlugin)
+	public Whitelist(EithonPlugin eithonPlugin, Blacklist blacklist)
 	{
 		this._eithonPlugin = eithonPlugin;
+		this._blacklist = blacklist;
 		this._hashMap = new HashMap<String, Profanity>();
-		delayedLoad();
 	}
 	
 	public Profanity add(String word) {
-		Profanity profanity = getProfanity(word);
-		if (profanity == null) return null;
-		this._hashMap.put(word, profanity);
+		String normalized = Profanity.normalize(word);
+		if (isWhitelisted(normalized)) return null;
+		Profanity profanity = this._blacklist.getProfanity(normalized);
+		this._hashMap.put(normalized, profanity);
 		return profanity;
 	}
 
 	public boolean isWhitelisted(String word) { return getProfanity(word) != null; }
 
 	public Profanity getProfanity(String word) {
-		return this._hashMap.get(word);
+		return this._hashMap.get(Profanity.normalize(word));
 	}
 
 	public void delayedSave()
@@ -63,14 +66,14 @@ class Whitelist {
 		fileContent.save(file);
 	}
 
-	public void delayedLoad()
+	public void delayedLoad(double delaySeconds)
 	{
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
 			public void run() {
 				load();
 			}
-		});		
+		}, TimeMisc.secondsToTicks(delaySeconds));		
 	}
 
 	void load() {

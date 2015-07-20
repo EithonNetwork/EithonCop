@@ -53,6 +53,7 @@ public class CommandHandler implements ICommandHandler {
 
 		String acceptedWord = commandParser.getArgumentStringAsLowercase();
 		if (acceptedWord == null) return;
+		acceptedWord = this._controller.normalize(acceptedWord);
 
 		CommandSender sender = commandParser.getSender();
 		String profanity = this._controller.addAccepted(sender, acceptedWord);

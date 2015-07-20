@@ -27,11 +27,12 @@ class Blacklist {
 	{
 		this._eithonPlugin = eithonPlugin;
 		this._hashMap = new HashMap<String, Profanity>();
-		delayedLoad();
 	}
 	
 	public Profanity add(String word) {
-		Profanity profanity = new Profanity(word);
+		Profanity profanity = getProfanity(word);
+		if (profanity != null) return profanity;
+		profanity = new Profanity(word);
 		add(profanity);
 		return profanity;
 	}
@@ -51,7 +52,7 @@ class Blacklist {
 
 	public Profanity getProfanity(String word) {
 		synchronized (metaphone3) {
-			metaphone3.SetWord(word.toLowerCase());
+			metaphone3.SetWord(Profanity.normalize(word));
 			metaphone3.Encode();
 			String encoding = metaphone3.GetMetaph();
 			Profanity forbiddenWord = this._hashMap.get(encoding);
@@ -86,7 +87,7 @@ class Blacklist {
 		this._eithonPlugin.getEithonLogger().info("Saving %d profanities in blacklist", blacklist.size());
 		File file = getBlacklistStorageFile();
 
-		FileContent fileContent = new FileContent("TravelPad", 1, blacklist);
+		FileContent fileContent = new FileContent("Blacklist", 1, blacklist);
 		fileContent.save(file);
 	}
 
@@ -122,7 +123,7 @@ class Blacklist {
 					this._eithonPlugin.getEithonLogger().error("Could not load profanity %d (result was null).", i);
 					continue;
 				}
-				this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Loaded profanity %s", profanity.getWord());
+				this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Loaded profanity %s", profanity.toString());
 				this.add(profanity);
 			} catch (Exception e) {
 				this._eithonPlugin.getEithonLogger().error("Could not load profanity %d (exception).", i);

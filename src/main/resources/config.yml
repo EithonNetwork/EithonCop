@@ -30,7 +30,7 @@ messages:
   #
   # Parameters: <new word>(%s)
   #
-  DuplicateProfanity: "You specified the word \"%s\", but that word has already been blacklisted."
+  DuplicateProfanity: "The word \"%s\" has already been blacklisted."
 
   #
   # Parameters: <new word>(%s), <existing word>(%s)
@@ -45,7 +45,7 @@ messages:
   #
   # Parameters: <new word>(%s)
   #
-  NotBlacklisted: "The word \"%s\" is not blacklisted, so it will not be added as whitelisted."
+  AcceptedWordWasNotBlacklisted: "The word \"%s\" is not blacklisted, so it will not be added as whitelisted."
 
   #
   # Parameters: <new word>(%s), <blacklisted word>(%s)
@@ -56,4 +56,9 @@ messages:
   # Parameters: <new word>(%s)
   #
   AcceptedWordWasBlacklisted: "You can't whitelist \"%s\" because it is blacklisted with that spelling."
+
+  #
+  # Parameters: <new word>(%s)
+  #
+  DuplicateAcceptedWord: "The word \"%s\" has already been whitelisted."
   

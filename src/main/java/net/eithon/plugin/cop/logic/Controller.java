@@ -1,6 +1,7 @@
 package net.eithon.plugin.cop.logic;
 
 import net.eithon.library.extensions.EithonPlugin;
+import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.plugin.cop.Config;
 
 import org.bukkit.command.CommandSender;
@@ -8,14 +9,16 @@ import org.bukkit.entity.Player;
 
 public class Controller {
 
+	private EithonPlugin _eithonPlugin;
 	private Blacklist _blacklist;
 	private Whitelist _whitelist;
 
 	public Controller(EithonPlugin eithonPlugin){
+		this._eithonPlugin = eithonPlugin;
 		this._blacklist = new Blacklist(eithonPlugin);
 		this._blacklist.delayedLoad();
-		this._whitelist = new Whitelist(eithonPlugin);
-		this._whitelist.delayedLoad();
+		this._whitelist = new Whitelist(eithonPlugin, this._blacklist);
+		this._whitelist.delayedLoad(10);
 	}
 
 	public String addProfanity(CommandSender sender, String word) {
@@ -32,11 +35,20 @@ public class Controller {
 		}
 		return null;
 	}
+	
+	public String normalize(String word) {
+		return Profanity.normalize(word);
+	}
 
 	public String addAccepted(CommandSender sender, String word) {
-		Profanity profanity = this._blacklist.getProfanity(word);
+		String normalized = Profanity.normalize(word);
+		if (this._whitelist.isWhitelisted(normalized)) {
+			Config.M.duplicateAcceptedWord.sendMessage(sender, word);
+			return null;
+		}
+		Profanity profanity = this._blacklist.getProfanity(normalized);
 		if (profanity != null) {
-			if (word.equalsIgnoreCase(profanity.getWord())) {
+			if (normalized.equalsIgnoreCase(profanity.getWord())) {
 				Config.M.acceptedWordWasBlacklisted.sendMessage(sender, word);
 				return null;
 			}
@@ -44,13 +56,13 @@ public class Controller {
 			this._whitelist.delayedSave();
 			return profanity.getWord();
 		}
-		Config.M.notBlacklisted.sendMessage(sender, word);
+		Config.M.acceptedWordWasNotBlacklisted.sendMessage(sender, word);
 		return null;
 	}
 
 	public String profanityFilter(Player player, String message) {
 		char[] inCharArray = message.toCharArray();
-		String transformedInMessage = Leet.decode(message.toLowerCase());
+		String transformedInMessage = Profanity.normalize(message);
 		transformedInMessage = transformedInMessage.replaceAll("\\s-", " ");
 		char[] transformedCharArray = transformedInMessage.toCharArray();
 		StringBuilder inWord = new StringBuilder("");
@@ -84,6 +96,7 @@ public class Controller {
 	}
 
 	private String replace(String transformedWord, String inWord) {
+		verbose("resplace", "In: %s, transformed: %s", inWord, transformedWord);
 		if (this._whitelist.isWhitelisted(transformedWord)) return inWord;
 		String outWord = this._blacklist.replaceIfBlacklisted(transformedWord);
 		if (outWord == null) return inWord;
@@ -110,5 +123,10 @@ public class Controller {
 			}
 		}
 		return outWord.toLowerCase();
+	}
+	
+	private void verbose(String method, String format, Object... args) {
+		String message = String.format(format, args);
+		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "%s: %s", method, message);
 	}
 }

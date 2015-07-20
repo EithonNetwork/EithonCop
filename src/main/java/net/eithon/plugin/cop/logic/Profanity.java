@@ -22,7 +22,7 @@ class Profanity implements IJson<Profanity> {
 		metaphone3 = new Metaphone3();
 		metaphone3.SetEncodeVowels(true);
 		metaphone3.SetEncodeExact(true);
-		addProfanityType(ProfanityType.UNKNOWN, 1);
+		addProfanityType(ProfanityType.UNKNOWN, 0);
 		addProfanityType(ProfanityType.BODY_CONTENT, 1);
 		addProfanityType(ProfanityType.BODY_PART, 2);
 		addProfanityType(ProfanityType.LOCATION, 3);
@@ -45,7 +45,7 @@ class Profanity implements IJson<Profanity> {
 	}
 
 	public Profanity(String word) {
-		this._word = Leet.decode(word.toLowerCase());
+		this._word = normalize(word);
 		this._type = ProfanityType.UNKNOWN;
 		prepare();
 	}
@@ -56,6 +56,8 @@ class Profanity implements IJson<Profanity> {
 	public enum ProfanityType {
 	    UNKNOWN, BODY_CONTENT, BODY_PART, LOCATION, OFFENSIVE, PROFESSION, RACIST, SEXUAL_NOUN, SEXUAL_VERB, DEROGATIVE
 	}
+	
+	public static String normalize(String word) { return Leet.decode(word.toLowerCase()); }
 
 	private static void addProfanityType(ProfanityType type, Integer i) {
 		profanityTypeToInteger.put(type, i);
@@ -71,14 +73,15 @@ class Profanity implements IJson<Profanity> {
 			if (secondaryEncoded.length() > 0) this._secondaryEncoded = secondaryEncoded;
 		}
 	}
-
+	
 	public String getWord() { return this._word; }
 	public String getPrimary() {return this._primaryEncoded; }
 	public String getSecondary() { return this._secondaryEncoded; }
 	public boolean hasSecondary() { return this._secondaryEncoded != null; }
 	public ProfanityType getProfanityType() { return this._type; }
 	public void setProfanityType(ProfanityType type) { this._type = type; }
-
+	public boolean isSameWord(String word) {return this._word.equalsIgnoreCase(normalize(word)); }
+	
 	public String getSynonym() {
 		String[] array = getSynonyms();
 		int index = (int) (Math.random()*array.length);
@@ -111,7 +114,7 @@ class Profanity implements IJson<Profanity> {
 		this._word = (String) jsonObject.get("word");
 		Long typeAsInteger = (Long) jsonObject.get("type");
 		if (typeAsInteger == null) this._type = ProfanityType.UNKNOWN;
-		else this._type = integerToProfanityType.get(typeAsInteger);
+		else this._type = integerToProfanityType.get(typeAsInteger.intValue());
 		this.prepare();
 		return this;
 	}
@@ -119,4 +122,7 @@ class Profanity implements IJson<Profanity> {
 	public static Profanity getFromJson(Object json) {
 		return new Profanity().fromJson(json);
 	}
+	
+	@Override 
+	public String toString() { return String.format("%s (%d)", getWord(), profanityTypeToInteger.get(this._type)); }
 }

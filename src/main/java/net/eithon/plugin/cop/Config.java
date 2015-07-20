@@ -47,23 +47,26 @@ public class Config {
 		public static ConfigurableMessage probablyDuplicateProfanity;
 		public static ConfigurableMessage duplicateProfanity;
 		public static ConfigurableMessage profanityAdded;
-		public static ConfigurableMessage notBlacklisted;
+		public static ConfigurableMessage acceptedWordWasNotBlacklisted;
 		public static ConfigurableMessage acceptedWordAdded;
 		public static ConfigurableMessage acceptedWordWasBlacklisted;
+		public static ConfigurableMessage duplicateAcceptedWord;
 
 		static void load(Configuration config) {
 			duplicateProfanity = config.getConfigurableMessage("DuplicateProfanity", 1,
-					"You specified the word \"%s\", but that word has already been blacklisted.");
+					"The word \"%s\" has already been blacklisted.");
 			probablyDuplicateProfanity = config.getConfigurableMessage("ProbablyDuplicateProfanity", 2,
 					"You specified the word \"%s\", but that word collides with existing blacklisted word \"%s\".");
 			profanityAdded = config.getConfigurableMessage("ProfanityAdded", 1,
 					"The word \"%s\" has been added to the blacklist.");
-			notBlacklisted = config.getConfigurableMessage("NotBlacklisted", 1,
+			acceptedWordWasNotBlacklisted = config.getConfigurableMessage("AcceptedWordWasNotBlacklisted", 1,
 					"The word \"%s\" is not blacklisted, so it will not be added as whitelisted.");
 			acceptedWordAdded = config.getConfigurableMessage("AcceptedWordAdded", 2,
 					"The word \"%s\" is now whitelisted, to prevent it from being mixed up with the blacklisted word \"%s\".");
 			acceptedWordWasBlacklisted = config.getConfigurableMessage("AcceptedWordWasBlacklisted", 1,
 					"You can't whitelist \"%s\" because it is blacklisted with that spelling.");
+			duplicateAcceptedWord = config.getConfigurableMessage("DuplicateAcceptedWord", 1,
+					"The word \"%s\" has already been whitelisted.");
 		}		
 	}
 
