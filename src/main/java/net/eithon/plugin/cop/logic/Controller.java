@@ -1,6 +1,13 @@
 package net.eithon.plugin.cop.logic;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import net.eithon.library.extensions.EithonPlugin;
+import net.eithon.library.file.FileMisc;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
@@ -24,11 +31,10 @@ public class Controller {
 		this._whitelist.delayedLoad(1);
 		if (Config.V.saveSimilar) {
 			this._blacklist.delayedLoadSimilar(2);
-			this._blacklist.delayedSaveSimilar(3, this._whitelist);
 		}
 		delayedLoadSeed(4);
 	}
-	
+
 	private void delayedLoadSeed(double delaySeconds)
 	{
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
@@ -40,7 +46,34 @@ public class Controller {
 	}
 
 	void loadSeed() {
-		
+		File fileIn = getSeedInStorageFile();
+		if (!fileIn.exists()) return;
+		File fileOut = getSeedOutStorageFile();
+		try (BufferedReader br = new BufferedReader(new FileReader(fileIn))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				String filtered = profanityFilter(null, line);
+				FileMisc.appendLine(fileOut, line);
+				FileMisc.appendLine(fileOut, filtered);
+				FileMisc.appendLine(fileOut, "");
+			}
+		} catch (FileNotFoundException e) {
+			this._eithonPlugin.getEithonLogger().error("(1) Could not read from file %s: %s", fileIn.getName(), e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			this._eithonPlugin.getEithonLogger().error("(2) Could not read from file %s: %s", fileIn.getName(), e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	private File getSeedInStorageFile() {
+		File file = this._eithonPlugin.getDataFile("seedin.txt");
+		return file;
+	}
+
+	private File getSeedOutStorageFile() {
+		File file = this._eithonPlugin.getDataFile("seedout.txt");
+		return file;
 	}
 
 	public void disable() {
