@@ -15,27 +15,37 @@ import org.json.simple.JSONArray;
 class Whitelist {
 	private EithonPlugin _eithonPlugin;
 	private Blacklist _blacklist;
-	private HashMap<String, Profanity> _hashMap;
+	private HashMap<String, Profanity> _whitelist;
 
 	public Whitelist(EithonPlugin eithonPlugin, Blacklist blacklist)
 	{
 		this._eithonPlugin = eithonPlugin;
 		this._blacklist = blacklist;
-		this._hashMap = new HashMap<String, Profanity>();
+		this._whitelist = new HashMap<String, Profanity>();
 	}
-	
+
 	public Profanity add(String word) {
+		verbose("add", "Enter: %s", word);
 		String normalized = Profanity.normalize(word);
-		if (isWhitelisted(normalized)) return null;
-		Profanity profanity = this._blacklist.getProfanity(normalized);
-		this._hashMap.put(normalized, profanity);
+		Profanity profanity = getProfanity(normalized);
+		if (profanity != null) {
+			verbose("add", "Already added: Leave %s", profanity.toString());
+			return profanity;
+		}
+		profanity = this._blacklist.getProfanity(normalized);
+		if (profanity == null) {
+			verbose("add", "No corresponding profanity found: Leave");
+			return null;
+		}
+		this._whitelist.put(normalized, profanity);
+		verbose("add", "Added: Leave %s", profanity.toString());
 		return profanity;
 	}
 
 	public boolean isWhitelisted(String word) { return getProfanity(word) != null; }
 
 	public Profanity getProfanity(String word) {
-		return this._hashMap.get(Profanity.normalize(word));
+		return this._whitelist.get(Profanity.normalize(word));
 	}
 
 	public void delayedSave()
@@ -52,7 +62,7 @@ class Whitelist {
 	public
 	void save() {
 		JSONArray whitelist = new JSONArray();
-		for (String word : this._hashMap.keySet()) {
+		for (String word : this._whitelist.keySet()) {
 			whitelist.add(word);
 		}
 		if ((whitelist == null) || (whitelist.size() == 0)) {
@@ -89,7 +99,7 @@ class Whitelist {
 			return;
 		}
 		this._eithonPlugin.getEithonLogger().info("Restoring %d words from whitelist file.", array.size());
-		this._hashMap = new HashMap<String, Profanity>();
+		this._whitelist = new HashMap<String, Profanity>();
 		for (int i = 0; i < array.size(); i++) {
 			String word = null;
 			try {
@@ -107,6 +117,11 @@ class Whitelist {
 	private File getWhitelistStorageFile() {
 		File file = this._eithonPlugin.getDataFile("whitelist.json");
 		return file;
+	}
+
+	private void verbose(String method, String format, Object... args) {
+		String message = String.format(format, args);
+		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Whitelist.%s(): %s", method, message);
 	}
 }
 

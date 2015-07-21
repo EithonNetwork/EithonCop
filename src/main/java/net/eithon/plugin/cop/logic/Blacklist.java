@@ -133,6 +133,8 @@ class Blacklist {
 		    if (whitelist.isWhitelisted(word)) {
 		    	this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.MINOR, "Removed similar word \"%s\" as it was whitelisted", word);
 		        iterator.remove();
+		    } else {
+		    	verbose("consolidateSimilar", "Keeping word \"%s\" as it was not whitelisted", word);
 		    }
 		}
 	}
@@ -269,5 +271,10 @@ class Blacklist {
 	File getSimilarStorageFile() {
 		File file = this._eithonPlugin.getDataFile("similar.txt");
 		return file;
+	}
+
+	private void verbose(String method, String format, Object... args) {
+		String message = String.format(format, args);
+		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Blacklist.%s(): %s", method, message);
 	}
 }
