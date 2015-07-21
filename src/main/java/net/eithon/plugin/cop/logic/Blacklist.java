@@ -1,19 +1,18 @@
 package net.eithon.plugin.cop.logic;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.file.FileMisc;
 import net.eithon.library.json.FileContent;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
+import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 
 import org.bukkit.Bukkit;
@@ -25,7 +24,7 @@ class Blacklist {
 	private EithonPlugin _eithonPlugin;
 	private HashMap<String, Profanity> _metaphoneList;
 	private HashMap<String, Profanity> _wordList;
-	private HashMap<String, Profanity> _similarWords;
+	HashMap<String, Profanity> _similarWords;
 	private static Metaphone3 metaphone3;
 
 	static {
@@ -40,7 +39,6 @@ class Blacklist {
 		this._metaphoneList = new HashMap<String, Profanity>();
 		this._wordList = new HashMap<String, Profanity>();
 		this._similarWords = new HashMap<String, Profanity>();
-		if (Config.V.saveSimilar) delayedLoadSimilar();
 	}
 
 	public Profanity add(String word) {
@@ -107,38 +105,60 @@ class Blacklist {
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
 			public void run() {
-				saveSimilar(similarWord, profanity);
+				saveSimilar(similarWord, profanity, false);
 			}
 		});	
 	}
 
-	void saveSimilar(String similarWord, Profanity profanity) {
+	void delayedSaveSimilar(double waitSeconds, Whitelist whitelist) {
+		final Blacklist thisObject = this;
+		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
+			public void run() {
+				synchronized (thisObject._similarWords) {
+					thisObject.getSimilarStorageFile().delete();
+					thisObject.consolidateSimilar(whitelist);
+					for (String similarWord : thisObject._similarWords.keySet()) {
+						Profanity profanity = thisObject._similarWords.get(similarWord);
+						saveSimilar(similarWord, profanity, true);
+					}
+				}
+			}
+		}, TimeMisc.secondsToTicks(waitSeconds));	
+	}
+
+	protected void consolidateSimilar(Whitelist whitelist) {
+		for (Iterator<String> iterator = this._similarWords.keySet().iterator(); iterator.hasNext();) {
+		    String word = iterator.next();
+		    if (whitelist.isWhitelisted(word)) {
+		    	this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.MINOR, "Removed similar word \"%s\" as it was whitelisted", word);
+		        iterator.remove();
+		    }
+		}
+	}
+
+	void saveSimilar(String similarWord, Profanity profanity, boolean force) {
 		synchronized (this._similarWords) {
-			if (this._similarWords.containsKey(similarWord)) return;
+			if (!force && this._similarWords.containsKey(similarWord)) return;
 			this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.MINOR, "Added similar %s: %s", similarWord, profanity.toString());
 			this._similarWords.put(similarWord, profanity);
 			File file = getSimilarStorageFile();
+			String line = String.format("%s ~ %s", similarWord, profanity.toString());
 			try {
-				if (!file.exists()) {
-					FileMisc.makeSureParentDirectoryExists(file);
-					file.createNewFile();
-				}
-				PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
-				out.println(String.format("%s ~ %s", similarWord, profanity.toString()));
-				out.close();
+				FileMisc.appendLine(file, line);
 			} catch (IOException e) {
 				this._eithonPlugin.getEithonLogger().error("Could not write to file %s: %s", file.getName(), e.getMessage());
 			}
 		}
 	}
 
-	private void delayedLoadSimilar() {
+	public void delayedLoadSimilar(double waitSeconds) {
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
 			public void run() {
 				loadSimilar();
 			}
-		});	
+		}, TimeMisc.secondsToTicks(waitSeconds));	
 	}
 
 	void loadSimilar() {
@@ -246,7 +266,7 @@ class Blacklist {
 		return file;
 	}
 
-	private File getSimilarStorageFile() {
+	File getSimilarStorageFile() {
 		File file = this._eithonPlugin.getDataFile("similar.txt");
 		return file;
 	}

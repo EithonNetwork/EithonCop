@@ -18,7 +18,11 @@ public class Controller {
 		this._blacklist = new Blacklist(eithonPlugin);
 		this._blacklist.delayedLoad();
 		this._whitelist = new Whitelist(eithonPlugin, this._blacklist);
-		this._whitelist.delayedLoad(10);
+		this._whitelist.delayedLoad(1);
+		if (Config.V.saveSimilar) {
+			this._blacklist.delayedLoadSimilar(2);
+			this._blacklist.delayedSaveSimilar(3, this._whitelist);
+		}
 	}
 
 	public String addProfanity(CommandSender sender, String word) {
@@ -35,7 +39,7 @@ public class Controller {
 		}
 		return null;
 	}
-	
+
 	public String normalize(String word) {
 		return Profanity.normalize(word);
 	}
@@ -124,7 +128,7 @@ public class Controller {
 		}
 		return outWord.toLowerCase();
 	}
-	
+
 	private void verbose(String method, String format, Object... args) {
 		String message = String.format(format, args);
 		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "%s: %s", method, message);
