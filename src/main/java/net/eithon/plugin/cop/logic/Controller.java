@@ -1,11 +1,21 @@
 package net.eithon.plugin.cop.logic;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import net.eithon.library.extensions.EithonPlugin;
+import net.eithon.library.file.FileMisc;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
+import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class Controller {
 
@@ -18,7 +28,56 @@ public class Controller {
 		this._blacklist = new Blacklist(eithonPlugin);
 		this._blacklist.delayedLoad();
 		this._whitelist = new Whitelist(eithonPlugin, this._blacklist);
-		this._whitelist.delayedLoad(10);
+		this._whitelist.delayedLoad(1);
+		if (Config.V.saveSimilar) {
+			this._blacklist.delayedLoadSimilar(2);
+		}
+		delayedLoadSeed(4);
+	}
+
+	private void delayedLoadSeed(double delaySeconds)
+	{
+		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
+			public void run() {
+				loadSeed();
+			}
+		}, TimeMisc.secondsToTicks(delaySeconds));		
+	}
+
+	void loadSeed() {
+		File fileIn = getSeedInStorageFile();
+		if (!fileIn.exists()) return;
+		File fileOut = getSeedOutStorageFile();
+		try (BufferedReader br = new BufferedReader(new FileReader(fileIn))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				String filtered = profanityFilter(null, line);
+				FileMisc.appendLine(fileOut, line);
+				FileMisc.appendLine(fileOut, filtered);
+				FileMisc.appendLine(fileOut, "");
+			}
+		} catch (FileNotFoundException e) {
+			this._eithonPlugin.getEithonLogger().error("(1) Could not read from file %s: %s", fileIn.getName(), e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			this._eithonPlugin.getEithonLogger().error("(2) Could not read from file %s: %s", fileIn.getName(), e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	private File getSeedInStorageFile() {
+		File file = this._eithonPlugin.getDataFile("seedin.txt");
+		return file;
+	}
+
+	private File getSeedOutStorageFile() {
+		File file = this._eithonPlugin.getDataFile("seedout.txt");
+		return file;
+	}
+
+	public void disable() {
+		this._blacklist.saveSimilar(this._whitelist);
 	}
 
 	public String addProfanity(CommandSender sender, String word) {
@@ -35,7 +94,7 @@ public class Controller {
 		}
 		return null;
 	}
-	
+
 	public String normalize(String word) {
 		return Profanity.normalize(word);
 	}
@@ -124,7 +183,7 @@ public class Controller {
 		}
 		return outWord.toLowerCase();
 	}
-	
+
 	private void verbose(String method, String format, Object... args) {
 		String message = String.format(format, args);
 		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "%s: %s", method, message);
