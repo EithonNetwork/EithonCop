@@ -1,0 +1,578 @@
+{
+	"payload": [
+	{
+		"word": "cum",
+		"type": 1
+	},
+	{
+		"word": "fart",
+		"type": 1
+	},
+	{
+		"word": "feces",
+		"type": 1
+	},
+	{
+		"word": "jism",
+		"type": 1
+	},
+	{
+		"word": "jiz",
+		"type": 1
+	},
+	{
+		"word": "merde",
+		"type": 1
+	},
+	{
+		"word": "paska",
+		"type": 1
+	},
+	{
+		"word": "piss",
+		"type": 1
+	},
+	{
+		"word": "queef",
+		"type": 1
+	},
+	{
+		"word": "scheiss",
+		"type": 1
+	},
+	{
+		"word": "semen",
+		"type": 1
+	},
+	{
+		"word": "shit",
+		"type": 1
+	},
+	{
+		"word": "splooge",
+		"type": 1
+	},
+	{
+		"word": "turd",
+		"type": 1
+	},
+	{
+		"word": "ahole",
+		"type": 2
+	},
+	{
+		"word": "anus",
+		"type": 2
+	},
+	{
+		"word": "arschloch",
+		"type": 2
+	},
+	{
+		"word": "arse",
+		"type": 2
+	},
+	{
+		"word": "ass",
+		"type": 2
+	},
+	{
+		"word": "asshole",
+		"type": 2
+	},
+	{
+		"word": "boob",
+		"type": 2
+	},
+	{
+		"word": "buceta",
+		"type": 2
+	},
+	{
+		"word": "butthole",
+		"type": 2
+	},
+	{
+		"word": "cazzo",
+		"type": 2
+	},
+	{
+		"word": "chuj",
+		"type": 2
+	},
+	{
+		"word": "cipa",
+		"type": 2
+	},
+	{
+		"word": "clit",
+		"type": 2
+	},
+	{
+		"word": "cock",
+		"type": 2
+	},
+	{
+		"word": "cockhead",
+		"type": 2
+	},
+	{
+		"word": "cunt",
+		"type": 2
+	},
+	{
+		"word": "dick",
+		"type": 2
+	},
+	{
+		"word": "fanny",
+		"type": 2
+	},
+	{
+		"word": "foreskin",
+		"type": 2
+	},
+	{
+		"word": "fotze",
+		"type": 2
+	},
+	{
+		"word": "hui",
+		"type": 2
+	},
+	{
+		"word": "klootzak",
+		"type": 2
+	},
+	{
+		"word": "kuk",
+		"type": 2
+	},
+	{
+		"word": "kurac",
+		"type": 2
+	},
+	{
+		"word": "kusi",
+		"type": 2
+	},
+	{
+		"word": "kyrpä",
+		"type": 2
+	},
+	{
+		"word": "mulkku",
+		"type": 2
+	},
+	{
+		"word": "muschi",
+		"type": 2
+	},
+	{
+		"word": "nutsack",
+		"type": 2
+	},
+	{
+		"word": "orifice",
+		"type": 2
+	},
+	{
+		"word": "pecker",
+		"type": 2
+	},
+	{
+		"word": "penis",
+		"type": 2
+	},
+	{
+		"word": "picka",
+		"type": 2
+	},
+	{
+		"word": "pillu",
+		"type": 2
+	},
+	{
+		"word": "pimmel",
+		"type": 2
+	},
+	{
+		"word": "pimpis",
+		"type": 2
+	},
+	{
+		"word": "pizda",
+		"type": 2
+	},
+	{
+		"word": "prick",
+		"type": 2
+	},
+	{
+		"word": "pussy",
+		"type": 2
+	},
+	{
+		"word": "rectum",
+		"type": 2
+	},
+	{
+		"word": "schlong",
+		"type": 2
+	},
+	{
+		"word": "scrotum",
+		"type": 2
+	},
+	{
+		"word": "sphincter",
+		"type": 2
+	},
+	{
+		"word": "testicle",
+		"type": 2
+	},
+	{
+		"word": "tit",
+		"type": 2
+	},
+	{
+		"word": "twat",
+		"type": 2
+	},
+	{
+		"word": "vagina",
+		"type": 2
+	},
+	{
+		"word": "vittu",
+		"type": 2
+	},
+	{
+		"word": "vulva",
+		"type": 2
+	},
+	{
+		"word": "zabourah",
+		"type": 2
+	},
+	{
+		"word": "hell",
+		"type": 3
+	},
+	{
+		"word": "helvete",
+		"type": 3
+	},
+	{
+		"word": "fanculo",
+		"type": 4
+	},
+	{
+		"word": "spierdalaj",
+		"type": 4
+	},
+	{
+		"word": "assrammer",
+		"type": 5
+	},
+	{
+		"word": "cocksucker",
+		"type": 5
+	},
+	{
+		"word": "felcher",
+		"type": 5
+	},
+	{
+		"word": "fucker",
+		"type": 5
+	},
+	{
+		"word": "hora",
+		"type": 5
+	},
+	{
+		"word": "hore",
+		"type": 5
+	},
+	{
+		"word": "kuksugare",
+		"type": 5
+	},
+	{
+		"word": "kuksuger",
+		"type": 5
+	},
+	{
+		"word": "kurwa",
+		"type": 5
+	},
+	{
+		"word": "mofo",
+		"type": 5
+	},
+	{
+		"word": "motherfucker",
+		"type": 5
+	},
+	{
+		"word": "orospu",
+		"type": 5
+	},
+	{
+		"word": "puta",
+		"type": 5
+	},
+	{
+		"word": "puto",
+		"type": 5
+	},
+	{
+		"word": "sharmuta",
+		"type": 5
+	},
+	{
+		"word": "sharmute",
+		"type": 5
+	},
+	{
+		"word": "whore",
+		"type": 5
+	},
+	{
+		"word": "chink",
+		"type": 6
+	},
+	{
+		"word": "dego",
+		"type": 6
+	},
+	{
+		"word": "gook",
+		"type": 6
+	},
+	{
+		"word": "injun",
+		"type": 6
+	},
+	{
+		"word": "kike",
+		"type": 6
+	},
+	{
+		"word": "kraut",
+		"type": 6
+	},
+	{
+		"word": "moulie",
+		"type": 6
+	},
+	{
+		"word": "nigga",
+		"type": 6
+	},
+	{
+		"word": "nigger",
+		"type": 6
+	},
+	{
+		"word": "packie",
+		"type": 6
+	},
+	{
+		"word": "spic",
+		"type": 6
+	},
+	{
+		"word": "wetback",
+		"type": 6
+	},
+	{
+		"word": "wop",
+		"type": 6
+	},
+	{
+		"word": "blowjob",
+		"type": 7
+	},
+	{
+		"word": "bollock",
+		"type": 7
+	},
+	{
+		"word": "dildo",
+		"type": 7
+	},
+	{
+		"word": "enema",
+		"type": 7
+	},
+	{
+		"word": "felch",
+		"type": 7
+	},
+	{
+		"word": "muie",
+		"type": 7
+	},
+	{
+		"word": "orgasm",
+		"type": 7
+	},
+	{
+		"word": "sex",
+		"type": 7
+	},
+	{
+		"word": "boffing",
+		"type": 8
+	},
+	{
+		"word": "ficken",
+		"type": 8
+	},
+	{
+		"word": "fuck",
+		"type": 8
+	},
+	{
+		"word": "fucking",
+		"type": 8
+	},
+	{
+		"word": "jackoff",
+		"type": 8
+	},
+	{
+		"word": "knulla",
+		"type": 8
+	},
+	{
+		"word": "masturbate",
+		"type": 8
+	},
+	{
+		"word": "pula",
+		"type": 8
+	},
+	{
+		"word": "pule",
+		"type": 8
+	},
+	{
+		"word": "screw",
+		"type": 8
+	},
+	{
+		"word": "screwing",
+		"type": 8
+	},
+	{
+		"word": "wank",
+		"type": 8
+	},
+	{
+		"word": "yed",
+		"type": 8
+	},
+	{
+		"word": "asswipe",
+		"type": 9
+	},
+	{
+		"word": "bastard",
+		"type": 9
+	},
+	{
+		"word": "bitch",
+		"type": 9
+	},
+	{
+		"word": "boiola",
+		"type": 9
+	},
+	{
+		"word": "buttwipe",
+		"type": 9
+	},
+	{
+		"word": "cabron",
+		"type": 9
+	},
+	{
+		"word": "dirsa",
+		"type": 9
+	},
+	{
+		"word": "fag",
+		"type": 9
+	},
+	{
+		"word": "faggot",
+		"type": 9
+	},
+	{
+		"word": "fatass",
+		"type": 9
+	},
+	{
+		"word": "honkey",
+		"type": 9
+	},
+	{
+		"word": "huevon",
+		"type": 9
+	},
+	{
+		"word": "masochist",
+		"type": 9
+	},
+	{
+		"word": "nazi",
+		"type": 9
+	},
+	{
+		"word": "retard",
+		"type": 9
+	},
+	{
+		"word": "sadist",
+		"type": 9
+	},
+	{
+		"word": "schlampe",
+		"type": 9
+	},
+	{
+		"word": "schmuck",
+		"type": 9
+	},
+	{
+		"word": "skank",
+		"type": 9
+	},
+	{
+		"word": "skurwysyn",
+		"type": 9
+	},
+	{
+		"word": "slut",
+		"type": 9
+	},
+	{
+		"word": "slutty",
+		"type": 9
+	},
+	{
+		"word": "suka",
+		"type": 9
+	},
+	{
+		"word": "wichser",
+		"type": 9
+	}
+	],
+	"name": "TravelPad",
+	"version": 1
+}

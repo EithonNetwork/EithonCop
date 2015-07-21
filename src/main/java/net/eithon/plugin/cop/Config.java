@@ -23,6 +23,15 @@ public class Config {
 		public static String[] categorySexualNoun;
 		public static String[] categorySexualVerb;
 		public static String[] categoryDerogative;
+		public static int profanityLevel;
+		public static boolean saveSimilar;
+		public static boolean markReplacement;
+		public static String markReplacementPrefix;
+		public static String markReplacementPostfix;
+		public static boolean markSimilar;
+		public static String markSimilarPrefix;
+		public static String markSimilarPostfix;
+		
 		static void load(Configuration config) {
 			String[] sample = {""};
 			categoryUnknown = config.getStringList("CategoryUnknown").toArray(sample);
@@ -35,6 +44,14 @@ public class Config {
 			categorySexualNoun = config.getStringList("CategorySexualNoun").toArray(sample);
 			categorySexualVerb = config.getStringList("CategorySexualVerb").toArray(sample);
 			categoryDerogative = config.getStringList("CategoryDerogative").toArray(sample);
+			profanityLevel = config.getInt("ProfanityLevel", 0);
+			saveSimilar = config.getInt("SaveSimilar", 0) != 0;
+			markReplacement = config.getInt("MarkReplacement", 0) != 0;
+			markReplacementPrefix = config.getString("MarkReplacementPrefix", "_");
+			markReplacementPostfix = config.getString("MarkReplacementPostfix", "_");
+			markSimilar = config.getInt("MarkSimilar", 0) != 0;
+			markSimilarPrefix = config.getString("MarkSimilarPrefix", "<");
+			markSimilarPostfix = config.getString("MarkSimilarPostfix", ">");
 		}
 
 	}
