@@ -111,20 +111,23 @@ class Blacklist {
 	}
 
 	void delayedSaveSimilar(double waitSeconds, Whitelist whitelist) {
-		final Blacklist thisObject = this;
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
 			public void run() {
-				synchronized (thisObject._similarWords) {
-					thisObject.getSimilarStorageFile().delete();
-					thisObject.consolidateSimilar(whitelist);
-					for (String similarWord : thisObject._similarWords.keySet()) {
-						Profanity profanity = thisObject._similarWords.get(similarWord);
-						saveSimilar(similarWord, profanity, true);
-					}
-				}
+				saveSimilar(whitelist);
 			}
 		}, TimeMisc.secondsToTicks(waitSeconds));	
+	}
+
+	void saveSimilar(Whitelist whitelist) {
+		synchronized (this._similarWords) {
+			getSimilarStorageFile().delete();
+			consolidateSimilar(whitelist);
+			for (String similarWord : this._similarWords.keySet()) {
+				Profanity profanity = this._similarWords.get(similarWord);
+				saveSimilar(similarWord, profanity, true);
+			}
+		}
 	}
 
 	protected void consolidateSimilar(Whitelist whitelist) {

@@ -2,10 +2,13 @@ package net.eithon.plugin.cop.logic;
 
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
+import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public class Controller {
 
@@ -23,6 +26,25 @@ public class Controller {
 			this._blacklist.delayedLoadSimilar(2);
 			this._blacklist.delayedSaveSimilar(3, this._whitelist);
 		}
+		delayedLoadSeed(4);
+	}
+	
+	private void delayedLoadSeed(double delaySeconds)
+	{
+		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
+			public void run() {
+				loadSeed();
+			}
+		}, TimeMisc.secondsToTicks(delaySeconds));		
+	}
+
+	void loadSeed() {
+		
+	}
+
+	public void disable() {
+		this._blacklist.saveSimilar(this._whitelist);
 	}
 
 	public String addProfanity(CommandSender sender, String word) {

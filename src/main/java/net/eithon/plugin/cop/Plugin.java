@@ -21,6 +21,7 @@ public final class Plugin extends EithonPlugin {
 	@Override
 	public void onDisable() {
 		super.onDisable();
+		this._controller.disable();
 		this._controller = null;
 	}
 }
