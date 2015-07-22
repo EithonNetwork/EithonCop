@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public class Controller {
-
+	static int profanityWordMinimumLength = 3;
 	private EithonPlugin _eithonPlugin;
 	private Blacklist _blacklist;
 	private Whitelist _whitelist;
@@ -82,6 +82,10 @@ public class Controller {
 	}
 
 	public String addProfanity(CommandSender sender, String word) {
+		if (word.length() < profanityWordMinimumLength) {
+			Config.M.blackListWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
+			return null;
+		}
 		Profanity profanity = this._blacklist.getProfanity(word);
 		if (profanity == null) {
 			profanity = this._blacklist.add(word);
@@ -101,6 +105,10 @@ public class Controller {
 	}
 
 	public String addAccepted(CommandSender sender, String word) {
+		if (word.length() < profanityWordMinimumLength) {
+			Config.M.whitelistWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
+			return null;
+		}
 		String normalized = Profanity.normalize(word);
 		if (this._whitelist.isWhitelisted(normalized)) {
 			Config.M.duplicateAcceptedWord.sendMessage(sender, word);
@@ -123,7 +131,7 @@ public class Controller {
 	public String profanityFilter(Player player, String message) {
 		char[] inCharArray = message.toCharArray();
 		String transformedInMessage = Profanity.normalize(message);
-		transformedInMessage = transformedInMessage.replaceAll("\\s-", " ");
+		transformedInMessage = transformedInMessage.replaceAll("\\W", " ");
 		char[] transformedCharArray = transformedInMessage.toCharArray();
 		StringBuilder inWord = new StringBuilder("");
 		StringBuilder transformedWord = new StringBuilder("");
@@ -156,12 +164,24 @@ public class Controller {
 	}
 
 	private String replace(String transformedWord, String inWord) {
+		if (transformedWord.length() < profanityWordMinimumLength) return inWord;
 		if (this._whitelist.isWhitelisted(transformedWord)) return inWord;
 		String outWord = this._blacklist.replaceIfBlacklisted(transformedWord);
-		if (outWord == null) return inWord;
+		if (outWord == null) {
+			String withoutPlural = withoutPlural(transformedWord);
+			if (transformedWord.equalsIgnoreCase(withoutPlural)) return inWord;
+			outWord = this._blacklist.replaceIfBlacklisted(withoutPlural);
+			if (outWord == null) return inWord;
+		}
 		String result = casifyAsReferenceWord(outWord, inWord);
 		if (Leet.isLeet(inWord)) return Leet.encode(result);
 		return result;
+	}
+
+	private String withoutPlural(String transformedWord) {
+		if (!transformedWord.endsWith("es")) return transformedWord.substring(0, transformedWord.length()-2);
+		if (!transformedWord.endsWith("s")) return transformedWord.substring(0, transformedWord.length()-1);
+		return transformedWord;
 	}
 
 	private String casifyAsReferenceWord(String outWord, String referenceWord) {

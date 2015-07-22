@@ -67,6 +67,8 @@ public class Config {
 		public static ConfigurableMessage acceptedWordAdded;
 		public static ConfigurableMessage acceptedWordWasBlacklisted;
 		public static ConfigurableMessage duplicateAcceptedWord;
+		public static ConfigurableMessage blackListWordMinimalLength;
+		public static ConfigurableMessage whitelistWordMinimalLength;
 
 		static void load(Configuration config) {
 			duplicateProfanity = config.getConfigurableMessage("DuplicateProfanity", 1,
@@ -83,6 +85,10 @@ public class Config {
 					"You can't whitelist \"%s\" because it is blacklisted with that spelling.");
 			duplicateAcceptedWord = config.getConfigurableMessage("DuplicateAcceptedWord", 1,
 					"The word \"%s\" has already been whitelisted.");
+			blackListWordMinimalLength = config.getConfigurableMessage("BlacklistWordMinimalLength", 1,
+					"A word that should be blacklisted must have at least %d characters.");
+			whitelistWordMinimalLength = config.getConfigurableMessage("WhitelistWordMinimalLength", 1,
+					"A word that should be whitelisted must have at least %d characters.");
 		}		
 	}
 

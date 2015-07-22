@@ -97,4 +97,9 @@ messages:
   # Parameters: <new word>(%s)
   #
   DuplicateAcceptedWord: "The word \"%s\" has already been whitelisted."
+
+  #
+  # Parameters: <minimum length>(%d)
+  #
+  BlackListWordMinimalLength: "A word that should be blacklisted must have at least %d characters."
   

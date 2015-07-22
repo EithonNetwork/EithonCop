@@ -6,6 +6,7 @@ A Cop plugin for Minecraft.
 
 ### 0.2 (2015-04-22)
 
+* NEW: Now recognizes plural s (both "dicks" and "bitches" are recognized as dick and bitch respectively).
 * NEW: Now has an isLiteral property for profanities.
 * BUG: Save blacklist duplicated values.
 
