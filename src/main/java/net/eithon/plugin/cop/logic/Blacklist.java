@@ -5,8 +5,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.file.FileMisc;
@@ -126,11 +130,21 @@ class Blacklist {
 		synchronized (this._similarWords) {
 			getSimilarStorageFile().delete();
 			consolidateSimilar(whitelist);
-			for (String similarWord : this._similarWords.keySet()) {
+			for (String similarWord : sortStrings(this._similarWords.keySet())) {
 				Profanity profanity = this._similarWords.get(similarWord);
 				saveSimilar(similarWord, profanity, true);
 			}
 		}
+	}
+
+	private List<String> sortStrings(Collection<String> collection) {
+		ArrayList<String> array = new ArrayList<String>(collection);
+		array.sort(new Comparator<String>(){
+			public int compare(String f1, String f2)
+			{
+				return f1.compareTo(f2);
+			} });
+		return array;
 	}
 
 	protected void consolidateSimilar(Whitelist whitelist) {

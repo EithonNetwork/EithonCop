@@ -10,6 +10,7 @@ import java.util.List;
 import net.eithon.library.json.IJson;
 import net.eithon.plugin.cop.Config;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 class Profanity implements IJson<Profanity> {
@@ -28,6 +29,7 @@ class Profanity implements IJson<Profanity> {
 	private String _secondaryEncoded;
 	private ProfanityType _type;
 	private boolean _isLiteral;
+	private List<String> _synonyms;
 	
 	static {
 		metaphone3 = new Metaphone3();
@@ -59,6 +61,7 @@ class Profanity implements IJson<Profanity> {
 		this._word = normalize(word);
 		this._type = ProfanityType.UNKNOWN;
 		this._isLiteral = true;
+		this._synonyms = new ArrayList<String>();
 		prepare();
 	}
 
@@ -106,7 +109,7 @@ class Profanity implements IJson<Profanity> {
 	}
 	
 	public String[] getSynonyms() {
-		String[] array = synonyms.get(this._type);
+		String[] array = this._synonyms.size() > 0 ? this._synonyms.toArray(new String[0]) : synonyms.get(this._type);
 		if ((array == null) || (array.length == 0)) return new String[] {"****"};
 		return array;
 	}
@@ -125,9 +128,9 @@ class Profanity implements IJson<Profanity> {
 		ArrayList<Profanity> array = new ArrayList<Profanity>(collection);
 		array.sort(
 				new Comparator<Profanity>(){
-					public int compare(Profanity f1, Profanity f2)
+					public int compare(Profanity p1, Profanity p2)
 					{
-						return factor*f1.getWord().compareTo(f2.getWord());
+						return factor*p1.getWord().compareTo(p2.getWord());
 					} });	
 		return array;
 	}
@@ -139,6 +142,9 @@ class Profanity implements IJson<Profanity> {
 		json.put("word", this._word);
 		json.put("type", profanityTypeToInteger.get(this._type));
 		json.put("isLiteral", this._isLiteral ? 1 : 0);
+		JSONArray array = new JSONArray();
+		array.addAll(this._synonyms);
+		json.put("synonyms", array);
 		return json;
 	}
 
@@ -148,6 +154,13 @@ class Profanity implements IJson<Profanity> {
 		this._word = (String) jsonObject.get("word");
 		Long typeAsInteger = (Long) jsonObject.get("type");
 		Long isLiteralAsLong = (Long) jsonObject.get("isLiteral");
+		JSONArray array = (JSONArray) jsonObject.get("synonyms");
+		this._synonyms = new ArrayList<String>();
+		if (array != null) {
+			for (Object object : array) {
+				this._synonyms.add((String) object);
+			}
+		}
 		this._isLiteral = ((isLiteralAsLong == null) || (isLiteralAsLong.longValue() == 0)) ? false : true;
 		if (typeAsInteger == null) this._type = ProfanityType.UNKNOWN;
 		else this._type = integerToProfanityType.get(typeAsInteger.intValue());

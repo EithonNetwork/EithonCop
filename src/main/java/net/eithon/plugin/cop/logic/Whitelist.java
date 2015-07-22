@@ -1,7 +1,11 @@
 package net.eithon.plugin.cop.logic;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.json.FileContent;
@@ -62,7 +66,8 @@ class Whitelist {
 	public
 	void save() {
 		JSONArray whitelist = new JSONArray();
-		for (String word : this._whitelist.keySet()) {
+		List<String> array = sortStrings(this._whitelist.keySet());
+		for (String word : array) {
 			whitelist.add(word);
 		}
 		if ((whitelist == null) || (whitelist.size() == 0)) {
@@ -74,6 +79,16 @@ class Whitelist {
 
 		FileContent fileContent = new FileContent("Whitelist", 1, whitelist);
 		fileContent.save(file);
+	}
+
+	private List<String> sortStrings(Collection<String> collection) {
+		ArrayList<String> array = new ArrayList<String>(collection);
+		array.sort(new Comparator<String>(){
+			public int compare(String f1, String f2)
+			{
+				return f1.compareTo(f2);
+			} });
+		return array;
 	}
 
 	public void delayedLoad(double delaySeconds)

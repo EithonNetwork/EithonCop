@@ -36,6 +36,7 @@ public class Controller {
 	}
 
 	public void disable() {
+		this._whitelist.save();
 		this._blacklist.save();
 		this._blacklist.saveSimilar(this._whitelist);
 	}
