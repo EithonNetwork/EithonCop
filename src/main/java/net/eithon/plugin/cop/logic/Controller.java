@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.StringTokenizer;
 
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.file.FileMisc;
@@ -130,56 +131,102 @@ public class Controller {
 	}
 
 	public String profanityFilter(Player player, String message) {
-		char[] inCharArray = message.toCharArray();
+		verbose("Controller.profanityFilter", "Enter = \"%s\"", message);
 		String transformedInMessage = Profanity.normalize(message);
 		transformedInMessage = transformedInMessage.replaceAll("\\W", " ");
-		char[] transformedCharArray = transformedInMessage.toCharArray();
 		StringBuilder inWord = new StringBuilder("");
 		StringBuilder transformedWord = new StringBuilder("");
 		String outWord;
-		StringBuilder outMessage = new StringBuilder("");
-		for (int pos = 0; pos < transformedCharArray.length; pos++) {
-			char inChar = inCharArray[pos];
-			char transformedChar = transformedCharArray[pos];
-			if (transformedChar != ' ') {
-				inWord.append(inChar);
-				transformedWord.append(transformedChar);
-				continue;
-			}
-			// We have a word
-			if (transformedWord.length() > 0) {
-				outWord = replace(transformedWord.toString(), inWord.toString());
-				outMessage.append(outWord);
-				outMessage.append(inChar);
-				inWord = new StringBuilder();
-				transformedWord = new StringBuilder("");
+		StringBuilder outMessage = new StringBuilder("");		
+		StringTokenizer st = new StringTokenizer(transformedInMessage, " ", true);
+		int pos = 0;
+		while (st.hasMoreElements()) {
+			String token = st.nextToken();
+			verbose("Controller.profanityFilter", "token = \"%s\"", token);
+			int tokenLength = token.length();
+			if (token.equalsIgnoreCase(" ")) {
+				verbose("Controller.profanityFilter", "space");
+				inWord.append(message.charAt(pos));
+				verbose("Controller.profanityFilter", "inWord = \"%s\"", inWord.toString());
+				if (transformedWord.length() == 0) {
+					outMessage.append(inWord);
+					verbose("Controller.profanityFilter", "outMessage = \"%s\"", outMessage.toString());
+					inWord = new StringBuilder();
+				}
 			} else {
-				outMessage.append(inChar);
+				if (tokenLength < profanityWordMinimumLength) {
+					inWord.append(message.substring(pos, pos+tokenLength));
+					verbose("Controller.profanityFilter", "inWord2 = \"%s\"", inWord.toString());
+					transformedWord.append(token);
+					verbose("Controller.profanityFilter", "transformedWord = \"%s\"", transformedWord.toString());
+					outWord = replaceWithSynonym(transformedWord.toString(), true);
+					verbose("Controller.profanityFilter", "outWord = \"%s\"", outWord);
+					if (outWord != null) {
+						outWord = replace(transformedWord.toString(), inWord.toString());
+						verbose("Controller.profanityFilter", "outWord2 = \"%s\"", outWord);
+						outMessage.append(outWord);
+						verbose("Controller.profanityFilter", "outMessage2 = \"%s\"", outMessage.toString());
+						inWord = new StringBuilder();
+						transformedWord = new StringBuilder("");
+					}
+				} else {
+					if (transformedWord.length() > 0) {
+						outWord = replace(transformedWord.toString(), inWord.toString());
+						verbose("Controller.profanityFilter", "outWord3 = \"%s\"", outWord);
+						outMessage.append(outWord);
+						verbose("Controller.profanityFilter", "outMessage3 = \"%s\"", outMessage.toString());
+						inWord = new StringBuilder();
+						transformedWord = new StringBuilder("");
+					}
+					inWord.append(message.substring(pos, pos+tokenLength));
+					outWord = replace(token, inWord.toString());
+					verbose("Controller.profanityFilter", "outWord4 = \"%s\"", outWord);
+					outMessage.append(outWord);
+					verbose("Controller.profanityFilter", "outMessage4 = \"%s\"", outMessage.toString());
+					inWord = new StringBuilder();
+				}
 			}
+			pos += tokenLength;
 		}
-		// We have a word
+
 		if (transformedWord.length() > 0) {
 			outWord = replace(transformedWord.toString(), inWord.toString());
+			verbose("Controller.profanityFilter", "outWord5 = \"%s\"", outWord);
 			outMessage.append(outWord);
+			verbose("Controller.profanityFilter", "outMessage5 = \"%s\"", outMessage.toString());
 		}
 
 		return outMessage.toString();
 	}
 
 	private String replace(String transformedWord, String inWord) {
-		if (transformedWord.length() < profanityWordMinimumLength) return inWord;
-		if (this._whitelist.isWhitelisted(transformedWord)) return inWord;
-		String outWord = this._blacklist.replaceIfBlacklisted(transformedWord);
-		if (outWord == null) {
-			String withoutPlural = withoutPlural(transformedWord);
-			if (transformedWord.equalsIgnoreCase(withoutPlural)) return inWord;
-			if (withoutPlural.length() < profanityWordMinimumLength) return inWord;
-			if (this._whitelist.isWhitelisted(withoutPlural)) return inWord;
-			outWord = this._blacklist.replaceIfBlacklisted(withoutPlural);
-			if (outWord == null) return inWord;
-		}
+		String outWord = replaceWithSynonym(transformedWord, true);
+		if (outWord == null) return inWord;
 		String result = casifyAsReferenceWord(outWord, inWord);
 		if (Leet.isLeet(inWord)) return Leet.encode(result);
+		return result;
+	}
+
+	private String replaceWithSynonym(String transformedWord, boolean checkPlural) {
+		String outWord = replaceWithSynonym(transformedWord);
+		if ((outWord != null) || !checkPlural) return outWord;
+		String withoutPlural = withoutPlural(transformedWord);
+		if (transformedWord.equalsIgnoreCase(withoutPlural)) return null;
+		return replaceWithSynonym(withoutPlural);
+	}
+
+	private String replaceWithSynonym(String transformedWord) {
+		verbose("Controller.replaceWithSynonym", "Enter = \"%s\"", transformedWord);
+		if (transformedWord.length() < profanityWordMinimumLength) {
+			verbose("Controller.replaceWithSynonym", "Too short. Leave null");
+			return null;
+		}
+		if (this._whitelist.isWhitelisted(transformedWord)) {
+			verbose("Controller.replaceWithSynonym", "Whitelisted. Leave null");
+			return null;
+		}
+		String result = this._blacklist.replaceIfBlacklisted(transformedWord);
+		verbose("Controller.replaceWithSynonym", "Leave = \"%s\"", result);
 		return result;
 	}
 
