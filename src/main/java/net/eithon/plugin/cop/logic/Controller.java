@@ -152,6 +152,8 @@ public class Controller {
 				outMessage.append(inChar);
 				inWord = new StringBuilder();
 				transformedWord = new StringBuilder("");
+			} else {
+				outMessage.append(inChar);
 			}
 		}
 		// We have a word
@@ -170,6 +172,8 @@ public class Controller {
 		if (outWord == null) {
 			String withoutPlural = withoutPlural(transformedWord);
 			if (transformedWord.equalsIgnoreCase(withoutPlural)) return inWord;
+			if (withoutPlural.length() < profanityWordMinimumLength) return inWord;
+			if (this._whitelist.isWhitelisted(withoutPlural)) return inWord;
 			outWord = this._blacklist.replaceIfBlacklisted(withoutPlural);
 			if (outWord == null) return inWord;
 		}
@@ -179,8 +183,8 @@ public class Controller {
 	}
 
 	private String withoutPlural(String transformedWord) {
-		if (!transformedWord.endsWith("es")) return transformedWord.substring(0, transformedWord.length()-2);
-		if (!transformedWord.endsWith("s")) return transformedWord.substring(0, transformedWord.length()-1);
+		if (transformedWord.endsWith("es")) return transformedWord.substring(0, transformedWord.length()-2);
+		if (transformedWord.endsWith("s")) return transformedWord.substring(0, transformedWord.length()-1);
 		return transformedWord;
 	}
 
@@ -195,7 +199,7 @@ public class Controller {
 				if (Character.isUpperCase(c)) return outWord.toUpperCase();
 				else {
 					StringBuilder result = new StringBuilder();
-					result.append(outWord.substring(0, 0).toUpperCase());
+					result.append(outWord.substring(0, 1).toUpperCase());
 					result.append(outWord.substring(1).toLowerCase());
 					return result.toString();
 				}
