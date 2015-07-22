@@ -33,17 +33,16 @@ public class Config {
 		public static String markSimilarPostfix;
 		
 		static void load(Configuration config) {
-			String[] sample = {""};
-			categoryUnknown = config.getStringList("CategoryUnknown").toArray(sample);
-			categoryBodyContent = config.getStringList("CategoryBodyContent").toArray(sample);
-			categoryBodyPart = config.getStringList("CategoryBodyPart").toArray(sample);
-			categoryLocation = config.getStringList("CategoryLocation").toArray(sample);
-			categoryOffensive = config.getStringList("CategoryOffensive").toArray(sample);
-			categoryProfession = config.getStringList("CategoryProfession").toArray(sample);
-			categoryRacist = config.getStringList("CategoryRacist").toArray(sample);
-			categorySexualNoun = config.getStringList("CategorySexualNoun").toArray(sample);
-			categorySexualVerb = config.getStringList("CategorySexualVerb").toArray(sample);
-			categoryDerogative = config.getStringList("CategoryDerogative").toArray(sample);
+			categoryUnknown = config.getStringList("CategoryUnknown").toArray(new String[0]);
+			categoryBodyContent = config.getStringList("CategoryBodyContent").toArray(new String[0]);
+			categoryBodyPart = config.getStringList("CategoryBodyPart").toArray(new String[0]);
+			categoryLocation = config.getStringList("CategoryLocation").toArray(new String[0]);
+			categoryOffensive = config.getStringList("CategoryOffensive").toArray(new String[0]);
+			categoryProfession = config.getStringList("CategoryProfession").toArray(new String[0]);
+			categoryRacist = config.getStringList("CategoryRacist").toArray(new String[0]);
+			categorySexualNoun = config.getStringList("CategorySexualNoun").toArray(new String[0]);
+			categorySexualVerb = config.getStringList("CategorySexualVerb").toArray(new String[0]);
+			categoryDerogative = config.getStringList("CategoryDerogative").toArray(new String[0]);
 			profanityLevel = config.getInt("ProfanityLevel", 0);
 			saveSimilar = config.getInt("SaveSimilar", 0) != 0;
 			markReplacement = config.getInt("MarkReplacement", 0) != 0;
@@ -68,6 +67,8 @@ public class Config {
 		public static ConfigurableMessage acceptedWordAdded;
 		public static ConfigurableMessage acceptedWordWasBlacklisted;
 		public static ConfigurableMessage duplicateAcceptedWord;
+		public static ConfigurableMessage blackListWordMinimalLength;
+		public static ConfigurableMessage whitelistWordMinimalLength;
 
 		static void load(Configuration config) {
 			duplicateProfanity = config.getConfigurableMessage("DuplicateProfanity", 1,
@@ -84,6 +85,10 @@ public class Config {
 					"You can't whitelist \"%s\" because it is blacklisted with that spelling.");
 			duplicateAcceptedWord = config.getConfigurableMessage("DuplicateAcceptedWord", 1,
 					"The word \"%s\" has already been whitelisted.");
+			blackListWordMinimalLength = config.getConfigurableMessage("BlacklistWordMinimalLength", 1,
+					"A word that should be blacklisted must have at least %d characters.");
+			whitelistWordMinimalLength = config.getConfigurableMessage("WhitelistWordMinimalLength", 1,
+					"A word that should be whitelisted must have at least %d characters.");
 		}		
 	}
 

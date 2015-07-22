@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public class Controller {
-
+	static int profanityWordMinimumLength = 3;
 	private EithonPlugin _eithonPlugin;
 	private Blacklist _blacklist;
 	private Whitelist _whitelist;
@@ -33,6 +33,11 @@ public class Controller {
 			this._blacklist.delayedLoadSimilar(2);
 		}
 		delayedLoadSeed(4);
+	}
+
+	public void disable() {
+		this._blacklist.save();
+		this._blacklist.saveSimilar(this._whitelist);
 	}
 
 	private void delayedLoadSeed(double delaySeconds)
@@ -76,11 +81,11 @@ public class Controller {
 		return file;
 	}
 
-	public void disable() {
-		this._blacklist.saveSimilar(this._whitelist);
-	}
-
 	public String addProfanity(CommandSender sender, String word) {
+		if (word.length() < profanityWordMinimumLength) {
+			Config.M.blackListWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
+			return null;
+		}
 		Profanity profanity = this._blacklist.getProfanity(word);
 		if (profanity == null) {
 			profanity = this._blacklist.add(word);
@@ -100,6 +105,10 @@ public class Controller {
 	}
 
 	public String addAccepted(CommandSender sender, String word) {
+		if (word.length() < profanityWordMinimumLength) {
+			Config.M.whitelistWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
+			return null;
+		}
 		String normalized = Profanity.normalize(word);
 		if (this._whitelist.isWhitelisted(normalized)) {
 			Config.M.duplicateAcceptedWord.sendMessage(sender, word);
@@ -122,7 +131,7 @@ public class Controller {
 	public String profanityFilter(Player player, String message) {
 		char[] inCharArray = message.toCharArray();
 		String transformedInMessage = Profanity.normalize(message);
-		transformedInMessage = transformedInMessage.replaceAll("\\s-", " ");
+		transformedInMessage = transformedInMessage.replaceAll("\\W", " ");
 		char[] transformedCharArray = transformedInMessage.toCharArray();
 		StringBuilder inWord = new StringBuilder("");
 		StringBuilder transformedWord = new StringBuilder("");
@@ -143,6 +152,8 @@ public class Controller {
 				outMessage.append(inChar);
 				inWord = new StringBuilder();
 				transformedWord = new StringBuilder("");
+			} else {
+				outMessage.append(inChar);
 			}
 		}
 		// We have a word
@@ -155,13 +166,26 @@ public class Controller {
 	}
 
 	private String replace(String transformedWord, String inWord) {
-		verbose("resplace", "In: %s, transformed: %s", inWord, transformedWord);
+		if (transformedWord.length() < profanityWordMinimumLength) return inWord;
 		if (this._whitelist.isWhitelisted(transformedWord)) return inWord;
 		String outWord = this._blacklist.replaceIfBlacklisted(transformedWord);
-		if (outWord == null) return inWord;
+		if (outWord == null) {
+			String withoutPlural = withoutPlural(transformedWord);
+			if (transformedWord.equalsIgnoreCase(withoutPlural)) return inWord;
+			if (withoutPlural.length() < profanityWordMinimumLength) return inWord;
+			if (this._whitelist.isWhitelisted(withoutPlural)) return inWord;
+			outWord = this._blacklist.replaceIfBlacklisted(withoutPlural);
+			if (outWord == null) return inWord;
+		}
 		String result = casifyAsReferenceWord(outWord, inWord);
 		if (Leet.isLeet(inWord)) return Leet.encode(result);
 		return result;
+	}
+
+	private String withoutPlural(String transformedWord) {
+		if (transformedWord.endsWith("es")) return transformedWord.substring(0, transformedWord.length()-2);
+		if (transformedWord.endsWith("s")) return transformedWord.substring(0, transformedWord.length()-1);
+		return transformedWord;
 	}
 
 	private String casifyAsReferenceWord(String outWord, String referenceWord) {
@@ -175,7 +199,7 @@ public class Controller {
 				if (Character.isUpperCase(c)) return outWord.toUpperCase();
 				else {
 					StringBuilder result = new StringBuilder();
-					result.append(outWord.substring(0, 0).toUpperCase());
+					result.append(outWord.substring(0, 1).toUpperCase());
 					result.append(outWord.substring(1).toLowerCase());
 					return result.toString();
 				}

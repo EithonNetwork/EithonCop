@@ -1,7 +1,11 @@
 package net.eithon.plugin.cop.logic;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 
 import net.eithon.library.json.IJson;
 import net.eithon.plugin.cop.Config;
@@ -9,18 +13,21 @@ import net.eithon.plugin.cop.Config;
 import org.json.simple.JSONObject;
 
 class Profanity implements IJson<Profanity> {
-	private String _word;
-	private String _primaryEncoded;
-	private String _secondaryEncoded;
-	private ProfanityType _type;
-	static Metaphone3 metaphone3;
-	private static EnumMap<ProfanityType, Integer> profanityTypeToInteger = new EnumMap<Profanity.ProfanityType, Integer>(ProfanityType.class);
-	private static HashMap<Integer, ProfanityType> integerToProfanityType = new HashMap<Integer, Profanity.ProfanityType>();
-	private static EnumMap<ProfanityType, String[]> synonyms = new EnumMap<Profanity.ProfanityType, String[]>(ProfanityType.class);
 	static final int PROFANITY_LEVEL_NONE = 0;
 	static final int PROFANITY_LEVEL_LITERAL = 1;
 	static final int PROFANITY_LEVEL_SIMILAR = 2;
 	static final int PROFANITY_LEVEL_MAX = 2;
+	static Metaphone3 metaphone3;
+	
+	private static EnumMap<ProfanityType, Integer> profanityTypeToInteger = new EnumMap<Profanity.ProfanityType, Integer>(ProfanityType.class);
+	private static HashMap<Integer, ProfanityType> integerToProfanityType = new HashMap<Integer, Profanity.ProfanityType>();
+	private static EnumMap<ProfanityType, String[]> synonyms = new EnumMap<Profanity.ProfanityType, String[]>(ProfanityType.class);
+
+	private String _word;
+	private String _primaryEncoded;
+	private String _secondaryEncoded;
+	private ProfanityType _type;
+	private boolean _isLiteral;
 	
 	static {
 		metaphone3 = new Metaphone3();
@@ -51,10 +58,11 @@ class Profanity implements IJson<Profanity> {
 	public Profanity(String word) {
 		this._word = normalize(word);
 		this._type = ProfanityType.UNKNOWN;
+		this._isLiteral = true;
 		prepare();
 	}
 
-	private Profanity() {
+	Profanity() {
 	}
 
 	public enum ProfanityType {
@@ -82,6 +90,7 @@ class Profanity implements IJson<Profanity> {
 	public String getPrimary() {return this._primaryEncoded; }
 	public String getSecondary() { return this._secondaryEncoded; }
 	public boolean hasSecondary() { return this._secondaryEncoded != null; }
+	public boolean isLiteral() { return this._isLiteral; }
 	public ProfanityType getProfanityType() { return this._type; }
 	public void setProfanityType(ProfanityType type) { this._type = type; }
 	public boolean isSameWord(String word) {return this._word.equalsIgnoreCase(normalize(word)); }
@@ -107,12 +116,29 @@ class Profanity implements IJson<Profanity> {
 		return new Profanity();
 	}
 
+	static List<Profanity> sortByWord(Collection<Profanity> collection) {
+		return sortByWord(collection, true);
+	}
+
+	static List<Profanity> sortByWord(Collection<Profanity> collection, boolean ascending) {
+		int factor = ascending ? 1 : -1;
+		ArrayList<Profanity> array = new ArrayList<Profanity>(collection);
+		array.sort(
+				new Comparator<Profanity>(){
+					public int compare(Profanity f1, Profanity f2)
+					{
+						return factor*f1.getWord().compareTo(f2.getWord());
+					} });	
+		return array;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object toJson() {
 		JSONObject json = new JSONObject();
 		json.put("word", this._word);
 		json.put("type", profanityTypeToInteger.get(this._type));
+		json.put("isLiteral", this._isLiteral ? 1 : 0);
 		return json;
 	}
 
@@ -121,6 +147,8 @@ class Profanity implements IJson<Profanity> {
 		JSONObject jsonObject = (JSONObject) json;
 		this._word = (String) jsonObject.get("word");
 		Long typeAsInteger = (Long) jsonObject.get("type");
+		Long isLiteralAsLong = (Long) jsonObject.get("isLiteral");
+		this._isLiteral = ((isLiteralAsLong == null) || (isLiteralAsLong.longValue() == 0)) ? false : true;
 		if (typeAsInteger == null) this._type = ProfanityType.UNKNOWN;
 		else this._type = integerToProfanityType.get(typeAsInteger.intValue());
 		this.prepare();
@@ -133,7 +161,7 @@ class Profanity implements IJson<Profanity> {
 	
 	@Override 
 	public String toString() {
-		String result = String.format("%s (%d)", getWord(), profanityTypeToInteger.get(this._type));
+		String result = String.format("%s (%s, %d)", getWord(), this._isLiteral ? "literal" : "not literal", profanityTypeToInteger.get(this._type));
 		if (hasSecondary()) result += String.format(" [%s, %s]", getPrimary(), getSecondary());
 		else result += String.format(" [%s]", getPrimary());
 		return result;
