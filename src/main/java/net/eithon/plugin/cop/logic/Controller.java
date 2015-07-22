@@ -35,6 +35,11 @@ public class Controller {
 		delayedLoadSeed(4);
 	}
 
+	public void disable() {
+		this._blacklist.save();
+		this._blacklist.saveSimilar(this._whitelist);
+	}
+
 	private void delayedLoadSeed(double delaySeconds)
 	{
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
@@ -74,10 +79,6 @@ public class Controller {
 	private File getSeedOutStorageFile() {
 		File file = this._eithonPlugin.getDataFile("seedout.txt");
 		return file;
-	}
-
-	public void disable() {
-		this._blacklist.saveSimilar(this._whitelist);
 	}
 
 	public String addProfanity(CommandSender sender, String word) {
@@ -155,7 +156,6 @@ public class Controller {
 	}
 
 	private String replace(String transformedWord, String inWord) {
-		verbose("resplace", "In: %s, transformed: %s", inWord, transformedWord);
 		if (this._whitelist.isWhitelisted(transformedWord)) return inWord;
 		String outWord = this._blacklist.replaceIfBlacklisted(transformedWord);
 		if (outWord == null) return inWord;
