@@ -1,578 +1,724 @@
 {
-	"payload": [
+	"payload": [{
+		"isLiteral": 0,
+		"type": 9,
+		"word": "skank"
+	},
 	{
-		"word": "cum",
-		"type": 1
+		"isLiteral": 1,
+		"type": 6,
+		"word": "spic"
 	},
 	{
-		"word": "fart",
-		"type": 1
+		"isLiteral": 1,
+		"type": 5,
+		"word": "puta"
 	},
 	{
-		"word": "feces",
-		"type": 1
+		"isLiteral": 1,
+		"type": 2,
+		"word": "pillu"
 	},
 	{
-		"word": "jism",
-		"type": 1
+		"isLiteral": 1,
+		"type": 6,
+		"word": "dego"
 	},
 	{
-		"word": "jiz",
-		"type": 1
+		"isLiteral": 1,
+		"type": 5,
+		"word": "kurwa"
 	},
 	{
-		"word": "merde",
-		"type": 1
+		"isLiteral": 1,
+		"type": 6,
+		"word": "kike"
 	},
 	{
-		"word": "paska",
-		"type": 1
+		"isLiteral": 0,
+		"type": 7,
+		"word": "blowjob"
 	},
 	{
-		"word": "piss",
-		"type": 1
+		"isLiteral": 1,
+		"type": 8,
+		"word": "pule"
 	},
 	{
-		"word": "queef",
-		"type": 1
+		"isLiteral": 0,
+		"type": 2,
+		"word": "testicle"
 	},
 	{
-		"word": "scheiss",
-		"type": 1
+		"isLiteral": 0,
+		"type": 5,
+		"word": "motherfucker"
 	},
 	{
-		"word": "semen",
-		"type": 1
+		"isLiteral": 0,
+		"type": 8,
+		"word": "fucking"
 	},
 	{
-		"word": "shit",
-		"type": 1
+		"isLiteral": 0,
+		"type": 3,
+		"word": "hell"
 	},
 	{
-		"word": "splooge",
-		"type": 1
+		"isLiteral": 0,
+		"type": 9,
+		"word": "fag"
 	},
 	{
-		"word": "turd",
-		"type": 1
+		"isLiteral": 1,
+		"type": 8,
+		"word": "pula"
 	},
 	{
-		"word": "ahole",
-		"type": 2
+		"isLiteral": 1,
+		"type": 9,
+		"word": "suka"
 	},
 	{
-		"word": "anus",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "prick"
 	},
 	{
-		"word": "arschloch",
-		"type": 2
+		"isLiteral": 0,
+		"type": 9,
+		"word": "nazi"
 	},
 	{
-		"word": "arse",
-		"type": 2
+		"isLiteral": 1,
+		"type": 1,
+		"word": "fart"
 	},
 	{
-		"word": "ass",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "orifice"
 	},
 	{
-		"word": "asshole",
-		"type": 2
+		"isLiteral": 0,
+		"type": 1,
+		"word": "jiz"
 	},
 	{
-		"word": "boob",
-		"type": 2
+		"isLiteral": 1,
+		"type": 1,
+		"word": "paska"
 	},
 	{
-		"word": "buceta",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "zabourah"
 	},
 	{
-		"word": "butthole",
-		"type": 2
+		"isLiteral": 0,
+		"type": 9,
+		"word": "buttwipe"
 	},
 	{
-		"word": "cazzo",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "ahole"
 	},
 	{
-		"word": "chuj",
-		"type": 2
+		"isLiteral": 0,
+		"type": 5,
+		"word": "assrammer"
 	},
 	{
-		"word": "cipa",
-		"type": 2
+		"isLiteral": 1,
+		"type": 9,
+		"word": "dirsa"
 	},
 	{
-		"word": "clit",
-		"type": 2
+		"isLiteral": 0,
+		"type": 1,
+		"word": "piss"
 	},
 	{
-		"word": "cock",
-		"type": 2
+		"isLiteral": 0,
+		"type": 8,
+		"word": "wank"
 	},
 	{
-		"word": "cockhead",
-		"type": 2
+		"isLiteral": 0,
+		"type": 9,
+		"word": "sadist"
 	},
 	{
-		"word": "cunt",
-		"type": 2
+		"isLiteral": 1,
+		"type": 1,
+		"word": "cum"
 	},
 	{
-		"word": "dick",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "rectum"
 	},
 	{
-		"word": "fanny",
-		"type": 2
+		"isLiteral": 1,
+		"type": 2,
+		"word": "picka"
 	},
 	{
-		"word": "foreskin",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "asshole"
 	},
 	{
-		"word": "fotze",
-		"type": 2
+		"isLiteral": 1,
+		"type": 2,
+		"word": "kuk"
 	},
 	{
-		"word": "hui",
-		"type": 2
+		"isLiteral": 0,
+		"type": 9,
+		"word": "bastard"
 	},
 	{
-		"word": "klootzak",
-		"type": 2
+		"isLiteral": 0,
+		"type": 1,
+		"word": "turd"
 	},
 	{
-		"word": "kuk",
-		"type": 2
+		"isLiteral": 1,
+		"type": 5,
+		"word": "hora"
 	},
 	{
-		"word": "kurac",
-		"type": 2
+		"isLiteral": 0,
+		"type": 8,
+		"word": "fuck"
 	},
 	{
-		"word": "kusi",
-		"type": 2
+		"isLiteral": 1,
+		"type": 2,
+		"word": "klootzak"
 	},
 	{
-		"word": "kyrpä",
-		"type": 2
+		"isLiteral": 1,
+		"type": 5,
+		"word": "hore"
 	},
 	{
-		"word": "mulkku",
-		"type": 2
+		"isLiteral": 0,
+		"type": 1,
+		"word": "queef"
 	},
 	{
-		"word": "muschi",
-		"type": 2
+		"isLiteral": 1,
+		"type": 2,
+		"word": "vulva"
 	},
 	{
-		"word": "nutsack",
-		"type": 2
+		"isLiteral": 0,
+		"type": 9,
+		"word": "asswipe"
 	},
 	{
-		"word": "orifice",
-		"type": 2
+		"isLiteral": 1,
+		"type": 8,
+		"word": "ficken"
 	},
 	{
-		"word": "pecker",
-		"type": 2
+		"isLiteral": 0,
+		"type": 6,
+		"word": "packie"
 	},
 	{
-		"word": "penis",
-		"type": 2
+		"isLiteral": 0,
+		"type": 9,
+		"word": "fatass"
 	},
 	{
-		"word": "picka",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "pecker"
 	},
 	{
-		"word": "pillu",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "cockhead"
 	},
 	{
-		"word": "pimmel",
-		"type": 2
+		"isLiteral": 0,
+		"type": 1,
+		"word": "scheiss"
 	},
 	{
-		"word": "pimpis",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "penis"
 	},
 	{
-		"word": "pizda",
-		"type": 2
+		"isLiteral": 0,
+		"type": 9,
+		"word": "slutty"
 	},
 	{
-		"word": "prick",
-		"type": 2
+		"isLiteral": 0,
+		"type": 1,
+		"word": "splooge"
 	},
 	{
-		"word": "pussy",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "muschi"
 	},
 	{
-		"word": "rectum",
-		"type": 2
+		"isLiteral": 0,
+		"type": 9,
+		"word": "retard"
 	},
 	{
-		"word": "schlong",
-		"type": 2
+		"isLiteral": 1,
+		"type": 9,
+		"word": "boiola"
 	},
 	{
-		"word": "scrotum",
-		"type": 2
+		"isLiteral": 1,
+		"type": 9,
+		"word": "schmuck"
 	},
 	{
-		"word": "sphincter",
-		"type": 2
+		"isLiteral": 0,
+		"type": 6,
+		"word": "nigger"
 	},
 	{
-		"word": "testicle",
-		"type": 2
+		"isLiteral": 1,
+		"type": 7,
+		"word": "sex"
 	},
 	{
-		"word": "tit",
-		"type": 2
+		"isLiteral": 1,
+		"type": 0,
+		"word": "noob"
 	},
 	{
-		"word": "twat",
-		"type": 2
+		"isLiteral": 0,
+		"type": 4,
+		"word": "spierdalaj"
 	},
 	{
-		"word": "vagina",
-		"type": 2
+		"isLiteral": 1,
+		"type": 5,
+		"word": "kuksuger"
 	},
 	{
-		"word": "vittu",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "arse"
 	},
 	{
-		"word": "vulva",
-		"type": 2
+		"isLiteral": 0,
+		"type": 2,
+		"word": "nutsack"
 	},
 	{
-		"word": "zabourah",
-		"type": 2
+		"isLiteral": 1,
+		"type": 2,
+		"word": "kurac"
 	},
 	{
-		"word": "hell",
-		"type": 3
+		"isLiteral": 0,
+		"type": 8,
+		"word": "screwing"
 	},
 	{
-		"word": "helvete",
-		"type": 3
+		"isLiteral": 1,
+		"type": 2,
+		"word": "kusi"
 	},
 	{
-		"word": "fanculo",
-		"type": 4
+		"isLiteral": 1,
+		"type": 2,
+		"word": "mulkku"
 	},
 	{
-		"word": "spierdalaj",
-		"type": 4
+		"isLiteral": 1,
+		"type": 5,
+		"word": "puto"
 	},
 	{
-		"word": "assrammer",
-		"type": 5
+		"isLiteral": 0,
+		"type": 1,
+		"word": "shit"
 	},
 	{
-		"word": "cocksucker",
-		"type": 5
+		"isLiteral": 0,
+		"type": 5,
+		"word": "cocksucker"
 	},
 	{
-		"word": "felcher",
-		"type": 5
+		"isLiteral": 1,
+		"type": 4,
+		"word": "fanculo"
 	},
 	{
-		"word": "fucker",
-		"type": 5
+		"isLiteral": 0,
+		"type": 2,
+		"word": "clit"
 	},
 	{
-		"word": "hora",
-		"type": 5
+		"isLiteral": 1,
+		"type": 7,
+		"word": "felch"
 	},
 	{
-		"word": "hore",
-		"type": 5
+		"isLiteral": 0,
+		"type": 9,
+		"word": "honkey"
 	},
 	{
-		"word": "kuksugare",
-		"type": 5
+		"isLiteral": 1,
+		"type": 2,
+		"word": "ass"
 	},
 	{
-		"word": "kuksuger",
-		"type": 5
+		"isLiteral": 1,
+		"type": 2,
+		"word": "dick"
 	},
 	{
-		"word": "kurwa",
-		"type": 5
+		"isLiteral": 1,
+		"type": 2,
+		"word": "pizda"
 	},
 	{
-		"word": "mofo",
-		"type": 5
+		"isLiteral": 0,
+		"type": 2,
+		"word": "scrotum"
 	},
 	{
-		"word": "motherfucker",
-		"type": 5
+		"isLiteral": 0,
+		"type": 8,
+		"word": "masturbate"
 	},
 	{
-		"word": "orospu",
-		"type": 5
+		"isLiteral": 0,
+		"type": 9,
+		"word": "slut"
 	},
 	{
-		"word": "puta",
-		"type": 5
+		"isLiteral": 0,
+		"type": 2,
+		"word": "arschloch"
 	},
 	{
-		"word": "puto",
-		"type": 5
+		"isLiteral": 1,
+		"type": 2,
+		"word": "chuj"
 	},
 	{
-		"word": "sharmuta",
-		"type": 5
+		"isLiteral": 0,
+		"type": 2,
+		"word": "pussy"
 	},
 	{
-		"word": "sharmute",
-		"type": 5
+		"isLiteral": 0,
+		"type": 9,
+		"word": "faggot"
 	},
 	{
-		"word": "whore",
-		"type": 5
+		"isLiteral": 0,
+		"type": 2,
+		"word": "cunt"
 	},
 	{
-		"word": "chink",
-		"type": 6
+		"isLiteral": 1,
+		"type": 6,
+		"word": "wop"
 	},
 	{
-		"word": "dego",
-		"type": 6
+		"isLiteral": 1,
+		"type": 2,
+		"word": "tit"
 	},
 	{
-		"word": "gook",
-		"type": 6
+		"isLiteral": 1,
+		"type": 2,
+		"word": "pimpis"
 	},
 	{
-		"word": "injun",
-		"type": 6
+		"isLiteral": 1,
+		"type": 9,
+		"word": "wichser"
 	},
 	{
-		"word": "kike",
-		"type": 6
+		"isLiteral": 0,
+		"type": 2,
+		"word": "butthole"
 	},
 	{
-		"word": "kraut",
-		"type": 6
+		"isLiteral": 0,
+		"type": 6,
+		"word": "wetback"
 	},
 	{
-		"word": "moulie",
-		"type": 6
+		"isLiteral": 1,
+		"type": 2,
+		"word": "vagina"
 	},
 	{
-		"word": "nigga",
-		"type": 6
+		"isLiteral": 0,
+		"type": 9,
+		"word": "bitch"
 	},
 	{
-		"word": "nigger",
-		"type": 6
+		"isLiteral": 0,
+		"type": 2,
+		"word": "anus"
 	},
 	{
-		"word": "packie",
-		"type": 6
+		"isLiteral": 1,
+		"type": 5,
+		"word": "orospu"
 	},
 	{
-		"word": "spic",
-		"type": 6
+		"isLiteral": 0,
+		"type": 8,
+		"word": "boffing"
 	},
 	{
-		"word": "wetback",
-		"type": 6
+		"isLiteral": 1,
+		"type": 2,
+		"word": "cazzo"
 	},
 	{
-		"word": "wop",
-		"type": 6
+		"isLiteral": 0,
+		"type": 8,
+		"word": "jackoff"
 	},
 	{
-		"word": "blowjob",
-		"type": 7
+		"isLiteral": 0,
+		"type": 7,
+		"word": "enema"
 	},
 	{
-		"word": "bollock",
-		"type": 7
+		"isLiteral": 0,
+		"type": 9,
+		"word": "schlampe"
 	},
 	{
-		"word": "dildo",
-		"type": 7
+		"isLiteral": 0,
+		"type": 9,
+		"word": "skurwysyn"
 	},
 	{
-		"word": "enema",
-		"type": 7
+		"isLiteral": 0,
+		"type": 1,
+		"word": "semen"
 	},
 	{
-		"word": "felch",
-		"type": 7
+		"isLiteral": 1,
+		"type": 2,
+		"word": "twat"
 	},
 	{
-		"word": "muie",
-		"type": 7
+		"isLiteral": 1,
+		"type": 6,
+		"word": "chink"
 	},
 	{
-		"word": "orgasm",
-		"type": 7
+		"isLiteral": 1,
+		"type": 6,
+		"word": "injun"
 	},
 	{
-		"word": "sex",
-		"type": 7
+		"isLiteral": 1,
+		"type": 9,
+		"word": "huevon"
 	},
 	{
-		"word": "boffing",
-		"type": 8
+		"isLiteral": 1,
+		"type": 6,
+		"word": "moulie"
 	},
 	{
-		"word": "ficken",
-		"type": 8
+		"isLiteral": 0,
+		"type": 5,
+		"word": "fucker"
 	},
 	{
-		"word": "fuck",
-		"type": 8
+		"isLiteral": 0,
+		"type": 5,
+		"word": "whore"
 	},
 	{
-		"word": "fucking",
-		"type": 8
+		"isLiteral": 0,
+		"type": 2,
+		"word": "boob"
 	},
 	{
-		"word": "jackoff",
-		"type": 8
+		"isLiteral": 1,
+		"type": 2,
+		"word": "vittu"
 	},
 	{
-		"word": "knulla",
-		"type": 8
+		"isLiteral": 0,
+		"type": 2,
+		"word": "fanny"
 	},
 	{
-		"word": "masturbate",
-		"type": 8
+		"isLiteral": 0,
+		"type": 8,
+		"word": "screw"
 	},
 	{
-		"word": "pula",
-		"type": 8
+		"isLiteral": 0,
+		"type": 5,
+		"word": "mofo"
 	},
 	{
-		"word": "pule",
-		"type": 8
+		"isLiteral": 1,
+		"type": 2,
+		"word": "pimmel"
 	},
 	{
-		"word": "screw",
-		"type": 8
+		"isLiteral": 0,
+		"type": 6,
+		"word": "nigga"
 	},
 	{
-		"word": "screwing",
-		"type": 8
+		"isLiteral": 1,
+		"type": 8,
+		"word": "yed"
 	},
 	{
-		"word": "wank",
-		"type": 8
+		"isLiteral": 0,
+		"type": 7,
+		"word": "bollock"
 	},
 	{
-		"word": "yed",
-		"type": 8
+		"isLiteral": 0,
+		"type": 2,
+		"word": "schlong"
 	},
 	{
-		"word": "asswipe",
-		"type": 9
+		"isLiteral": 0,
+		"type": 2,
+		"word": "sphincter"
 	},
 	{
-		"word": "bastard",
-		"type": 9
+		"isLiteral": 0,
+		"type": 2,
+		"word": "foreskin"
 	},
 	{
-		"word": "bitch",
-		"type": 9
+		"isLiteral": 0,
+		"type": 6,
+		"word": "kraut"
 	},
 	{
-		"word": "boiola",
-		"type": 9
+		"isLiteral": 0,
+		"type": 7,
+		"word": "dildo"
 	},
 	{
-		"word": "buttwipe",
-		"type": 9
+		"isLiteral": 1,
+		"type": 3,
+		"word": "helvete"
 	},
 	{
-		"word": "cabron",
-		"type": 9
+		"isLiteral": 1,
+		"type": 2,
+		"word": "fotze"
 	},
 	{
-		"word": "dirsa",
-		"type": 9
+		"isLiteral": 0,
+		"type": 1,
+		"word": "jism"
 	},
 	{
-		"word": "fag",
-		"type": 9
+		"isLiteral": 1,
+		"type": 5,
+		"word": "felcher"
 	},
 	{
-		"word": "faggot",
-		"type": 9
+		"isLiteral": 1,
+		"type": 5,
+		"word": "kuksugare"
 	},
 	{
-		"word": "fatass",
-		"type": 9
+		"isLiteral": 1,
+		"type": 5,
+		"word": "sharmute"
 	},
 	{
-		"word": "honkey",
-		"type": 9
+		"isLiteral": 1,
+		"type": 1,
+		"word": "merde"
 	},
 	{
-		"word": "huevon",
-		"type": 9
+		"isLiteral": 1,
+		"type": 5,
+		"word": "sharmuta"
 	},
 	{
-		"word": "masochist",
-		"type": 9
+		"isLiteral": 0,
+		"type": 6,
+		"word": "gook"
 	},
 	{
-		"word": "nazi",
-		"type": 9
+		"isLiteral": 1,
+		"type": 8,
+		"word": "knulla"
 	},
 	{
-		"word": "retard",
-		"type": 9
+		"isLiteral": 1,
+		"type": 7,
+		"word": "muie"
 	},
 	{
-		"word": "sadist",
-		"type": 9
+		"isLiteral": 0,
+		"type": 7,
+		"word": "orgasm"
 	},
 	{
-		"word": "schlampe",
-		"type": 9
+		"isLiteral": 1,
+		"type": 2,
+		"word": "buceta"
 	},
 	{
-		"word": "schmuck",
-		"type": 9
+		"isLiteral": 1,
+		"type": 2,
+		"word": "cipa"
 	},
 	{
-		"word": "skank",
-		"type": 9
+		"isLiteral": 1,
+		"type": 9,
+		"word": "cabron"
 	},
 	{
-		"word": "skurwysyn",
-		"type": 9
+		"isLiteral": 0,
+		"type": 2,
+		"word": "cock"
 	},
 	{
-		"word": "slut",
-		"type": 9
+		"isLiteral": 0,
+		"type": 9,
+		"word": "masochist"
 	},
 	{
-		"word": "slutty",
-		"type": 9
+		"isLiteral": 1,
+		"type": 2,
+		"word": "hui"
 	},
 	{
-		"word": "suka",
-		"type": 9
+		"isLiteral": 0,
+		"type": 0,
+		"word": "imbecil"
 	},
 	{
-		"word": "wichser",
-		"type": 9
-	}
-	],
-	"name": "TravelPad",
+		"isLiteral": 0,
+		"type": 1,
+		"word": "feces"
+	}],
+	"name": "Blacklist",
 	"version": 1
 }

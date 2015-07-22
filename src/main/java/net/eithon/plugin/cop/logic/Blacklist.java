@@ -53,7 +53,9 @@ class Blacklist {
 	}
 
 	private void add(Profanity profanity) {
+		if (this._wordList.containsKey(profanity.getWord())) return;
 		this._wordList.put(profanity.getWord(), profanity);
+		if (profanity.isLiteral()) return;
 		this._metaphoneList.put(profanity.getPrimary(), profanity);
 		if (profanity.hasSecondary()) this._metaphoneList.put(profanity.getSecondary(), profanity);
 	}
@@ -93,11 +95,12 @@ class Blacklist {
 			metaphone3.Encode();
 			String encoding = metaphone3.GetMetaph();
 			profanity = this._metaphoneList.get(encoding);
-			if (profanity == null) {
+			if ((profanity == null) || profanity.isLiteral()) {
 				encoding = metaphone3.GetAlternateMetaph();
 				if (encoding.length() > 0) profanity = this._metaphoneList.get(encoding);
 			}
 		}
+		if ((profanity != null) && profanity.isLiteral()) return null;
 		return profanity;
 	}
 
@@ -132,13 +135,13 @@ class Blacklist {
 
 	protected void consolidateSimilar(Whitelist whitelist) {
 		for (Iterator<String> iterator = this._similarWords.keySet().iterator(); iterator.hasNext();) {
-		    String word = iterator.next();
-		    if (whitelist.isWhitelisted(word)) {
-		    	this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.MINOR, "Removed similar word \"%s\" as it was whitelisted", word);
-		        iterator.remove();
-		    } else {
-		    	verbose("consolidateSimilar", "Keeping word \"%s\" as it was not whitelisted", word);
-		    }
+			String word = iterator.next();
+			if (whitelist.isWhitelisted(word)) {
+				this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.MINOR, "Removed similar word \"%s\" as it was whitelisted", word);
+				iterator.remove();
+			} else {
+				verbose("consolidateSimilar", "Keeping word \"%s\" as it was not whitelisted", word);
+			}
 		}
 	}
 
@@ -209,7 +212,7 @@ class Blacklist {
 	public
 	void save() {
 		JSONArray blacklist = new JSONArray();
-		for (Profanity profanity : this._metaphoneList.values()) {
+		for (Profanity profanity : Profanity.sortByWord(this._wordList.values())) {
 			blacklist.add(profanity.toJson());
 		}
 		if ((blacklist == null) || (blacklist.size() == 0)) {
