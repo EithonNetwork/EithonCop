@@ -20,6 +20,7 @@ import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -78,8 +79,15 @@ public class Blacklist {
 			delayedSaveSimilar(word, profanity);
 		}
 		if (profanity.getProfanityLevel(word) > Config.V.profanityLevel) {
-			if (Config.V.markSimilar && !profanity.isSameWord(word)) {
-				return String.format("%s%s%s", Config.V.markSimilarPrefix, word, Config.V.markSimilarPostfix);
+			if (!profanity.isSameWord(word)) {
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					if (player.hasPermission("eithoncop.notify-about-similar")) {
+						Config.M.notifyAboutSimilar.sendMessage(player, word, profanity.getWord());
+					}
+				}
+				if (Config.V.markSimilar) {
+					return String.format("%s%s%s", Config.V.markSimilarPrefix, word, Config.V.markSimilarPostfix);
+				}
 			}
 			return null;
 		}

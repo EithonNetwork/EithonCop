@@ -1,6 +1,6 @@
 name: EithonCop
 main: net.eithon.plugin.cop.Plugin
-version: 0.3
+version: 0.4
 author: vanbrayne
 depend: [EithonLibrary]
 description: A Minecraft plugin
@@ -21,4 +21,6 @@ permissions:
   eithoncop.whitelist:
     description: Access to /eithoncop whitelist command
     default: op
-    
+  eithoncop.notify-about-similar:
+    description: Get notified when someone uses a word similar to a blacklisted word
+    default: op

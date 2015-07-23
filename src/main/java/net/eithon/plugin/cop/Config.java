@@ -69,6 +69,7 @@ public class Config {
 		public static ConfigurableMessage duplicateAcceptedWord;
 		public static ConfigurableMessage blackListWordMinimalLength;
 		public static ConfigurableMessage whitelistWordMinimalLength;
+		public static ConfigurableMessage notifyAboutSimilar;
 
 		static void load(Configuration config) {
 			duplicateProfanity = config.getConfigurableMessage("DuplicateProfanity", 1,
@@ -89,6 +90,8 @@ public class Config {
 					"A word that should be blacklisted must have at least %d characters.");
 			whitelistWordMinimalLength = config.getConfigurableMessage("WhitelistWordMinimalLength", 1,
 					"A word that should be whitelisted must have at least %d characters.");
+			notifyAboutSimilar = config.getConfigurableMessage("NotifyAboutSimilar", 2,
+					"A player used the word \"%s\", that is similar to the blacklisted word \"%s\".");
 		}		
 	}
 

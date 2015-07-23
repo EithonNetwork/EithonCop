@@ -20,17 +20,19 @@ SaveSimilar: 1
 # Should we mark the words that replaces a profanity?
 #
 # 0 = NO
+# 1 = YES
 #
 MarkReplacement: 1
-MarkReplacementPrefix: "\""
-MarkReplacementPostfix: "\""
+MarkReplacementPrefix: "\'"
+MarkReplacementPostfix: "\'"
 
 #
 # Should we mark the words that are similar to profanities?
 #
 # 0 = NO
+# 1 = YES
 #
-MarkSimilar: 1
+MarkSimilar: 0
 MarkSimilarPrefix: "<"
 MarkSimilarPostfix: ">"
 
@@ -59,7 +61,7 @@ eithon:
   #  2 = MINOR (also minor messages)
   #  3 = VERBOSE (all messages)
   #
-  DebugLevel: 3
+  DebugLevel: 2
 
 messages:
 
@@ -102,4 +104,9 @@ messages:
   # Parameters: <minimum length>(%d)
   #
   BlackListWordMinimalLength: "A word that should be blacklisted must have at least %d characters."
+
+  #
+  # Parameters: <similar word>(%s), profanity(%s)
+  #
+  NotifyAboutSimilar: "A player used the word \"%s\", that is similar to the blacklisted word \"%s\"."
   
