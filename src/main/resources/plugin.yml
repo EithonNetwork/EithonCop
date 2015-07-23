@@ -13,11 +13,12 @@ permissions:
   eithoncop.*:
     description: Gives access to all eithoncop commands
     default: op
-    cop.blacklist: true
-    cop.whitelist: true
-  cop.blacklist:
+    eithoncop.blacklist: true
+    eithoncop.whitelist: true
+  eithoncop.blacklist:
     description: Access to /eithoncop blacklist command
     default: op
-  cop.whitelist:
+  eithoncop.whitelist:
     description: Access to /eithoncop whitelist command
     default: op
+    

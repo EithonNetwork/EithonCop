@@ -1,4 +1,4 @@
-package net.eithon.plugin.cop.logic;
+package net.eithon.plugin.cop.profanity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +13,7 @@ import net.eithon.plugin.cop.Config;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-class Profanity implements IJson<Profanity> {
+public class Profanity implements IJson<Profanity> {
 	static final int PROFANITY_LEVEL_NONE = 0;
 	static final int PROFANITY_LEVEL_LITERAL = 1;
 	static final int PROFANITY_LEVEL_SIMILAR = 2;
@@ -57,7 +57,7 @@ class Profanity implements IJson<Profanity> {
 		synonyms.put(ProfanityType.DEROGATIVE, Config.V.categoryDerogative);
 	}
 
-	public Profanity(String word) {
+	Profanity(String word) {
 		this._word = normalize(word);
 		this._type = ProfanityType.UNKNOWN;
 		this._isLiteral = true;
@@ -68,7 +68,7 @@ class Profanity implements IJson<Profanity> {
 	Profanity() {
 	}
 
-	public enum ProfanityType {
+	enum ProfanityType {
 	    UNKNOWN, BODY_CONTENT, BODY_PART, LOCATION, OFFENSIVE, PROFESSION, RACIST, SEXUAL_NOUN, SEXUAL_VERB, DEROGATIVE
 	}
 	
@@ -90,32 +90,33 @@ class Profanity implements IJson<Profanity> {
 	}
 	
 	public String getWord() { return this._word; }
-	public String getPrimary() {return this._primaryEncoded; }
-	public String getSecondary() { return this._secondaryEncoded; }
-	public boolean hasSecondary() { return this._secondaryEncoded != null; }
-	public boolean isLiteral() { return this._isLiteral; }
-	public ProfanityType getProfanityType() { return this._type; }
-	public void setProfanityType(ProfanityType type) { this._type = type; }
-	public boolean isSameWord(String word) {return this._word.equalsIgnoreCase(normalize(word)); }
-	public int getProfanityLevel(String word) { 
+	String getPrimary() {return this._primaryEncoded; }
+	String getSecondary() { return this._secondaryEncoded; }
+	boolean hasSecondary() { return this._secondaryEncoded != null; }
+	boolean isLiteral() { return this._isLiteral; }
+	ProfanityType getProfanityType() { return this._type; }
+	void setProfanityType(ProfanityType type) { this._type = type; }
+	boolean isSameWord(String word) {return this._word.equalsIgnoreCase(normalize(word)); }
+	int getProfanityLevel(String word) { 
 		if (isSameWord(word)) return PROFANITY_LEVEL_LITERAL;
 		return PROFANITY_LEVEL_SIMILAR;
 	}
 	
-	public String getSynonym() {
+	String getSynonym() {
 		String[] array = getSynonyms();
 		int index = (int) (Math.random()*array.length);
 		return array[index];
 	}
 	
-	public String[] getSynonyms() {
+	String[] getSynonyms() {
 		String[] array = this._synonyms.size() > 0 ? this._synonyms.toArray(new String[0]) : synonyms.get(this._type);
 		if ((array == null) || (array.length == 0)) return new String[] {"****"};
 		return array;
 	}
 
 	@Override
-	public Profanity factory() {
+	public
+	Profanity factory() {
 		return new Profanity();
 	}
 
@@ -137,7 +138,8 @@ class Profanity implements IJson<Profanity> {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJson() {
+	public
+	Object toJson() {
 		JSONObject json = new JSONObject();
 		json.put("word", this._word);
 		json.put("type", profanityTypeToInteger.get(this._type));
@@ -149,7 +151,8 @@ class Profanity implements IJson<Profanity> {
 	}
 
 	@Override
-	public Profanity fromJson(Object json) {
+	public
+	Profanity fromJson(Object json) {
 		JSONObject jsonObject = (JSONObject) json;
 		this._word = (String) jsonObject.get("word");
 		Long typeAsInteger = (Long) jsonObject.get("type");
@@ -168,12 +171,13 @@ class Profanity implements IJson<Profanity> {
 		return this;
 	}
 
-	public static Profanity getFromJson(Object json) {
+	static Profanity getFromJson(Object json) {
 		return new Profanity().fromJson(json);
 	}
 	
-	@Override 
-	public String toString() {
+	@Override
+	public 
+	String toString() {
 		String result = String.format("%s (%s, %d)", getWord(), this._isLiteral ? "literal" : "not literal", profanityTypeToInteger.get(this._type));
 		if (hasSecondary()) result += String.format(" [%s, %s]", getPrimary(), getSecondary());
 		else result += String.format(" [%s]", getPrimary());

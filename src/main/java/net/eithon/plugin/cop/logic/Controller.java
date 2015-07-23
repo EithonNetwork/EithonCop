@@ -12,6 +12,10 @@ import net.eithon.library.file.FileMisc;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
+import net.eithon.plugin.cop.profanity.Blacklist;
+import net.eithon.plugin.cop.profanity.Leet;
+import net.eithon.plugin.cop.profanity.Profanity;
+import net.eithon.plugin.cop.profanity.Whitelist;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;

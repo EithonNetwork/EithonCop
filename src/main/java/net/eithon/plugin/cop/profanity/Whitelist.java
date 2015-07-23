@@ -1,4 +1,4 @@
-package net.eithon.plugin.cop.logic;
+package net.eithon.plugin.cop.profanity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONArray;
 
-class Whitelist {
+public class Whitelist {
 	private EithonPlugin _eithonPlugin;
 	private Blacklist _blacklist;
 	private HashMap<String, Profanity> _whitelist;
@@ -48,7 +48,7 @@ class Whitelist {
 
 	public boolean isWhitelisted(String word) { return getProfanity(word) != null; }
 
-	public Profanity getProfanity(String word) {
+	Profanity getProfanity(String word) {
 		return this._whitelist.get(Profanity.normalize(word));
 	}
 

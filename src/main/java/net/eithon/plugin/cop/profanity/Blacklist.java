@@ -1,4 +1,4 @@
-package net.eithon.plugin.cop.logic;
+package net.eithon.plugin.cop.profanity;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +24,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-class Blacklist {
+public class Blacklist {
 	private EithonPlugin _eithonPlugin;
 	private HashMap<String, Profanity> _metaphoneList;
 	private HashMap<String, Profanity> _wordList;
@@ -64,7 +64,7 @@ class Blacklist {
 		if (profanity.hasSecondary()) this._metaphoneList.put(profanity.getSecondary(), profanity);
 	}
 
-	public boolean isBlacklisted(String word) {
+	boolean isBlacklisted(String word) {
 		Profanity profanity = getProfanity(word);
 		return (profanity != null) && (profanity.getProfanityLevel(word) <= Config.V.profanityLevel); 
 	}
@@ -126,7 +126,7 @@ class Blacklist {
 		}, TimeMisc.secondsToTicks(waitSeconds));	
 	}
 
-	void saveSimilar(Whitelist whitelist) {
+	public void saveSimilar(Whitelist whitelist) {
 		synchronized (this._similarWords) {
 			getSimilarStorageFile().delete();
 			consolidateSimilar(whitelist);
