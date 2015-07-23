@@ -31,12 +31,21 @@ class Blacklist {
 	private HashMap<String, Profanity> _metaphoneList;
 	private HashMap<String, Profanity> _wordList;
 	HashMap<String, Profanity> _similarWords;
+
 	private static Metaphone3 metaphone3;
+	private static Comparator<String> stringComparator;
 
 	static {
 		metaphone3 = new Metaphone3();
 		metaphone3.SetEncodeVowels(true);
 		metaphone3.SetEncodeExact(true);
+
+		stringComparator = new Comparator<String>(){
+			public int compare(String f1, String f2)
+			{
+				return f1.compareTo(f2);
+			}
+		};
 	}
 
 	Blacklist(EithonPlugin eithonPlugin)
@@ -159,11 +168,7 @@ class Blacklist {
 
 	private List<String> sortStrings(Collection<String> collection) {
 		ArrayList<String> array = new ArrayList<String>(collection);
-		array.sort(new Comparator<String>(){
-			public int compare(String f1, String f2)
-			{
-				return f1.compareTo(f2);
-			} });
+		array.sort(stringComparator);
 		return array;
 	}
 
