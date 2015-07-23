@@ -20,17 +20,19 @@ SaveSimilar: 1
 # Should we mark the words that replaces a profanity?
 #
 # 0 = NO
+# 1 = YES
 #
 MarkReplacement: 1
-MarkReplacementPrefix: "\""
-MarkReplacementPostfix: "\""
+MarkReplacementPrefix: "\'"
+MarkReplacementPostfix: "\'"
 
 #
 # Should we mark the words that are similar to profanities?
 #
 # 0 = NO
+# 1 = YES
 #
-MarkSimilar: 1
+MarkSimilar: 0
 MarkSimilarPrefix: "<"
 MarkSimilarPostfix: ">"
 
@@ -38,15 +40,15 @@ MarkSimilarPostfix: ">"
 # The following strings will replace any blacklisted word from that category
 #
 CategoryUnknown: ["****"]
-CategoryBodyContent: ["casserole", "lasagna"]
-CategoryBodyPart: ["shoulder", "knee", "elbow"]
-CategoryLocation: ["a warm place", "elsewhere"]
-CategoryOffensive: ["yahoo", "I need to count to 10"]
-CategoryProfession: ["astronaut", "dentist", "surgeon"]
-CategoryRacist: ["dragon", "unicorn", "magic creature"]
-CategorySexualNoun: ["chair", "pigeon"]
-CategorySexualVerb: ["run", "walk", "look at"]
-CategoryDerogative: ["citizen", "member", "person"]
+#CategoryBodyContent: ["casserole", "lasagna"]
+#CategoryBodyPart: ["shoulder", "knee", "elbow"]
+#CategoryLocation: ["a warm place", "elsewhere"]
+#CategoryOffensive: ["yahoo", "I need to count to 10"]
+#CategoryProfession: ["astronaut", "dentist", "surgeon"]
+#CategoryRacist: ["dragon", "unicorn", "magic creature"]
+#CategorySexualNoun: ["chair", "pigeon"]
+#CategorySexualVerb: ["run", "walk", "look at"]
+#CategoryDerogative: ["citizen", "member", "person"]
 
 eithon:
   UseMarkUpForMessages: 0
@@ -59,7 +61,7 @@ eithon:
   #  2 = MINOR (also minor messages)
   #  3 = VERBOSE (all messages)
   #
-  DebugLevel: 3
+  DebugLevel: 2
 
 messages:
 
@@ -102,4 +104,14 @@ messages:
   # Parameters: <minimum length>(%d)
   #
   BlackListWordMinimalLength: "A word that should be blacklisted must have at least %d characters."
+
+  #
+  # Parameters: <player name>%s, profanity(%s)
+  #
+  NotifyAboutProfanity: "Player %s used the word \"%s\" which is blacklisted."
+
+  #
+  # Parameters: <player name>%s, <similar word>(%s), profanity(%s)
+  #
+  NotifyAboutSimilar: "Player %s used the word \"%s\", that is similar to the blacklisted word \"%s\"."
   

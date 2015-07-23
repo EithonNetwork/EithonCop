@@ -1,12 +1,16 @@
-package net.eithon.plugin.cop.logic;
+package net.eithon.plugin.cop.profanity;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.file.FileMisc;
@@ -16,11 +20,13 @@ import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-class Blacklist {
+public class Blacklist {
 	private EithonPlugin _eithonPlugin;
 	private HashMap<String, Profanity> _metaphoneList;
 	private HashMap<String, Profanity> _wordList;
@@ -60,12 +66,12 @@ class Blacklist {
 		if (profanity.hasSecondary()) this._metaphoneList.put(profanity.getSecondary(), profanity);
 	}
 
-	public boolean isBlacklisted(String word) {
+	boolean isBlacklisted(String word) {
 		Profanity profanity = getProfanity(word);
 		return (profanity != null) && (profanity.getProfanityLevel(word) <= Config.V.profanityLevel); 
 	}
 
-	public String replaceIfBlacklisted(String word) {
+	public String replaceIfBlacklisted(CommandSender sender, String word) {
 		Profanity profanity = getProfanity(word);
 		if (profanity == null) return null;
 		if (Config.V.saveSimilar 
@@ -74,8 +80,21 @@ class Blacklist {
 			delayedSaveSimilar(word, profanity);
 		}
 		if (profanity.getProfanityLevel(word) > Config.V.profanityLevel) {
-			if (Config.V.markSimilar && !profanity.isSameWord(word)) {
-				return String.format("%s%s%s", Config.V.markSimilarPrefix, word, Config.V.markSimilarPostfix);
+			if (profanity.isSameWord(word)) { 
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					if (player.hasPermission("eithoncop.notify-about-profanity")) {
+						Config.M.notifyAboutProfanity.sendMessage(player, sender.getName(), word);
+					}
+				}				
+			} else {
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					if (player.hasPermission("eithoncop.notify-about-similar")) {
+						Config.M.notifyAboutSimilar.sendMessage(player, sender.getName(), word, profanity.getWord());
+					}
+				}
+				if (Config.V.markSimilar) {
+					return String.format("%s%s%s", Config.V.markSimilarPrefix, word, Config.V.markSimilarPostfix);
+				}
 			}
 			return null;
 		}
@@ -122,15 +141,25 @@ class Blacklist {
 		}, TimeMisc.secondsToTicks(waitSeconds));	
 	}
 
-	void saveSimilar(Whitelist whitelist) {
+	public void saveSimilar(Whitelist whitelist) {
 		synchronized (this._similarWords) {
 			getSimilarStorageFile().delete();
 			consolidateSimilar(whitelist);
-			for (String similarWord : this._similarWords.keySet()) {
+			for (String similarWord : sortStrings(this._similarWords.keySet())) {
 				Profanity profanity = this._similarWords.get(similarWord);
 				saveSimilar(similarWord, profanity, true);
 			}
 		}
+	}
+
+	private List<String> sortStrings(Collection<String> collection) {
+		ArrayList<String> array = new ArrayList<String>(collection);
+		array.sort(new Comparator<String>(){
+			public int compare(String f1, String f2)
+			{
+				return f1.compareTo(f2);
+			} });
+		return array;
 	}
 
 	protected void consolidateSimilar(Whitelist whitelist) {

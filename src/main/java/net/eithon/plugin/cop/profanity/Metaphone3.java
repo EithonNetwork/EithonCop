@@ -1,4 +1,4 @@
-package net.eithon.plugin.cop.logic;
+package net.eithon.plugin.cop.profanity;
 
 // https://github.com/OpenRefine/OpenRefine/blob/master/main/src/com/google/refine/clustering/binning/Metaphone3.java
 
@@ -173,7 +173,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 //package com.google.refine.clustering.binning;
 
-public class Metaphone3 {
+class Metaphone3 {
 
     /** Length of word sent in to be encoded, as 
 	* measured at beginning of encoding. */
@@ -7353,7 +7353,7 @@ public class Metaphone3 {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args)
+	static void main(String[] args)
 	{
 		// example code
 		
