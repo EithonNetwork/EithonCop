@@ -16,7 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONArray;
 
-public class Whitelist {
+class Whitelist {
 	private EithonPlugin _eithonPlugin;
 	private Blacklist _blacklist;
 	private HashMap<String, Profanity> _whitelist;

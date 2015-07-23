@@ -13,7 +13,7 @@ import net.eithon.plugin.cop.Config;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class Profanity implements IJson<Profanity> {
+class Profanity implements IJson<Profanity> {
 	static final int PROFANITY_LEVEL_NONE = 0;
 	static final int PROFANITY_LEVEL_LITERAL = 1;
 	static final int PROFANITY_LEVEL_SIMILAR = 2;

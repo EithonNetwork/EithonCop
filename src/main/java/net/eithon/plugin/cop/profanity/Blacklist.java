@@ -26,7 +26,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class Blacklist {
+class Blacklist {
 	private EithonPlugin _eithonPlugin;
 	private HashMap<String, Profanity> _metaphoneList;
 	private HashMap<String, Profanity> _wordList;
@@ -39,7 +39,7 @@ public class Blacklist {
 		metaphone3.SetEncodeExact(true);
 	}
 
-	public Blacklist(EithonPlugin eithonPlugin)
+	Blacklist(EithonPlugin eithonPlugin)
 	{
 		this._eithonPlugin = eithonPlugin;
 		this._metaphoneList = new HashMap<String, Profanity>();
@@ -47,7 +47,7 @@ public class Blacklist {
 		this._similarWords = new HashMap<String, Profanity>();
 	}
 
-	public Profanity add(String word) {
+	Profanity add(String word) {
 		Profanity profanity = getProfanity(word);
 		if (profanity != null) {
 			this._eithonPlugin.getEithonLogger().warning("Blacklist.add: Trying to add a word that already exists: \"%s\".", word);
@@ -71,7 +71,7 @@ public class Blacklist {
 		return (profanity != null) && (profanity.getProfanityLevel(word) <= Config.V.profanityLevel); 
 	}
 
-	public String replaceIfBlacklisted(CommandSender sender, String word) {
+	String replaceIfBlacklisted(CommandSender sender, String word) {
 		Profanity profanity = getProfanity(word);
 		if (profanity == null) return null;
 		if (Config.V.saveSimilar 
@@ -105,7 +105,7 @@ public class Blacklist {
 		return synonym;
 	}
 
-	public Profanity getProfanity(String word) {
+	Profanity getProfanity(String word) {
 		String normalized = Profanity.normalize(word);
 		Profanity profanity = this._wordList.get(normalized);
 		if (profanity != null) return profanity;
@@ -141,7 +141,7 @@ public class Blacklist {
 		}, TimeMisc.secondsToTicks(waitSeconds));	
 	}
 
-	public void saveSimilar(Whitelist whitelist) {
+	void saveSimilar(Whitelist whitelist) {
 		synchronized (this._similarWords) {
 			getSimilarStorageFile().delete();
 			consolidateSimilar(whitelist);
@@ -189,7 +189,7 @@ public class Blacklist {
 		}
 	}
 
-	public void delayedLoadSimilar(double waitSeconds) {
+	void delayedLoadSimilar(double waitSeconds) {
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
 			public void run() {
@@ -227,7 +227,7 @@ public class Blacklist {
 		}
 	}
 
-	public void delayedSave()
+	void delayedSave()
 	{
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
@@ -255,7 +255,7 @@ public class Blacklist {
 		fileContent.save(file);
 	}
 
-	public void delayedLoad()
+	void delayedLoad()
 	{
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
