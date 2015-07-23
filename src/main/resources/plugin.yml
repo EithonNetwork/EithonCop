@@ -21,6 +21,9 @@ permissions:
   eithoncop.whitelist:
     description: Access to /eithoncop whitelist command
     default: op
+  eithoncop.notify-about-profanity:
+    description: Get notified when someone uses a blacklisted word
+    default: op
   eithoncop.notify-about-similar:
     description: Get notified when someone uses a word similar to a blacklisted word
     default: op

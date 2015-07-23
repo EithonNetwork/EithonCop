@@ -106,7 +106,12 @@ messages:
   BlackListWordMinimalLength: "A word that should be blacklisted must have at least %d characters."
 
   #
-  # Parameters: <similar word>(%s), profanity(%s)
+  # Parameters: <player name>%s, profanity(%s)
   #
-  NotifyAboutSimilar: "A player used the word \"%s\", that is similar to the blacklisted word \"%s\"."
+  NotifyAboutProfanity: "Player %s used the word \"%s\" which is blacklisted."
+
+  #
+  # Parameters: <player name>%s, <similar word>(%s), profanity(%s)
+  #
+  NotifyAboutSimilar: "Player %s used the word \"%s\", that is similar to the blacklisted word \"%s\"."
   

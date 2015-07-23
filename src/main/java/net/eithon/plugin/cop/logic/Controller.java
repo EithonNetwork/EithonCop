@@ -163,10 +163,10 @@ public class Controller {
 					verbose("Controller.profanityFilter", "inWord2 = \"%s\"", inWord.toString());
 					transformedWord.append(token);
 					verbose("Controller.profanityFilter", "transformedWord = \"%s\"", transformedWord.toString());
-					outWord = replaceWithSynonym(transformedWord.toString(), true);
+					outWord = replaceWithSynonym(player, transformedWord.toString(), true);
 					verbose("Controller.profanityFilter", "outWord = \"%s\"", outWord);
 					if (outWord != null) {
-						outWord = replace(transformedWord.toString(), inWord.toString());
+						outWord = replace(player, transformedWord.toString(), inWord.toString());
 						verbose("Controller.profanityFilter", "outWord2 = \"%s\"", outWord);
 						outMessage.append(outWord);
 						verbose("Controller.profanityFilter", "outMessage2 = \"%s\"", outMessage.toString());
@@ -175,7 +175,7 @@ public class Controller {
 					}
 				} else {
 					if (transformedWord.length() > 0) {
-						outWord = replace(transformedWord.toString(), inWord.toString());
+						outWord = replace(player, transformedWord.toString(), inWord.toString());
 						verbose("Controller.profanityFilter", "outWord3 = \"%s\"", outWord);
 						outMessage.append(outWord);
 						verbose("Controller.profanityFilter", "outMessage3 = \"%s\"", outMessage.toString());
@@ -183,7 +183,7 @@ public class Controller {
 						transformedWord = new StringBuilder("");
 					}
 					inWord.append(message.substring(pos, pos+tokenLength));
-					outWord = replace(token, inWord.toString());
+					outWord = replace(player, token, inWord.toString());
 					verbose("Controller.profanityFilter", "outWord4 = \"%s\"", outWord);
 					outMessage.append(outWord);
 					verbose("Controller.profanityFilter", "outMessage4 = \"%s\"", outMessage.toString());
@@ -194,7 +194,7 @@ public class Controller {
 		}
 
 		if (transformedWord.length() > 0) {
-			outWord = replace(transformedWord.toString(), inWord.toString());
+			outWord = replace(player, transformedWord.toString(), inWord.toString());
 			verbose("Controller.profanityFilter", "outWord5 = \"%s\"", outWord);
 			outMessage.append(outWord);
 			verbose("Controller.profanityFilter", "outMessage5 = \"%s\"", outMessage.toString());
@@ -203,23 +203,23 @@ public class Controller {
 		return outMessage.toString();
 	}
 
-	private String replace(String transformedWord, String inWord) {
-		String outWord = replaceWithSynonym(transformedWord, true);
+	private String replace(CommandSender sender, String transformedWord, String inWord) {
+		String outWord = replaceWithSynonym(sender, transformedWord, true);
 		if (outWord == null) return inWord;
 		String result = casifyAsReferenceWord(outWord, inWord);
 		if (Leet.isLeet(inWord)) return Leet.encode(result);
 		return result;
 	}
 
-	private String replaceWithSynonym(String transformedWord, boolean checkPlural) {
-		String outWord = replaceWithSynonym(transformedWord);
+	private String replaceWithSynonym(CommandSender sender, String transformedWord, boolean checkPlural) {
+		String outWord = replaceWithSynonym(sender, transformedWord);
 		if ((outWord != null) || !checkPlural) return outWord;
 		String withoutPlural = withoutPlural(transformedWord);
 		if (transformedWord.equalsIgnoreCase(withoutPlural)) return null;
-		return replaceWithSynonym(withoutPlural);
+		return replaceWithSynonym(sender, withoutPlural);
 	}
 
-	private String replaceWithSynonym(String transformedWord) {
+	private String replaceWithSynonym(CommandSender sender, String transformedWord) {
 		verbose("Controller.replaceWithSynonym", "Enter = \"%s\"", transformedWord);
 		if (transformedWord.length() < profanityWordMinimumLength) {
 			verbose("Controller.replaceWithSynonym", "Too short. Leave null");
@@ -229,7 +229,7 @@ public class Controller {
 			verbose("Controller.replaceWithSynonym", "Whitelisted. Leave null");
 			return null;
 		}
-		String result = this._blacklist.replaceIfBlacklisted(transformedWord);
+		String result = this._blacklist.replaceIfBlacklisted(sender, transformedWord);
 		verbose("Controller.replaceWithSynonym", "Leave = \"%s\"", result);
 		return result;
 	}

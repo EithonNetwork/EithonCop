@@ -20,6 +20,7 @@ import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONArray;
@@ -70,7 +71,7 @@ public class Blacklist {
 		return (profanity != null) && (profanity.getProfanityLevel(word) <= Config.V.profanityLevel); 
 	}
 
-	public String replaceIfBlacklisted(String word) {
+	public String replaceIfBlacklisted(CommandSender sender, String word) {
 		Profanity profanity = getProfanity(word);
 		if (profanity == null) return null;
 		if (Config.V.saveSimilar 
@@ -79,10 +80,16 @@ public class Blacklist {
 			delayedSaveSimilar(word, profanity);
 		}
 		if (profanity.getProfanityLevel(word) > Config.V.profanityLevel) {
-			if (!profanity.isSameWord(word)) {
+			if (profanity.isSameWord(word)) { 
+				for (Player player : Bukkit.getOnlinePlayers()) {
+					if (player.hasPermission("eithoncop.notify-about-profanity")) {
+						Config.M.notifyAboutProfanity.sendMessage(player, sender.getName(), word);
+					}
+				}				
+			} else {
 				for (Player player : Bukkit.getOnlinePlayers()) {
 					if (player.hasPermission("eithoncop.notify-about-similar")) {
-						Config.M.notifyAboutSimilar.sendMessage(player, word, profanity.getWord());
+						Config.M.notifyAboutSimilar.sendMessage(player, sender.getName(), word, profanity.getWord());
 					}
 				}
 				if (Config.V.markSimilar) {

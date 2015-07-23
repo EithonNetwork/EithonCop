@@ -6,6 +6,7 @@ A Cop plugin for Minecraft.
 
 ### 0.4 (2015-04-23)
 
+* CHANGE: Inform players with a certain permission when a player has used a blacklisted word.
 * CHANGE: Inform players with a certain permission when a player has used a similar word.
 
 ### 0.3 (2015-04-22)
