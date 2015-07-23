@@ -23,8 +23,8 @@ SaveSimilar: 1
 # 1 = YES
 #
 MarkReplacement: 1
-MarkReplacementPrefix: "\'"
-MarkReplacementPostfix: "\'"
+MarkReplacementPrefix: "'"
+MarkReplacementPostfix: "'"
 
 #
 # Should we mark the words that are similar to profanities?
@@ -32,7 +32,7 @@ MarkReplacementPostfix: "\'"
 # 0 = NO
 # 1 = YES
 #
-MarkSimilar: 0
+MarkSimilar: 1
 MarkSimilarPrefix: "<"
 MarkSimilarPostfix: ">"
 

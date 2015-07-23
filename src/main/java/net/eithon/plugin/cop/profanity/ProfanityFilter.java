@@ -15,9 +15,8 @@ class ProfanityFilter {
 	private StringTokenizer _tokenizer;
 	private int _position = 0;
 	private ArrayList<Token> _queue;
-	private EithonPlugin _eithonPlugin;
 	private CommandSender _sender;
-	private String _outMessage;
+	private StringBuilder _outMessage;
 	private ProfanityFilterController _controller;
 
 	ProfanityFilter(ProfanityFilterController controller, CommandSender sender, String message) {
@@ -28,6 +27,8 @@ class ProfanityFilter {
 				.normalize(this._inMessage)
 				.replaceAll("\\W", " ");
 		this._tokenizer = new StringTokenizer(this._transformedInMessage, " ", true);
+		this._queue = new ArrayList<Token>();
+		this._outMessage = new StringBuilder();
 	}
 
 	boolean hasMoreTokens() { return this._tokenizer.hasMoreTokens(); }
@@ -35,7 +36,7 @@ class ProfanityFilter {
 	String getFilteredMessage() {
 		while (hasMoreTokens()) {
 			Token token = getNextToken();
-			verbose("ProfanityFinder.getNextPart", "token = \"%s\"", token);
+			verbose("ProfanityFilter.getFilteredMessage", "token = \"%s\"", token);
 			if (token.equalsIgnoreCase(" ")) {
 				if (queueIsEmpty()) handleToken(token);
 				else addToQueue(token);
@@ -47,7 +48,7 @@ class ProfanityFilter {
 			}
 		}
 		handleQueue();
-		return this._outMessage;
+		return this._outMessage.toString();
 	}
 
 	private boolean queueIsEmpty() {
@@ -83,22 +84,30 @@ class ProfanityFilter {
 				token = this._queue.get(j);
 				in += token.getIn();
 				String t = token.getTransformed();
-				if (t != " ") transformed += t;
+				if (!t.equalsIgnoreCase(" ")) transformed += t;
 			}
 			token = new Token(in, transformed);
 			String result = replaceProfanity(token);
 			if (result != null) {
-				this._outMessage += result + tail;
+				this._outMessage.append(result);
+				this._outMessage.append(tail);
+				verbose("ProfanityFilter.handleQueue", "token = \"%s\", result=\"%s\", tail=\"%s\", outmessage=\"%s\"",
+						token, result, tail, this._outMessage);
+				this._queue = new ArrayList<Token>();
 				return;
 			}
 			tail = this._queue.get(i-1).getIn() + tail;
 		}
-		this._outMessage = tail;
+		this._outMessage.append(tail);
+		verbose("ProfanityFilter.handleQueue", "tail=\"%s\", outmessage=\"%s\"", tail, this._outMessage);
+		this._queue = new ArrayList<Token>();
 	}
 
 	private void handleToken(Token token) {
 		String out = replaceProfanity(token);
-		this._outMessage += out == null ? token.getIn() : out;
+		if (out == null) out = token.getIn();
+		this._outMessage.append(out);
+		verbose("ProfanityFilter.handleToken", "out = \"%s\", outmessage=\"%s\"", out, this._outMessage);
 	}
 
 	private String replaceProfanity(Token token) {
@@ -125,7 +134,7 @@ class ProfanityFilter {
 			return null;
 		}
 		String result = this._controller.replaceIfBlacklisted(this._sender, transformedWord);
-		verbose("Controller.replaceWithSynonym", "Leave = \"%s\"", result);
+		verbose("Controller.replaceWithSynonym", "transformedWord=\"%s\", Leave = \"%s\"", transformedWord, result);
 		return result;
 	}
 
@@ -156,7 +165,6 @@ class ProfanityFilter {
 	}
 
 	private void verbose(String method, String format, Object... args) {
-		String message = String.format(format, args);
-		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "%s: %s", method, message);
+		this._controller.verbose(method, format, args);
 	}
 }

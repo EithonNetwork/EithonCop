@@ -73,36 +73,45 @@ class Blacklist {
 
 	String replaceIfBlacklisted(CommandSender sender, String word) {
 		Profanity profanity = getProfanity(word);
+		verbose("Blacklist.replaceIfBlacklisted", "word=%s, profanity = %s", word, profanity);
 		if (profanity == null) return null;
 		if (Config.V.saveSimilar 
 				&& !profanity.isSameWord(word)
 				&& !this._similarWords.containsKey(word)) {
 			delayedSaveSimilar(word, profanity);
 		}
+		notifySomePlayers(sender, word, profanity);
 		if (profanity.getProfanityLevel(word) > Config.V.profanityLevel) {
-			if (profanity.isSameWord(word)) { 
-				for (Player player : Bukkit.getOnlinePlayers()) {
-					if (player.hasPermission("eithoncop.notify-about-profanity")) {
-						Config.M.notifyAboutProfanity.sendMessage(player, sender.getName(), word);
-					}
-				}				
-			} else {
-				for (Player player : Bukkit.getOnlinePlayers()) {
-					if (player.hasPermission("eithoncop.notify-about-similar")) {
-						Config.M.notifyAboutSimilar.sendMessage(player, sender.getName(), word, profanity.getWord());
-					}
-				}
-				if (Config.V.markSimilar) {
-					return String.format("%s%s%s", Config.V.markSimilarPrefix, word, Config.V.markSimilarPostfix);
-				}
-			}
+			verbose("Blacklist.replaceIfBlacklisted", "Leave, because profanity.getProfanityLevel(%s)=%d > %d", 
+					word, profanity.getProfanityLevel(word), Config.V.profanityLevel);
 			return null;
+		}
+		if (!profanity.isSameWord(word)) {
+			if (Config.V.markSimilar) return String.format("%s%s%s", Config.V.markSimilarPrefix, word, Config.V.markSimilarPostfix);
+			else return word;
 		}
 		String synonym = profanity.getSynonym();
 		if (Config.V.markReplacement) {
 			return String.format("%s%s%s", Config.V.markReplacementPrefix, synonym, Config.V.markReplacementPostfix);
 		}
 		return synonym;
+	}
+
+	private void notifySomePlayers(CommandSender sender, String word,
+			Profanity profanity) {
+		if (profanity.isSameWord(word)) { 
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (player.hasPermission("eithoncop.notify-about-profanity")) {
+					Config.M.notifyAboutProfanity.sendMessage(player, sender == null ? "-" : sender.getName(), word);
+				}
+			}				
+		} else {
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (player.hasPermission("eithoncop.notify-about-similar")) {
+					Config.M.notifyAboutSimilar.sendMessage(player, sender == null ? "-" : sender.getName(), word, profanity.getWord());
+				}
+			}
+		}
 	}
 
 	Profanity getProfanity(String word) {
