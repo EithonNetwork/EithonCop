@@ -40,15 +40,15 @@ MarkSimilarPostfix: ">"
 # The following strings will replace any blacklisted word from that category
 #
 CategoryUnknown: ["****"]
-CategoryBodyContent: ["casserole", "lasagna"]
-CategoryBodyPart: ["shoulder", "knee", "elbow"]
-CategoryLocation: ["a warm place", "elsewhere"]
-CategoryOffensive: ["yahoo", "I need to count to 10"]
-CategoryProfession: ["astronaut", "dentist", "surgeon"]
-CategoryRacist: ["dragon", "unicorn", "magic creature"]
-CategorySexualNoun: ["chair", "pigeon"]
-CategorySexualVerb: ["run", "walk", "look at"]
-CategoryDerogative: ["citizen", "member", "person"]
+#CategoryBodyContent: ["casserole", "lasagna"]
+#CategoryBodyPart: ["shoulder", "knee", "elbow"]
+#CategoryLocation: ["a warm place", "elsewhere"]
+#CategoryOffensive: ["yahoo", "I need to count to 10"]
+#CategoryProfession: ["astronaut", "dentist", "surgeon"]
+#CategoryRacist: ["dragon", "unicorn", "magic creature"]
+#CategorySexualNoun: ["chair", "pigeon"]
+#CategorySexualVerb: ["run", "walk", "look at"]
+#CategoryDerogative: ["citizen", "member", "person"]
 
 eithon:
   UseMarkUpForMessages: 0
