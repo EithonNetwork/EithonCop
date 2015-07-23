@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 0.5 (2015-04-23)
+
+* NEW: Completely rewritten profanity finder.
+
 ### 0.4 (2015-04-23)
 
 * CHANGE: Inform players with a certain permission when a player has used a blacklisted word.

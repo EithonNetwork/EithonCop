@@ -31,6 +31,7 @@ public class Config {
 		public static boolean markSimilar;
 		public static String markSimilarPrefix;
 		public static String markSimilarPostfix;
+		public static int profanityWordMinimumLength = 3;
 		
 		static void load(Configuration config) {
 			categoryUnknown = config.getStringList("CategoryUnknown").toArray(new String[0]);

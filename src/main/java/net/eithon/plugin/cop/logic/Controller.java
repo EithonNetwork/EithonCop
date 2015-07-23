@@ -7,10 +7,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Controller {
-	private EithonPlugin _eithonPlugin;
 	private ProfanityFilterController _profanityFilterController;
+	
 	public Controller(EithonPlugin eithonPlugin){
-		this._eithonPlugin = eithonPlugin;
 		this._profanityFilterController = new ProfanityFilterController(eithonPlugin);
 	}
 
