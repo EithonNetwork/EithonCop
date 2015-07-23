@@ -5,17 +5,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.StringTokenizer;
 
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.file.FileMisc;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
-import net.eithon.plugin.cop.profanity.Blacklist;
-import net.eithon.plugin.cop.profanity.Leet;
-import net.eithon.plugin.cop.profanity.Profanity;
-import net.eithon.plugin.cop.profanity.Whitelist;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -143,9 +138,8 @@ public class ProfanityFilterController {
 		return this._whitelist.isWhitelisted(word);
 	}
 
-	String replaceIfBlacklisted(CommandSender sender,
-			String word) {
-		return this._blacklist.replaceIfBlacklisted(sender, word);
+	String replaceIfBlacklisted(CommandSender sender, String normalized) {
+		return this._blacklist.replaceIfBlacklisted(sender, normalized);
 	}
 
 	void verbose(String method, String format, Object... args) {

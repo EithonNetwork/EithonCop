@@ -47,11 +47,8 @@ public class Config {
 			profanityLevel = config.getInt("ProfanityLevel", 0);
 			saveSimilar = config.getInt("SaveSimilar", 0) != 0;
 			markReplacement = config.getInt("MarkReplacement", 0) != 0;
-			markReplacementPrefix = config.getString("MarkReplacementPrefix", "_");
-			markReplacementPostfix = config.getString("MarkReplacementPostfix", "_");
-			markSimilar = config.getInt("MarkSimilar", 0) != 0;
-			markSimilarPrefix = config.getString("MarkSimilarPrefix", "<");
-			markSimilarPostfix = config.getString("MarkSimilarPostfix", ">");
+			markReplacementPrefix = config.getString("MarkReplacementPrefix", "'");
+			markReplacementPostfix = config.getString("MarkReplacementPostfix", "'");
 		}
 
 	}

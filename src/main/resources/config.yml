@@ -27,16 +27,6 @@ MarkReplacementPrefix: "'"
 MarkReplacementPostfix: "'"
 
 #
-# Should we mark the words that are similar to profanities?
-#
-# 0 = NO
-# 1 = YES
-#
-MarkSimilar: 1
-MarkSimilarPrefix: "<"
-MarkSimilarPostfix: ">"
-
-#
 # The following strings will replace any blacklisted word from that category
 #
 CategoryUnknown: ["****"]
@@ -61,7 +51,7 @@ eithon:
   #  2 = MINOR (also minor messages)
   #  3 = VERBOSE (all messages)
   #
-  DebugLevel: 2
+  DebugLevel: 1
 
 messages:
 

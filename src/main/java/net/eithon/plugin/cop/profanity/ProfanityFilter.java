@@ -3,8 +3,6 @@ package net.eithon.plugin.cop.profanity;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import net.eithon.library.extensions.EithonPlugin;
-import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.plugin.cop.Config;
 
 import org.bukkit.command.CommandSender;
@@ -25,7 +23,7 @@ class ProfanityFilter {
 		this._inMessage = message;
 		this._transformedInMessage = Profanity
 				.normalize(this._inMessage)
-				.replaceAll("\\W", " ");
+				.replaceAll("[^a-z]", " ");
 		this._tokenizer = new StringTokenizer(this._transformedInMessage, " ", true);
 		this._queue = new ArrayList<Token>();
 		this._outMessage = new StringBuilder();
@@ -36,7 +34,6 @@ class ProfanityFilter {
 	String getFilteredMessage() {
 		while (hasMoreTokens()) {
 			Token token = getNextToken();
-			verbose("ProfanityFilter.getFilteredMessage", "token = \"%s\"", token);
 			if (token.equalsIgnoreCase(" ")) {
 				if (queueIsEmpty()) handleToken(token);
 				else addToQueue(token);
@@ -71,42 +68,58 @@ class ProfanityFilter {
 
 	private void handleQueue() {
 		int length = this._queue.size();
-		String tail = "";
-		for (int i = length; i > 0; i--) {
-			String in = "";
-			String transformed = "";
-			Token token = this._queue.get(i-1);
-			if (token.getTransformed().equalsIgnoreCase(" ")) {
-				tail = token.getIn() + tail;
-				continue;
+		StringBuilder tail = new StringBuilder("");
+		StringBuilder front = new StringBuilder("");
+		String out = null;
+		for (int i = 0; i < length; i++) {
+			int beginning = i;
+			int end = length-i-1;
+			Token tokensWithTail = this._queue.get(end);
+			Token tokensWithFront = this._queue.get(beginning);
+			if (!tokensWithTail.getTransformed().equalsIgnoreCase(" ")) {
+				out = replaceProfanityInSubpart(0, end);
+				if (out != null) {
+					this._outMessage.append(out);
+					this._outMessage.append(tail);
+					verbose("ProfanityFilter.handleQueue", "out=\"%s\", tail=\"%s\", outmessage=\"%s\"",
+							out, tail, this._outMessage);
+					break;
+				}
 			}
-			boolean success = getTokenFromBeginning(tail, i, in, transformed);
-			if (success) break;
-			tail = this._queue.get(i-1).getIn() + tail;
+			tail.insert(0, tokensWithTail.getIn());
+			front.append(tokensWithFront.getIn());
+			if (!tokensWithFront.getTransformed().equalsIgnoreCase(" ")) {
+				out = replaceProfanityInSubpart(beginning+1, length-1);
+				if (out != null) {
+					this._outMessage.append(front);
+					this._outMessage.append(out);
+					verbose("ProfanityFilter.handleQueue", "front=\"%s\", out=\"%s\", outmessage=\"%s\"",
+							front, out, this._outMessage);
+					break;
+				}
+			}
+		}
+		if (out == null) {
+			this._outMessage.append(tail);
+			verbose("ProfanityFilter.handleQueue", "front=\"%s\", tail=\"%s\", outmessage=\"%s\"",
+					front, tail, this._outMessage);
 		}
 		this._queue = new ArrayList<Token>();
-		this._outMessage.append(tail);
-		verbose("ProfanityFilter.handleQueue", "tail=\"%s\", outmessage=\"%s\"", tail, this._outMessage);
 	}
 
-	private boolean getTokenFromBeginning(String tail, int i, String in,
-			String transformed) {
+	private String replaceProfanityInSubpart(int start, int end) {
+		if (end-start+1 < Config.V.profanityWordMinimumLength) return null;
+		String in = "";
+		String transformed = "";
 		Token token;
-		for (int j = 0; j < i; j++) {
+		for (int j = start; j <= end; j++) {
 			token = this._queue.get(j);
 			in += token.getIn();
 			String t = token.getTransformed();
 			if (!t.equalsIgnoreCase(" ")) transformed += t;
 		}
 		token = new Token(in, transformed);
-		String result = replaceProfanity(token);
-		if (result != null) {
-			this._outMessage.append(result);
-			verbose("ProfanityFilter.handleQueue", "token = \"%s\", result=\"%s\", tail=\"%s\", outmessage=\"%s\"",
-					token, result, tail, this._outMessage);
-			return true;
-		}
-		return false;
+		return replaceProfanity(token);
 	}
 
 	private void handleToken(Token token) {

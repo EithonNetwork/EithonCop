@@ -7,6 +7,7 @@ A Cop plugin for Minecraft.
 ### 0.5 (2015-04-23)
 
 * NEW: Completely rewritten profanity finder.
+* NEW: Can detect the profanity in "i f u c k" and "f u c k u"
 
 ### 0.4 (2015-04-23)
 

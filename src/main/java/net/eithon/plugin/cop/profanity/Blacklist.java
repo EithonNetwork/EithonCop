@@ -71,24 +71,20 @@ class Blacklist {
 		return (profanity != null) && (profanity.getProfanityLevel(word) <= Config.V.profanityLevel); 
 	}
 
-	String replaceIfBlacklisted(CommandSender sender, String word) {
-		Profanity profanity = getProfanity(word);
-		verbose("Blacklist.replaceIfBlacklisted", "word=%s, profanity = %s", word, profanity);
+	String replaceIfBlacklisted(CommandSender sender, String normalized) {
+		Profanity profanity = getProfanity(normalized);
+		verbose("Blacklist.replaceIfBlacklisted", "word=%s, profanity = %s", normalized, profanity);
 		if (profanity == null) return null;
 		if (Config.V.saveSimilar 
-				&& !profanity.isSameWord(word)
-				&& !this._similarWords.containsKey(word)) {
-			delayedSaveSimilar(word, profanity);
+				&& !profanity.isSameWord(normalized)
+				&& !this._similarWords.containsKey(normalized)) {
+			delayedSaveSimilar(normalized, profanity);
 		}
-		notifySomePlayers(sender, word, profanity);
-		if (profanity.getProfanityLevel(word) > Config.V.profanityLevel) {
+		notifySomePlayers(sender, normalized, profanity);
+		if (profanity.getProfanityLevel(normalized) > Config.V.profanityLevel) {
 			verbose("Blacklist.replaceIfBlacklisted", "Leave, because profanity.getProfanityLevel(%s)=%d > %d", 
-					word, profanity.getProfanityLevel(word), Config.V.profanityLevel);
+					normalized, profanity.getProfanityLevel(normalized), Config.V.profanityLevel);
 			return null;
-		}
-		if (!profanity.isSameWord(word)) {
-			if (Config.V.markSimilar) return String.format("%s%s%s", Config.V.markSimilarPrefix, word, Config.V.markSimilarPostfix);
-			else return word;
 		}
 		String synonym = profanity.getSynonym();
 		if (Config.V.markReplacement) {
