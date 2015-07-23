@@ -80,27 +80,33 @@ class ProfanityFilter {
 				tail = token.getIn() + tail;
 				continue;
 			}
-			for (int j = 0; j < i; j++) {
-				token = this._queue.get(j);
-				in += token.getIn();
-				String t = token.getTransformed();
-				if (!t.equalsIgnoreCase(" ")) transformed += t;
-			}
-			token = new Token(in, transformed);
-			String result = replaceProfanity(token);
-			if (result != null) {
-				this._outMessage.append(result);
-				this._outMessage.append(tail);
-				verbose("ProfanityFilter.handleQueue", "token = \"%s\", result=\"%s\", tail=\"%s\", outmessage=\"%s\"",
-						token, result, tail, this._outMessage);
-				this._queue = new ArrayList<Token>();
-				return;
-			}
+			boolean success = getTokenFromBeginning(tail, i, in, transformed);
+			if (success) break;
 			tail = this._queue.get(i-1).getIn() + tail;
 		}
+		this._queue = new ArrayList<Token>();
 		this._outMessage.append(tail);
 		verbose("ProfanityFilter.handleQueue", "tail=\"%s\", outmessage=\"%s\"", tail, this._outMessage);
-		this._queue = new ArrayList<Token>();
+	}
+
+	private boolean getTokenFromBeginning(String tail, int i, String in,
+			String transformed) {
+		Token token;
+		for (int j = 0; j < i; j++) {
+			token = this._queue.get(j);
+			in += token.getIn();
+			String t = token.getTransformed();
+			if (!t.equalsIgnoreCase(" ")) transformed += t;
+		}
+		token = new Token(in, transformed);
+		String result = replaceProfanity(token);
+		if (result != null) {
+			this._outMessage.append(result);
+			verbose("ProfanityFilter.handleQueue", "token = \"%s\", result=\"%s\", tail=\"%s\", outmessage=\"%s\"",
+					token, result, tail, this._outMessage);
+			return true;
+		}
+		return false;
 	}
 
 	private void handleToken(Token token) {
