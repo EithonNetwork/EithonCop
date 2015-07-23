@@ -31,6 +31,7 @@ public class Config {
 		public static boolean markSimilar;
 		public static String markSimilarPrefix;
 		public static String markSimilarPostfix;
+		public static int profanityWordMinimumLength = 3;
 		
 		static void load(Configuration config) {
 			categoryUnknown = config.getStringList("CategoryUnknown").toArray(new String[0]);
@@ -46,11 +47,8 @@ public class Config {
 			profanityLevel = config.getInt("ProfanityLevel", 0);
 			saveSimilar = config.getInt("SaveSimilar", 0) != 0;
 			markReplacement = config.getInt("MarkReplacement", 0) != 0;
-			markReplacementPrefix = config.getString("MarkReplacementPrefix", "_");
-			markReplacementPostfix = config.getString("MarkReplacementPostfix", "_");
-			markSimilar = config.getInt("MarkSimilar", 0) != 0;
-			markSimilarPrefix = config.getString("MarkSimilarPrefix", "<");
-			markSimilarPostfix = config.getString("MarkSimilarPostfix", ">");
+			markReplacementPrefix = config.getString("MarkReplacementPrefix", "'");
+			markReplacementPostfix = config.getString("MarkReplacementPostfix", "'");
 		}
 
 	}
@@ -69,6 +67,8 @@ public class Config {
 		public static ConfigurableMessage duplicateAcceptedWord;
 		public static ConfigurableMessage blackListWordMinimalLength;
 		public static ConfigurableMessage whitelistWordMinimalLength;
+		public static ConfigurableMessage notifyAboutProfanity;
+		public static ConfigurableMessage notifyAboutSimilar;
 
 		static void load(Configuration config) {
 			duplicateProfanity = config.getConfigurableMessage("DuplicateProfanity", 1,
@@ -89,6 +89,10 @@ public class Config {
 					"A word that should be blacklisted must have at least %d characters.");
 			whitelistWordMinimalLength = config.getConfigurableMessage("WhitelistWordMinimalLength", 1,
 					"A word that should be whitelisted must have at least %d characters.");
+			notifyAboutProfanity = config.getConfigurableMessage("NotifyAboutProfanity", 2,
+					"Player %s used the word \"%s\" which is blacklisted.");
+			notifyAboutSimilar = config.getConfigurableMessage("NotifyAboutSimilar", 3,
+					"Player %s used the word \"%s\", that is similar to the blacklisted word \"%s\".");
 		}		
 	}
 

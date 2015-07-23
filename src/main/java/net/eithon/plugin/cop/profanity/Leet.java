@@ -1,4 +1,4 @@
-package net.eithon.plugin.cop.logic;
+package net.eithon.plugin.cop.profanity;
 
 class Leet {
 	
@@ -6,7 +6,7 @@ class Leet {
 		return !message.equalsIgnoreCase(decode(message));
 	}
 	
-	public static String decode(String message) {
+	static String decode(String message) {
 		StringBuilder result = new StringBuilder();
 		char[] input = message.toCharArray();
 		char newC;

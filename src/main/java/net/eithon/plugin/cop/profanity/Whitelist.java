@@ -1,4 +1,4 @@
-package net.eithon.plugin.cop.logic;
+package net.eithon.plugin.cop.profanity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,9 +17,20 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONArray;
 
 class Whitelist {
+	private static Comparator<String> stringComparator;
+
 	private EithonPlugin _eithonPlugin;
 	private Blacklist _blacklist;
 	private HashMap<String, Profanity> _whitelist;
+
+	static {
+		stringComparator = new Comparator<String>(){
+			public int compare(String f1, String f2)
+			{
+				return f1.compareTo(f2);
+			}
+		};
+	}
 
 	public Whitelist(EithonPlugin eithonPlugin, Blacklist blacklist)
 	{
@@ -48,7 +59,7 @@ class Whitelist {
 
 	public boolean isWhitelisted(String word) { return getProfanity(word) != null; }
 
-	public Profanity getProfanity(String word) {
+	Profanity getProfanity(String word) {
 		return this._whitelist.get(Profanity.normalize(word));
 	}
 
@@ -83,11 +94,7 @@ class Whitelist {
 
 	private List<String> sortStrings(Collection<String> collection) {
 		ArrayList<String> array = new ArrayList<String>(collection);
-		array.sort(new Comparator<String>(){
-			public int compare(String f1, String f2)
-			{
-				return f1.compareTo(f2);
-			} });
+		array.sort(stringComparator);
 		return array;
 	}
 

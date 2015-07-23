@@ -1,4 +1,4 @@
-package net.eithon.plugin.cop.logic;
+package net.eithon.plugin.cop.profanity;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -20,6 +20,8 @@ import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -29,15 +31,24 @@ class Blacklist {
 	private HashMap<String, Profanity> _metaphoneList;
 	private HashMap<String, Profanity> _wordList;
 	HashMap<String, Profanity> _similarWords;
+
 	private static Metaphone3 metaphone3;
+	private static Comparator<String> stringComparator;
 
 	static {
 		metaphone3 = new Metaphone3();
 		metaphone3.SetEncodeVowels(true);
 		metaphone3.SetEncodeExact(true);
+
+		stringComparator = new Comparator<String>(){
+			public int compare(String f1, String f2)
+			{
+				return f1.compareTo(f2);
+			}
+		};
 	}
 
-	public Blacklist(EithonPlugin eithonPlugin)
+	Blacklist(EithonPlugin eithonPlugin)
 	{
 		this._eithonPlugin = eithonPlugin;
 		this._metaphoneList = new HashMap<String, Profanity>();
@@ -45,7 +56,7 @@ class Blacklist {
 		this._similarWords = new HashMap<String, Profanity>();
 	}
 
-	public Profanity add(String word) {
+	Profanity add(String word) {
 		Profanity profanity = getProfanity(word);
 		if (profanity != null) {
 			this._eithonPlugin.getEithonLogger().warning("Blacklist.add: Trying to add a word that already exists: \"%s\".", word);
@@ -64,23 +75,24 @@ class Blacklist {
 		if (profanity.hasSecondary()) this._metaphoneList.put(profanity.getSecondary(), profanity);
 	}
 
-	public boolean isBlacklisted(String word) {
+	boolean isBlacklisted(String word) {
 		Profanity profanity = getProfanity(word);
 		return (profanity != null) && (profanity.getProfanityLevel(word) <= Config.V.profanityLevel); 
 	}
 
-	public String replaceIfBlacklisted(String word) {
-		Profanity profanity = getProfanity(word);
+	String replaceIfBlacklisted(CommandSender sender, String normalized) {
+		Profanity profanity = getProfanity(normalized);
+		verbose("Blacklist.replaceIfBlacklisted", "word=%s, profanity = %s", normalized, profanity);
 		if (profanity == null) return null;
 		if (Config.V.saveSimilar 
-				&& !profanity.isSameWord(word)
-				&& !this._similarWords.containsKey(word)) {
-			delayedSaveSimilar(word, profanity);
+				&& !profanity.isSameWord(normalized)
+				&& !this._similarWords.containsKey(normalized)) {
+			delayedSaveSimilar(normalized, profanity);
 		}
-		if (profanity.getProfanityLevel(word) > Config.V.profanityLevel) {
-			if (Config.V.markSimilar && !profanity.isSameWord(word)) {
-				return String.format("%s%s%s", Config.V.markSimilarPrefix, word, Config.V.markSimilarPostfix);
-			}
+		notifySomePlayers(sender, normalized, profanity);
+		if (profanity.getProfanityLevel(normalized) > Config.V.profanityLevel) {
+			verbose("Blacklist.replaceIfBlacklisted", "Leave, because profanity.getProfanityLevel(%s)=%d > %d", 
+					normalized, profanity.getProfanityLevel(normalized), Config.V.profanityLevel);
 			return null;
 		}
 		String synonym = profanity.getSynonym();
@@ -90,7 +102,24 @@ class Blacklist {
 		return synonym;
 	}
 
-	public Profanity getProfanity(String word) {
+	private void notifySomePlayers(CommandSender sender, String word,
+			Profanity profanity) {
+		if (profanity.isSameWord(word)) { 
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (player.hasPermission("eithoncop.notify-about-profanity")) {
+					Config.M.notifyAboutProfanity.sendMessage(player, sender == null ? "-" : sender.getName(), word);
+				}
+			}				
+		} else {
+			for (Player player : Bukkit.getOnlinePlayers()) {
+				if (player.hasPermission("eithoncop.notify-about-similar")) {
+					Config.M.notifyAboutSimilar.sendMessage(player, sender == null ? "-" : sender.getName(), word, profanity.getWord());
+				}
+			}
+		}
+	}
+
+	Profanity getProfanity(String word) {
 		String normalized = Profanity.normalize(word);
 		Profanity profanity = this._wordList.get(normalized);
 		if (profanity != null) return profanity;
@@ -139,11 +168,7 @@ class Blacklist {
 
 	private List<String> sortStrings(Collection<String> collection) {
 		ArrayList<String> array = new ArrayList<String>(collection);
-		array.sort(new Comparator<String>(){
-			public int compare(String f1, String f2)
-			{
-				return f1.compareTo(f2);
-			} });
+		array.sort(stringComparator);
 		return array;
 	}
 
@@ -174,7 +199,7 @@ class Blacklist {
 		}
 	}
 
-	public void delayedLoadSimilar(double waitSeconds) {
+	void delayedLoadSimilar(double waitSeconds) {
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
 			public void run() {
@@ -212,7 +237,7 @@ class Blacklist {
 		}
 	}
 
-	public void delayedSave()
+	void delayedSave()
 	{
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
@@ -240,7 +265,7 @@ class Blacklist {
 		fileContent.save(file);
 	}
 
-	public void delayedLoad()
+	void delayedLoad()
 	{
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {

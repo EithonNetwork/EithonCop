@@ -1,4 +1,4 @@
-package net.eithon.plugin.cop.logic;
+package net.eithon.plugin.cop.profanity;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,10 +19,11 @@ class Profanity implements IJson<Profanity> {
 	static final int PROFANITY_LEVEL_SIMILAR = 2;
 	static final int PROFANITY_LEVEL_MAX = 2;
 	static Metaphone3 metaphone3;
-	
+
 	private static EnumMap<ProfanityType, Integer> profanityTypeToInteger = new EnumMap<Profanity.ProfanityType, Integer>(ProfanityType.class);
 	private static HashMap<Integer, ProfanityType> integerToProfanityType = new HashMap<Integer, Profanity.ProfanityType>();
 	private static EnumMap<ProfanityType, String[]> synonyms = new EnumMap<Profanity.ProfanityType, String[]>(ProfanityType.class);
+	private static Comparator<Profanity> profanityComparator;
 
 	private String _word;
 	private String _primaryEncoded;
@@ -30,7 +31,7 @@ class Profanity implements IJson<Profanity> {
 	private ProfanityType _type;
 	private boolean _isLiteral;
 	private List<String> _synonyms;
-	
+
 	static {
 		metaphone3 = new Metaphone3();
 		metaphone3.SetEncodeVowels(true);
@@ -55,9 +56,16 @@ class Profanity implements IJson<Profanity> {
 		synonyms.put(ProfanityType.SEXUAL_NOUN, Config.V.categorySexualNoun);
 		synonyms.put(ProfanityType.SEXUAL_VERB, Config.V.categorySexualVerb);
 		synonyms.put(ProfanityType.DEROGATIVE, Config.V.categoryDerogative);
+
+		profanityComparator = new Comparator<Profanity>(){
+			public int compare(Profanity p1, Profanity p2)
+			{
+				return p1.getWord().compareTo(p2.getWord());
+			} 
+		};
 	}
 
-	public Profanity(String word) {
+	Profanity(String word) {
 		this._word = normalize(word);
 		this._type = ProfanityType.UNKNOWN;
 		this._isLiteral = true;
@@ -68,17 +76,17 @@ class Profanity implements IJson<Profanity> {
 	Profanity() {
 	}
 
-	public enum ProfanityType {
-	    UNKNOWN, BODY_CONTENT, BODY_PART, LOCATION, OFFENSIVE, PROFESSION, RACIST, SEXUAL_NOUN, SEXUAL_VERB, DEROGATIVE
+	enum ProfanityType {
+		UNKNOWN, BODY_CONTENT, BODY_PART, LOCATION, OFFENSIVE, PROFESSION, RACIST, SEXUAL_NOUN, SEXUAL_VERB, DEROGATIVE
 	}
-	
+
 	public static String normalize(String word) { return Leet.decode(word.toLowerCase()); }
 
 	private static void addProfanityType(ProfanityType type, Integer i) {
 		profanityTypeToInteger.put(type, i);
 		integerToProfanityType.put(i, type);
 	}
-	
+
 	private void prepare() {
 		synchronized (metaphone3) {
 			metaphone3.SetWord(this._word);
@@ -88,56 +96,48 @@ class Profanity implements IJson<Profanity> {
 			if (secondaryEncoded.length() > 0) this._secondaryEncoded = secondaryEncoded;
 		}
 	}
-	
+
 	public String getWord() { return this._word; }
-	public String getPrimary() {return this._primaryEncoded; }
-	public String getSecondary() { return this._secondaryEncoded; }
-	public boolean hasSecondary() { return this._secondaryEncoded != null; }
-	public boolean isLiteral() { return this._isLiteral; }
-	public ProfanityType getProfanityType() { return this._type; }
-	public void setProfanityType(ProfanityType type) { this._type = type; }
-	public boolean isSameWord(String word) {return this._word.equalsIgnoreCase(normalize(word)); }
-	public int getProfanityLevel(String word) { 
+	String getPrimary() {return this._primaryEncoded; }
+	String getSecondary() { return this._secondaryEncoded; }
+	boolean hasSecondary() { return this._secondaryEncoded != null; }
+	boolean isLiteral() { return this._isLiteral; }
+	ProfanityType getProfanityType() { return this._type; }
+	void setProfanityType(ProfanityType type) { this._type = type; }
+	boolean isSameWord(String word) {return this._word.equalsIgnoreCase(normalize(word)); }
+	int getProfanityLevel(String word) { 
 		if (isSameWord(word)) return PROFANITY_LEVEL_LITERAL;
 		return PROFANITY_LEVEL_SIMILAR;
 	}
-	
-	public String getSynonym() {
+
+	String getSynonym() {
 		String[] array = getSynonyms();
 		int index = (int) (Math.random()*array.length);
 		return array[index];
 	}
-	
-	public String[] getSynonyms() {
+
+	String[] getSynonyms() {
 		String[] array = this._synonyms.size() > 0 ? this._synonyms.toArray(new String[0]) : synonyms.get(this._type);
 		if ((array == null) || (array.length == 0)) return new String[] {"****"};
 		return array;
 	}
 
 	@Override
-	public Profanity factory() {
+	public
+	Profanity factory() {
 		return new Profanity();
 	}
 
 	static List<Profanity> sortByWord(Collection<Profanity> collection) {
-		return sortByWord(collection, true);
-	}
-
-	static List<Profanity> sortByWord(Collection<Profanity> collection, boolean ascending) {
-		int factor = ascending ? 1 : -1;
 		ArrayList<Profanity> array = new ArrayList<Profanity>(collection);
-		array.sort(
-				new Comparator<Profanity>(){
-					public int compare(Profanity p1, Profanity p2)
-					{
-						return factor*p1.getWord().compareTo(p2.getWord());
-					} });	
+		array.sort(profanityComparator);
 		return array;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object toJson() {
+	public
+	Object toJson() {
 		JSONObject json = new JSONObject();
 		json.put("word", this._word);
 		json.put("type", profanityTypeToInteger.get(this._type));
@@ -149,7 +149,8 @@ class Profanity implements IJson<Profanity> {
 	}
 
 	@Override
-	public Profanity fromJson(Object json) {
+	public
+	Profanity fromJson(Object json) {
 		JSONObject jsonObject = (JSONObject) json;
 		this._word = (String) jsonObject.get("word");
 		Long typeAsInteger = (Long) jsonObject.get("type");
@@ -168,12 +169,13 @@ class Profanity implements IJson<Profanity> {
 		return this;
 	}
 
-	public static Profanity getFromJson(Object json) {
+	static Profanity getFromJson(Object json) {
 		return new Profanity().fromJson(json);
 	}
-	
-	@Override 
-	public String toString() {
+
+	@Override
+	public 
+	String toString() {
 		String result = String.format("%s (%s, %d)", getWord(), this._isLiteral ? "literal" : "not literal", profanityTypeToInteger.get(this._type));
 		if (hasSecondary()) result += String.format(" [%s, %s]", getPrimary(), getSecondary());
 		else result += String.format(" [%s]", getPrimary());
