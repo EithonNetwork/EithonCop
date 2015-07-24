@@ -50,6 +50,16 @@ MarkReplacementPrefix: "'"
 MarkReplacementPostfix: "'"
 
 #
+# Should we mark the words that are similar to profanities?
+#
+# 0 = NO
+# 1 = YES
+#
+MarkSimilar: 0
+MarkSimilarPrefix: "<"
+MarkSimilarPostfix: ">"
+
+#
 # The following strings will replace any blacklisted word from that category
 #
 CategoryUnknown: ["****"]
@@ -127,4 +137,3 @@ messages:
   # Parameters: <player name>(%s), <similar word>(%s), <exact phrasing>(%s), blacklisted word(%s)
   #
   NotifyAboutSimilar: "Player %s used the word \"%s\" (%s), that is similar to the blacklisted word \"%s\"."
-  
