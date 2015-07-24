@@ -102,6 +102,7 @@ class Blacklist {
 			if (Config.V.markSimilar) {
 				return String.format("%s%s%s", Config.V.markSimilarPrefix, originalWord, Config.V.markSimilarPostfix);
 			}
+			return null;
 		}
 		String synonym = profanity.getSynonym();
 		if (Config.V.markReplacement) {
