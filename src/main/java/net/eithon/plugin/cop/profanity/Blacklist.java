@@ -87,18 +87,17 @@ class Blacklist {
 
 	String replaceIfBlacklisted(Player player, String normalized, String originalWord) {
 		Profanity profanity = getProfanity(normalized);
-		verbose("Blacklist.replaceIfBlacklisted", "word=%s, profanity = %s", normalized, profanity);
 		if (profanity == null) return replaceIfBuildingStone(player, normalized, originalWord);
+		int profanityLevel = profanity.getProfanityLevel(normalized);
+		boolean isConsideredForbidden = profanityLevel <= Config.V.profanityLevel;
 		if (Config.V.saveSimilar 
-				&& !profanity.isSameWord(normalized)
+				&& (profanityLevel == Profanity.PROFANITY_LEVEL_SIMILAR)
 				&& !this._similarWords.containsKey(normalized)) {
 			delayedSaveSimilar(normalized, profanity);
 		}
-		int profanityLevel = profanity.getProfanityLevel(normalized);
-		boolean isConsideredForbidden = profanityLevel <= Config.V.profanityLevel;
 		notifySomePlayers(player, normalized, originalWord, profanity.getWord(), profanityLevel, isConsideredForbidden);
 		if (!isConsideredForbidden) {
-			if (Config.V.markSimilar) return markSimilar(originalWord);
+			if (Config.V.markSimilar && (profanityLevel == Profanity.PROFANITY_LEVEL_SIMILAR)) return markSimilar(originalWord);
 			return null;
 		}
 		String synonym = profanity.getSynonym();

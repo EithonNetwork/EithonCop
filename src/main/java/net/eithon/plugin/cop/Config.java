@@ -38,7 +38,7 @@ public class Config {
 		public static boolean logOffenderMessages;
 		
 		static void load(Configuration config) {
-			profanityBuildingBlocks = config.getStringList("ProfanityBuildingStones").toArray(new String[0]);
+			profanityBuildingBlocks = config.getStringList("ProfanityBuildingBlocks").toArray(new String[0]);
 			categoryUnknown = config.getStringList("CategoryUnknown").toArray(new String[0]);
 			categoryBodyContent = config.getStringList("CategoryBodyContent").toArray(new String[0]);
 			categoryBodyPart = config.getStringList("CategoryBodyPart").toArray(new String[0]);
