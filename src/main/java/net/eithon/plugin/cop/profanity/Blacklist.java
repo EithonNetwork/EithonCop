@@ -99,7 +99,9 @@ class Blacklist {
 		if (!isConsideredForbidden) {
 			verbose("Blacklist.replaceIfBlacklisted", "Leave, because profanity.getProfanityLevel(%s)=%d > %d", 
 					normalized, profanity.getProfanityLevel(normalized), Config.V.profanityLevel);
-			return null;
+			if (Config.V.markSimilar) {
+				return String.format("%s%s%s", Config.V.markSimilarPrefix, originalWord, Config.V.markSimilarPostfix);
+			}
 		}
 		String synonym = profanity.getSynonym();
 		if (Config.V.markReplacement) {

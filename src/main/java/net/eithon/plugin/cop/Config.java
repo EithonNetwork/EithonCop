@@ -55,6 +55,9 @@ public class Config {
 			markReplacement = config.getInt("MarkReplacement", 0) != 0;
 			markReplacementPrefix = config.getString("MarkReplacementPrefix", "'");
 			markReplacementPostfix = config.getString("MarkReplacementPostfix", "'");
+			markSimilar = config.getInt("MarkSimilar", 0) != 0;
+			markSimilarPrefix = config.getString("MarkSimilarPrefix", "<");
+			markSimilarPostfix = config.getString("MarkSimilarPostfix", ">");
 		}
 
 	}
