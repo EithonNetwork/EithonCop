@@ -16,8 +16,9 @@ import org.json.simple.JSONObject;
 class Profanity implements IJson<Profanity> {
 	static final int PROFANITY_LEVEL_NONE = 0;
 	static final int PROFANITY_LEVEL_LITERAL = 1;
-	static final int PROFANITY_LEVEL_SIMILAR = 2;
-	static final int PROFANITY_LEVEL_MAX = 2;
+	static final int PROFANITY_LEVEL_COMPOSED = 2;
+	static final int PROFANITY_LEVEL_SIMILAR = 3;
+	static final int PROFANITY_LEVEL_MAX = 3;
 	static Metaphone3 metaphone3;
 
 	private static EnumMap<ProfanityType, Integer> profanityTypeToInteger = new EnumMap<Profanity.ProfanityType, Integer>(ProfanityType.class);

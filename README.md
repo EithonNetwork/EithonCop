@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 0.7 (2015-04-24)
+
+* NEW: ProfanityBuildingBlocks is a list of words that, if part of a word, the word is considered blacklisted.
+
 ### 0.6.1 (2015-04-24)
 
 * BUG: Ignored the level. Similar was always replaced.

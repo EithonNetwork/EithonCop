@@ -13,6 +13,7 @@ public class Config {
 		M.load(config);
 	}
 	public static class V {
+		public static String[] profanityBuildingBlocks;
 		public static String[] categoryUnknown;
 		public static String[] categoryBodyContent;
 		public static String[] categoryBodyPart;
@@ -37,6 +38,7 @@ public class Config {
 		public static boolean logOffenderMessages;
 		
 		static void load(Configuration config) {
+			profanityBuildingBlocks = config.getStringList("ProfanityBuildingBlocks").toArray(new String[0]);
 			categoryUnknown = config.getStringList("CategoryUnknown").toArray(new String[0]);
 			categoryBodyContent = config.getStringList("CategoryBodyContent").toArray(new String[0]);
 			categoryBodyPart = config.getStringList("CategoryBodyPart").toArray(new String[0]);
@@ -77,6 +79,7 @@ public class Config {
 		public static ConfigurableMessage blackListWordMinimalLength;
 		public static ConfigurableMessage whitelistWordMinimalLength;
 		public static ConfigurableMessage notifyAboutProfanity;
+		public static ConfigurableMessage notifyAboutComposed;
 		public static ConfigurableMessage notifyAboutSimilar;
 
 		static void load(Configuration config) {
@@ -100,6 +103,8 @@ public class Config {
 					"A word that should be whitelisted must have at least %d characters.");
 			notifyAboutProfanity = config.getConfigurableMessage("NotifyAboutProfanity", 3,
 					"Player %s used the word \"%s\" (%s) which is blacklisted.");
+			notifyAboutComposed = config.getConfigurableMessage("NotifyAboutComposed", 4,
+					"Player %s used the word \"%s\" (%s), that contains the blacklisted building block \"%s\".");
 			notifyAboutSimilar = config.getConfigurableMessage("NotifyAboutSimilar", 4,
 					"Player %s used the word \"%s\" (%s), that is similar to the blacklisted word \"%s\".");
 		}		
