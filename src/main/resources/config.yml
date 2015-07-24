@@ -5,9 +5,15 @@
 #
 # 0 = Don't stop anything
 # 1 = Stop when spelled exactly as blacklisted word
-# 2 = Stop when not in whitelist, but similar to blacklisted word
+# 2 = Stop when subpart of word is listed in ProfanityBuildingBlocks
+# 3 = Stop when similar to blacklisted word
 #
-ProfanityLevel: 1
+ProfanityLevel: 2
+
+#
+# Words that are not allowed as part of a word. If they are part of a word, the entire word is considered blacklisted
+#
+ProfanityBuildingBlocks: [fuck, dick]
 
 #
 # Should we log all messages for players considered to be offenders?
@@ -137,3 +143,8 @@ messages:
   # Parameters: <player name>(%s), <similar word>(%s), <exact phrasing>(%s), blacklisted word(%s)
   #
   NotifyAboutSimilar: "Player %s used the word \"%s\" (%s), that is similar to the blacklisted word \"%s\"."
+
+  #
+  # Parameters: <player name>(%s), <composed word>(%s), <exact phrasing>(%s), blacklisted word(%s)
+  #
+  NotifyAboutComposed: "Player %s used the word \"%s\" (%s), that contains the blacklisted building block \"%s\"."

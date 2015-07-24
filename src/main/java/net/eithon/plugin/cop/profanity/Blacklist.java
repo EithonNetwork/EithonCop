@@ -88,49 +88,75 @@ class Blacklist {
 	String replaceIfBlacklisted(Player player, String normalized, String originalWord) {
 		Profanity profanity = getProfanity(normalized);
 		verbose("Blacklist.replaceIfBlacklisted", "word=%s, profanity = %s", normalized, profanity);
-		if (profanity == null) return null;
+		if (profanity == null) return replaceIfBuildingStone(player, normalized, originalWord);
 		if (Config.V.saveSimilar 
 				&& !profanity.isSameWord(normalized)
 				&& !this._similarWords.containsKey(normalized)) {
 			delayedSaveSimilar(normalized, profanity);
 		}
-		boolean isConsideredForbidden = profanity.getProfanityLevel(normalized) <= Config.V.profanityLevel;
-		notifySomePlayers(player, normalized, originalWord, profanity, isConsideredForbidden);
+		int profanityLevel = profanity.getProfanityLevel(normalized);
+		boolean isConsideredForbidden = profanityLevel <= Config.V.profanityLevel;
+		notifySomePlayers(player, normalized, originalWord, profanity.getWord(), profanityLevel, isConsideredForbidden);
 		if (!isConsideredForbidden) {
-			verbose("Blacklist.replaceIfBlacklisted", "Leave, because profanity.getProfanityLevel(%s)=%d > %d", 
-					normalized, profanity.getProfanityLevel(normalized), Config.V.profanityLevel);
-			if (Config.V.markSimilar) {
-				return String.format("%s%s%s", Config.V.markSimilarPrefix, originalWord, Config.V.markSimilarPostfix);
-			}
+			if (Config.V.markSimilar) return markSimilar(originalWord);
 			return null;
 		}
 		String synonym = profanity.getSynonym();
-		if (Config.V.markReplacement) {
-			return String.format("%s%s%s", Config.V.markReplacementPrefix, synonym, Config.V.markReplacementPostfix);
-		}
+		if (Config.V.markReplacement) return markReplacement(synonym);
 		return synonym;
 	}
 
-	private void notifySomePlayers(Player player, String normalized, String originalWord,
-			Profanity profanity, boolean isConsideredForbidden) {
-		if (profanity.isSameWord(normalized)) {
-			noteAsOffender(player, true, isConsideredForbidden);
+	private String markSimilar(String originalWord) {
+		return String.format("%s%s%s", Config.V.markSimilarPrefix, originalWord, Config.V.markSimilarPostfix);
+	}
+
+	private String markReplacement(String synonym) {
+		return String.format("%s%s%s", Config.V.markReplacementPrefix, synonym, Config.V.markReplacementPostfix);
+	}
+
+	private String replaceIfBuildingStone(Player player, String normalized,
+			String originalWord) {
+		for (String buildingBlock : Config.V.profanityBuildingBlocks) {
+			if (normalized.contains(buildingBlock)) {
+				notifySomePlayers(player, normalized, originalWord, buildingBlock, 
+						Profanity.PROFANITY_LEVEL_COMPOSED, Profanity.PROFANITY_LEVEL_COMPOSED <= Config.V.profanityLevel);
+				return markReplacement("****");
+			}
+		}
+		return null;
+	}
+
+	private void notifySomePlayers(Player player, String normalized, String originalWord, String referenceWord,
+			int profanityLevel, boolean isConsideredForbidden) {
+		noteAsOffender(player, isConsideredForbidden);
+		switch (profanityLevel) {
+		case Profanity.PROFANITY_LEVEL_LITERAL:
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				if (p.hasPermission("eithoncop.notify-about-profanity")) {
 					Config.M.notifyAboutProfanity.sendMessage(p, player == null ? "-" : player.getName(), normalized, originalWord);
 				}
-			}				
-		} else {
-			noteAsOffender(player, false, isConsideredForbidden);
+			}	
+			break;
+		case Profanity.PROFANITY_LEVEL_COMPOSED:
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				if (p.hasPermission("eithoncop.notify-about-composed")) {
+					Config.M.notifyAboutComposed.sendMessage(p, player == null ? "-" : player.getName(), normalized, originalWord, referenceWord);
+				}
+			}	
+			break;
+		case Profanity.PROFANITY_LEVEL_SIMILAR:
 			for (Player p : Bukkit.getOnlinePlayers()) {
 				if (p.hasPermission("eithoncop.notify-about-similar")) {
-					Config.M.notifyAboutSimilar.sendMessage(p, player == null ? "-" : player.getName(), normalized, originalWord, profanity.getWord());
+					Config.M.notifyAboutSimilar.sendMessage(p, player == null ? "-" : player.getName(), normalized, originalWord, referenceWord);
 				}
 			}
+			break;
+		default:
+			break;
 		}
 	}
 
-	private void noteAsOffender(Player player, boolean literal, boolean isConsideredForbidden) {
+	private void noteAsOffender(Player player, boolean isConsideredForbidden) {
 		if (player == null) return;
 		if (!this._offenders.isInCoolDownPeriod(player) 
 				&& !this._recentOffenders.isInCoolDownPeriod(player)
@@ -267,7 +293,7 @@ class Blacklist {
 			String filteredMessage) {
 		if (!Config.V.logOffenderMessages) return;
 		if (!isOffender(player)) return;
-		
+
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
 			public void run() {
