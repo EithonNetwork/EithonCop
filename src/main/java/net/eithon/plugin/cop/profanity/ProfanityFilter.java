@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 import net.eithon.plugin.cop.Config;
 
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 class ProfanityFilter {
 	private String _inMessage;
@@ -13,13 +13,13 @@ class ProfanityFilter {
 	private StringTokenizer _tokenizer;
 	private int _position = 0;
 	private ArrayList<Token> _queue;
-	private CommandSender _sender;
+	private Player _player;
 	private StringBuilder _outMessage;
 	private ProfanityFilterController _controller;
 
-	ProfanityFilter(ProfanityFilterController controller, CommandSender sender, String message) {
+	ProfanityFilter(ProfanityFilterController controller, Player player, String message) {
 		this._controller = controller;
-		this._sender = sender;
+		this._player = player;
 		this._inMessage = message;
 		this._transformedInMessage = Profanity
 				.normalize(this._inMessage)
@@ -130,29 +130,29 @@ class ProfanityFilter {
 	}
 
 	private String replaceProfanity(Token token) {
-		String outWord = replaceWithSynonym(token.getTransformed(), true);
+		String outWord = replaceWithSynonym(token.getTransformed(), token.getIn(), true);
 		if (outWord == null) return null;
 		String result = casifyAsReferenceWord(outWord, token.getIn());
 		if (Leet.isLeet(token.getIn())) return Leet.encode(result);
 		return result;
 	}
 
-	private String replaceWithSynonym(String transformedWord, boolean checkPlural) {
-		String outWord = replaceWithSynonym(transformedWord);
+	private String replaceWithSynonym(String transformedWord, String originalWord, boolean checkPlural) {
+		String outWord = replaceWithSynonym(transformedWord, originalWord);
 		if ((outWord != null) || !checkPlural) return outWord;
 		String withoutPlural = withoutPlural(transformedWord);
 		if (transformedWord.equalsIgnoreCase(withoutPlural)) return null;
-		return replaceWithSynonym(withoutPlural);
+		return replaceWithSynonym(withoutPlural, originalWord);
 	}
 
-	private String replaceWithSynonym(String transformedWord) {
+	private String replaceWithSynonym(String transformedWord, String originalWord) {
 		if (transformedWord.length() < Config.V.profanityWordMinimumLength) {
 			return null;
 		}
 		if (this._controller.isWhitelisted(transformedWord)) {
 			return null;
 		}
-		String result = this._controller.replaceIfBlacklisted(this._sender, transformedWord);
+		String result = this._controller.replaceIfBlacklisted(this._player, transformedWord, originalWord);
 		verbose("Controller.replaceWithSynonym", "transformedWord=\"%s\", Leave = \"%s\"", transformedWord, result);
 		return result;
 	}

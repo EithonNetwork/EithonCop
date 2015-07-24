@@ -12,15 +12,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import net.eithon.library.core.CoreMisc;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.file.FileMisc;
 import net.eithon.library.json.FileContent;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
+import net.eithon.library.time.CoolDown;
 import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.json.simple.JSONArray;
@@ -30,7 +31,9 @@ class Blacklist {
 	private EithonPlugin _eithonPlugin;
 	private HashMap<String, Profanity> _metaphoneList;
 	private HashMap<String, Profanity> _wordList;
-	HashMap<String, Profanity> _similarWords;
+	private HashMap<String, Profanity> _similarWords;
+	private CoolDown _recentOffenders;
+	private CoolDown _offenders;
 
 	private static Metaphone3 metaphone3;
 	private static Comparator<String> stringComparator;
@@ -54,6 +57,8 @@ class Blacklist {
 		this._metaphoneList = new HashMap<String, Profanity>();
 		this._wordList = new HashMap<String, Profanity>();
 		this._similarWords = new HashMap<String, Profanity>();
+		this._recentOffenders = new CoolDown("BlacklistRecentOffenders", Config.V.profanityRecentOffenderCooldownInSeconds);
+		this._offenders = new CoolDown("BlacklistNotedOffenders", Config.V.profanityOffenderCooldownInSeconds);
 	}
 
 	Profanity add(String word) {
@@ -80,7 +85,7 @@ class Blacklist {
 		return (profanity != null) && (profanity.getProfanityLevel(word) <= Config.V.profanityLevel); 
 	}
 
-	String replaceIfBlacklisted(CommandSender sender, String normalized) {
+	String replaceIfBlacklisted(Player player, String normalized, String originalWord) {
 		Profanity profanity = getProfanity(normalized);
 		verbose("Blacklist.replaceIfBlacklisted", "word=%s, profanity = %s", normalized, profanity);
 		if (profanity == null) return null;
@@ -89,8 +94,9 @@ class Blacklist {
 				&& !this._similarWords.containsKey(normalized)) {
 			delayedSaveSimilar(normalized, profanity);
 		}
-		notifySomePlayers(sender, normalized, profanity);
-		if (profanity.getProfanityLevel(normalized) > Config.V.profanityLevel) {
+		boolean isConsideredForbidden = profanity.getProfanityLevel(normalized) <= Config.V.profanityLevel;
+		notifySomePlayers(player, normalized, originalWord, profanity, isConsideredForbidden);
+		if (!isConsideredForbidden) {
 			verbose("Blacklist.replaceIfBlacklisted", "Leave, because profanity.getProfanityLevel(%s)=%d > %d", 
 					normalized, profanity.getProfanityLevel(normalized), Config.V.profanityLevel);
 			return null;
@@ -102,22 +108,39 @@ class Blacklist {
 		return synonym;
 	}
 
-	private void notifySomePlayers(CommandSender sender, String word,
-			Profanity profanity) {
-		if (profanity.isSameWord(word)) { 
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				if (player.hasPermission("eithoncop.notify-about-profanity")) {
-					Config.M.notifyAboutProfanity.sendMessage(player, sender == null ? "-" : sender.getName(), word);
+	private void notifySomePlayers(Player player, String normalized, String originalWord,
+			Profanity profanity, boolean isConsideredForbidden) {
+		if (profanity.isSameWord(normalized)) {
+			noteAsOffender(player, true, isConsideredForbidden);
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				if (p.hasPermission("eithoncop.notify-about-profanity")) {
+					Config.M.notifyAboutProfanity.sendMessage(p, player == null ? "-" : player.getName(), normalized, originalWord);
 				}
 			}				
 		} else {
-			for (Player player : Bukkit.getOnlinePlayers()) {
-				if (player.hasPermission("eithoncop.notify-about-similar")) {
-					Config.M.notifyAboutSimilar.sendMessage(player, sender == null ? "-" : sender.getName(), word, profanity.getWord());
+			noteAsOffender(player, false, isConsideredForbidden);
+			for (Player p : Bukkit.getOnlinePlayers()) {
+				if (p.hasPermission("eithoncop.notify-about-similar")) {
+					Config.M.notifyAboutSimilar.sendMessage(p, player == null ? "-" : player.getName(), normalized, originalWord, profanity.getWord());
 				}
 			}
 		}
 	}
+
+	private void noteAsOffender(Player player, boolean literal, boolean isConsideredForbidden) {
+		if (player == null) return;
+		if (!this._offenders.isInCoolDownPeriod(player) 
+				&& !this._recentOffenders.isInCoolDownPeriod(player)
+				&& !isConsideredForbidden) return;
+		if (isConsideredForbidden)  {
+			minor("Player %s is an offender.", player.getName());
+			this._offenders.addPlayer(player);
+		}
+		minor("Player %s is a recent offender.", player.getName());
+		this._recentOffenders.addPlayer(player);
+	}
+
+	boolean isOffender(Player player) { return player == null ? false : this._recentOffenders.isInCoolDownPeriod(player); };
 
 	Profanity getProfanity(String word) {
 		String normalized = Profanity.normalize(word);
@@ -237,6 +260,30 @@ class Blacklist {
 		}
 	}
 
+	void delayedSaveOffenderMessage(Player player, String message,
+			String filteredMessage) {
+		if (!Config.V.logOffenderMessages) return;
+		if (!isOffender(player)) return;
+		
+		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
+			public void run() {
+				saveOffenderMessage(player, message, filteredMessage);
+			}
+		});
+	}
+
+	void saveOffenderMessage(Player player, String message, String filteredMessage) {
+		verbose("saveOffenderMessage", "Log message:  %s", message);
+		File file = getOffenderLogFile();
+		String line = String.format("%s (%s)\n%s\n%s\n", player.getName(), player.getUniqueId().toString(), filteredMessage, message);
+		try {
+			FileMisc.appendLine(file, line);
+		} catch (IOException e) {
+			this._eithonPlugin.getEithonLogger().error("Could not write to file %s: %s", file.getName(), e.getMessage());
+		}
+	}
+
 	void delayedSave()
 	{
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
@@ -313,13 +360,23 @@ class Blacklist {
 		return file;
 	}
 
-	File getSimilarStorageFile() {
+	private File getSimilarStorageFile() {
 		File file = this._eithonPlugin.getDataFile("similar.txt");
 		return file;
 	}
 
+	private File getOffenderLogFile() {
+		File file = this._eithonPlugin.getDataFile("offender.log");
+		return file;
+	}
+
+	private void minor(String format, Object... args) {
+		String message = CoreMisc.safeFormat(format, args);
+		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.MINOR, "Blacklist: %s", message);
+	}
+
 	private void verbose(String method, String format, Object... args) {
-		String message = String.format(format, args);
+		String message = CoreMisc.safeFormat(format, args);
 		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Blacklist.%s(): %s", method, message);
 	}
 }

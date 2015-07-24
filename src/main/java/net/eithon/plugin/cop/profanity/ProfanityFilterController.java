@@ -74,7 +74,9 @@ public class ProfanityFilterController {
 
 	public String profanityFilter(Player player, String message) {
 		ProfanityFilter filter = new ProfanityFilter(this, player, message);
-		return filter.getFilteredMessage();
+		String filteredMessage = filter.getFilteredMessage();
+		this._blacklist.delayedSaveOffenderMessage(player, message, filteredMessage);
+		return filteredMessage;
 	}
 
 	private File getSeedInStorageFile() {
@@ -138,8 +140,8 @@ public class ProfanityFilterController {
 		return this._whitelist.isWhitelisted(word);
 	}
 
-	String replaceIfBlacklisted(CommandSender sender, String normalized) {
-		return this._blacklist.replaceIfBlacklisted(sender, normalized);
+	String replaceIfBlacklisted(Player player, String normalized, String originalWord) {
+		return this._blacklist.replaceIfBlacklisted(player, normalized, originalWord);
 	}
 
 	void verbose(String method, String format, Object... args) {

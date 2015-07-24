@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 0.6 (2015-04-24)
+
+* NEW: Logs offender messages in offender.log
+
 ### 0.5 (2015-04-23)
 
 * NEW: Completely rewritten profanity finder.

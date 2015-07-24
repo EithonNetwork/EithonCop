@@ -10,9 +10,32 @@
 ProfanityLevel: 1
 
 #
+# Should we log all messages for players considered to be offenders?
+#
+# 0 = NO
+# 1 = YES
+#
+LogOffenderMessages: 1
+
+#
+# When a player has entered a profanity, this is how long time he/she is considered an "offender".
+# A player is only considered an offender if a word he/she has written is stopped according to ProfanityLevel.
+#
+ProfanityOffenderCooldownInSeconds: 3600
+
+#
+# When a player has entered a profanity, this is how long time he/she is considered a recent "offender".
+# Recent offender messages will be logged for this time period to see if they try to circumvent the blacklist system.
+# This does not take into account the ProfanityLevel. This means that if you are an offender, then you will continue to be
+# considered a recent offender if you use similar words to blacklisted words any time while you are an offender.
+#
+ProfanityRecentOffenderCooldownInSeconds: 20
+
+#
 # Should we save a file with all words that are similar to blacklisted words?
 #
 # 0 = NO
+# 1 = YES
 #
 SaveSimilar: 1
 
@@ -96,12 +119,12 @@ messages:
   BlackListWordMinimalLength: "A word that should be blacklisted must have at least %d characters."
 
   #
-  # Parameters: <player name>%s, profanity(%s)
+  # Parameters: <player name>(%s), blacklisted word(%s), <exact phrasing>(%s)
   #
-  NotifyAboutProfanity: "Player %s used the word \"%s\" which is blacklisted."
+  NotifyAboutProfanity: "Player %s used the word \"%s\" (%s) which is blacklisted."
 
   #
-  # Parameters: <player name>%s, <similar word>(%s), profanity(%s)
+  # Parameters: <player name>(%s), <similar word>(%s), <exact phrasing>(%s), blacklisted word(%s)
   #
-  NotifyAboutSimilar: "Player %s used the word \"%s\", that is similar to the blacklisted word \"%s\"."
+  NotifyAboutSimilar: "Player %s used the word \"%s\" (%s), that is similar to the blacklisted word \"%s\"."
   
