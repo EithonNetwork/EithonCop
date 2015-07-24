@@ -11,11 +11,9 @@ public class CommandHandler implements ICommandHandler {
 	private static final String BLACKLIST_COMMAND = "/eithoncop blacklist <profanity>";
 	private static final String WHITELIST_COMMAND = "/eithoncop whitelist <accepted word>";
 	private Controller _controller;
-	private EithonPlugin _eithonPlugin;
-
+	
 	public CommandHandler(EithonPlugin eithonPlugin, Controller controller) {
 		this._controller = controller;
-		this._eithonPlugin = eithonPlugin;
 	}
 
 	public boolean onCommand(CommandParser commandParser) {

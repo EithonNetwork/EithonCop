@@ -1,6 +1,6 @@
 package net.eithon.plugin.cop.profanity;
 
-public class Leet {
+class Leet {
 	
 	public static boolean isLeet(String message) {
 		return !message.equalsIgnoreCase(decode(message));

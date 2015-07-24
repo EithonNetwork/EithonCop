@@ -31,6 +31,10 @@ public class Config {
 		public static boolean markSimilar;
 		public static String markSimilarPrefix;
 		public static String markSimilarPostfix;
+		public static int profanityWordMinimumLength = 3;
+		public static int profanityRecentOffenderCooldownInSeconds;
+		public static int profanityOffenderCooldownInSeconds;
+		public static boolean logOffenderMessages;
 		
 		static void load(Configuration config) {
 			categoryUnknown = config.getStringList("CategoryUnknown").toArray(new String[0]);
@@ -44,10 +48,13 @@ public class Config {
 			categorySexualVerb = config.getStringList("CategorySexualVerb").toArray(new String[0]);
 			categoryDerogative = config.getStringList("CategoryDerogative").toArray(new String[0]);
 			profanityLevel = config.getInt("ProfanityLevel", 0);
+			logOffenderMessages = config.getInt("LogOffenderMessages", 0) != 0;
+			profanityRecentOffenderCooldownInSeconds = config.getInt("ProfanityOffenderCooldownInSeconds", 20);
+			profanityOffenderCooldownInSeconds = config.getInt("ProfanityOffenderCooldownInSeconds", 3600);
 			saveSimilar = config.getInt("SaveSimilar", 0) != 0;
 			markReplacement = config.getInt("MarkReplacement", 0) != 0;
-			markReplacementPrefix = config.getString("MarkReplacementPrefix", "_");
-			markReplacementPostfix = config.getString("MarkReplacementPostfix", "_");
+			markReplacementPrefix = config.getString("MarkReplacementPrefix", "'");
+			markReplacementPostfix = config.getString("MarkReplacementPostfix", "'");
 			markSimilar = config.getInt("MarkSimilar", 0) != 0;
 			markSimilarPrefix = config.getString("MarkSimilarPrefix", "<");
 			markSimilarPostfix = config.getString("MarkSimilarPostfix", ">");
@@ -91,10 +98,10 @@ public class Config {
 					"A word that should be blacklisted must have at least %d characters.");
 			whitelistWordMinimalLength = config.getConfigurableMessage("WhitelistWordMinimalLength", 1,
 					"A word that should be whitelisted must have at least %d characters.");
-			notifyAboutProfanity = config.getConfigurableMessage("NotifyAboutProfanity", 2,
-					"Player %s used the word \"%s\" which is blacklisted.");
-			notifyAboutSimilar = config.getConfigurableMessage("NotifyAboutSimilar", 3,
-					"Player %s used the word \"%s\", that is similar to the blacklisted word \"%s\".");
+			notifyAboutProfanity = config.getConfigurableMessage("NotifyAboutProfanity", 3,
+					"Player %s used the word \"%s\" (%s) which is blacklisted.");
+			notifyAboutSimilar = config.getConfigurableMessage("NotifyAboutSimilar", 4,
+					"Player %s used the word \"%s\" (%s), that is similar to the blacklisted word \"%s\".");
 		}		
 	}
 

@@ -13,16 +13,17 @@ import net.eithon.plugin.cop.Config;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class Profanity implements IJson<Profanity> {
+class Profanity implements IJson<Profanity> {
 	static final int PROFANITY_LEVEL_NONE = 0;
 	static final int PROFANITY_LEVEL_LITERAL = 1;
 	static final int PROFANITY_LEVEL_SIMILAR = 2;
 	static final int PROFANITY_LEVEL_MAX = 2;
 	static Metaphone3 metaphone3;
-	
+
 	private static EnumMap<ProfanityType, Integer> profanityTypeToInteger = new EnumMap<Profanity.ProfanityType, Integer>(ProfanityType.class);
 	private static HashMap<Integer, ProfanityType> integerToProfanityType = new HashMap<Integer, Profanity.ProfanityType>();
 	private static EnumMap<ProfanityType, String[]> synonyms = new EnumMap<Profanity.ProfanityType, String[]>(ProfanityType.class);
+	private static Comparator<Profanity> profanityComparator;
 
 	private String _word;
 	private String _primaryEncoded;
@@ -30,7 +31,7 @@ public class Profanity implements IJson<Profanity> {
 	private ProfanityType _type;
 	private boolean _isLiteral;
 	private List<String> _synonyms;
-	
+
 	static {
 		metaphone3 = new Metaphone3();
 		metaphone3.SetEncodeVowels(true);
@@ -55,6 +56,13 @@ public class Profanity implements IJson<Profanity> {
 		synonyms.put(ProfanityType.SEXUAL_NOUN, Config.V.categorySexualNoun);
 		synonyms.put(ProfanityType.SEXUAL_VERB, Config.V.categorySexualVerb);
 		synonyms.put(ProfanityType.DEROGATIVE, Config.V.categoryDerogative);
+
+		profanityComparator = new Comparator<Profanity>(){
+			public int compare(Profanity p1, Profanity p2)
+			{
+				return p1.getWord().compareTo(p2.getWord());
+			} 
+		};
 	}
 
 	Profanity(String word) {
@@ -69,16 +77,16 @@ public class Profanity implements IJson<Profanity> {
 	}
 
 	enum ProfanityType {
-	    UNKNOWN, BODY_CONTENT, BODY_PART, LOCATION, OFFENSIVE, PROFESSION, RACIST, SEXUAL_NOUN, SEXUAL_VERB, DEROGATIVE
+		UNKNOWN, BODY_CONTENT, BODY_PART, LOCATION, OFFENSIVE, PROFESSION, RACIST, SEXUAL_NOUN, SEXUAL_VERB, DEROGATIVE
 	}
-	
+
 	public static String normalize(String word) { return Leet.decode(word.toLowerCase()); }
 
 	private static void addProfanityType(ProfanityType type, Integer i) {
 		profanityTypeToInteger.put(type, i);
 		integerToProfanityType.put(i, type);
 	}
-	
+
 	private void prepare() {
 		synchronized (metaphone3) {
 			metaphone3.SetWord(this._word);
@@ -88,7 +96,7 @@ public class Profanity implements IJson<Profanity> {
 			if (secondaryEncoded.length() > 0) this._secondaryEncoded = secondaryEncoded;
 		}
 	}
-	
+
 	public String getWord() { return this._word; }
 	String getPrimary() {return this._primaryEncoded; }
 	String getSecondary() { return this._secondaryEncoded; }
@@ -101,13 +109,13 @@ public class Profanity implements IJson<Profanity> {
 		if (isSameWord(word)) return PROFANITY_LEVEL_LITERAL;
 		return PROFANITY_LEVEL_SIMILAR;
 	}
-	
+
 	String getSynonym() {
 		String[] array = getSynonyms();
 		int index = (int) (Math.random()*array.length);
 		return array[index];
 	}
-	
+
 	String[] getSynonyms() {
 		String[] array = this._synonyms.size() > 0 ? this._synonyms.toArray(new String[0]) : synonyms.get(this._type);
 		if ((array == null) || (array.length == 0)) return new String[] {"****"};
@@ -121,18 +129,8 @@ public class Profanity implements IJson<Profanity> {
 	}
 
 	static List<Profanity> sortByWord(Collection<Profanity> collection) {
-		return sortByWord(collection, true);
-	}
-
-	static List<Profanity> sortByWord(Collection<Profanity> collection, boolean ascending) {
-		int factor = ascending ? 1 : -1;
 		ArrayList<Profanity> array = new ArrayList<Profanity>(collection);
-		array.sort(
-				new Comparator<Profanity>(){
-					public int compare(Profanity p1, Profanity p2)
-					{
-						return factor*p1.getWord().compareTo(p2.getWord());
-					} });	
+		array.sort(profanityComparator);
 		return array;
 	}
 
@@ -174,7 +172,7 @@ public class Profanity implements IJson<Profanity> {
 	static Profanity getFromJson(Object json) {
 		return new Profanity().fromJson(json);
 	}
-	
+
 	@Override
 	public 
 	String toString() {
