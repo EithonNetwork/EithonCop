@@ -162,10 +162,10 @@ class Blacklist {
 				&& !isConsideredForbidden) return;
 		if (isConsideredForbidden)  {
 			minor("Player %s is an offender.", player.getName());
-			this._offenders.addPlayer(player);
+			this._offenders.addIncident(player);
 		}
 		minor("Player %s is a recent offender.", player.getName());
-		this._recentOffenders.addPlayer(player);
+		this._recentOffenders.addIncident(player);
 	}
 
 	boolean isOffender(Player player) { return player == null ? false : this._recentOffenders.isInCoolDownPeriod(player); };
