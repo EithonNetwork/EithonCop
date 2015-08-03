@@ -79,6 +79,16 @@ CategoryUnknown: ["****"]
 #CategorySexualVerb: ["run", "walk", "look at"]
 #CategoryDerogative: ["citizen", "member", "person"]
 
+#
+# If a chat line consists of more than this number of upper case letters, then the entire line will be converted into lower case
+#
+MaxNumberOfUpperCaseLettersInLine: 15
+
+#
+# If a chat line consists of more than this number of upper case words, then the entire line will be converted into lower case
+#
+MaxNumberOfUpperCaseWordsInLine: 3
+
 eithon:
   UseMarkUpForMessages: 0
   UseWrappingForMessages: 0

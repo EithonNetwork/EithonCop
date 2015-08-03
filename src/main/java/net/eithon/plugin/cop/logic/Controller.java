@@ -2,15 +2,18 @@ package net.eithon.plugin.cop.logic;
 
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.plugin.cop.profanity.ProfanityFilterController;
+import net.eithon.plugin.cop.spam.SpamController;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Controller {
 	private ProfanityFilterController _profanityFilterController;
+	private SpamController _spamController;
 	
 	public Controller(EithonPlugin eithonPlugin){
 		this._profanityFilterController = new ProfanityFilterController(eithonPlugin);
+		this._spamController = new SpamController(eithonPlugin);
 	}
 
 	public void disable() {
@@ -39,5 +42,14 @@ public class Controller {
 
 	public String profanityFilter(Player player, String message) {
 		return this._profanityFilterController.profanityFilter(player, message);
+	}
+
+	public String reduceUpperCaseUsage(Player player, String message) {
+		return this._spamController.reduceUpperCaseUsage(player, message);
+	}
+
+	public boolean isDuplicate(Player player, String profaneMessage) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
