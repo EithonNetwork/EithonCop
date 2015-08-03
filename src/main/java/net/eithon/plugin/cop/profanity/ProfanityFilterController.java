@@ -89,23 +89,48 @@ public class ProfanityFilterController {
 		return file;
 	}
 
-	public String addProfanity(CommandSender sender, String word) {
+	public String addProfanity(CommandSender sender, String word, boolean isLiteral, String synonyms) {
 		if (word.length() < profanityWordMinimumLength) {
 			Config.M.blackListWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
 			return null;
 		}
 		Profanity profanity = this._blacklist.getProfanity(word);
 		if (profanity == null) {
-			profanity = this._blacklist.add(word);
+			profanity = this._blacklist.add(word, isLiteral);
+			profanity.setSynonyms(synonyms.split("\\W"));
 			this._blacklist.delayedSave();
 			return profanity.getWord();
 		}
 		if (word.equalsIgnoreCase(profanity.getWord())) {
-			Config.M.duplicateProfanity.sendMessage(sender, word);
+			profanity.setIsLiteral(isLiteral);
+			profanity.setSynonyms(synonyms.split("\\W"));
+			this._blacklist.delayedSave();
+			return profanity.getWord();
 		} else {
 			Config.M.probablyDuplicateProfanity.sendMessage(sender, word, profanity.getWord());
 		}
 		return null;
+	}
+
+	public String removeProfanity(CommandSender sender, String word) {
+		if (word.length() < profanityWordMinimumLength) {
+			Config.M.blackListWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
+			return null;
+		}
+		Profanity profanity = this._blacklist.getProfanity(word);
+		if (profanity == null) {
+			Config.M.profanityNotFound.sendMessage(sender, word);
+			return null;
+		}
+
+		String found = profanity.getWord();
+		if (!word.equalsIgnoreCase(found)) {
+			Config.M.profanityNotFoundButSimilarFound.sendMessage(sender, word, found);
+			return null;
+		}
+		this._blacklist.remove(word);
+		this._blacklist.delayedSave();
+		return found;
 	}
 
 	public String normalize(String word) {
@@ -134,6 +159,22 @@ public class ProfanityFilterController {
 		}
 		Config.M.acceptedWordWasNotBlacklisted.sendMessage(sender, word);
 		return null;
+	}
+
+	public String removeAccepted(CommandSender sender, String word) {
+		if (word.length() < profanityWordMinimumLength) {
+			Config.M.whitelistWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
+			return null;
+		}
+		String normalized = Profanity.normalize(word);
+		if (!this._whitelist.isWhitelisted(normalized)) {
+			Config.M.acceptedWordNotFound.sendMessage(sender, word);
+			return null;
+		}
+		
+		this._whitelist.remove(normalized);
+		this._whitelist.delayedSave();
+		return normalized;
 	}
 
 	boolean isWhitelisted(String word) {

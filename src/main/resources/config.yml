@@ -100,6 +100,16 @@ messages:
   DuplicateProfanity: "The word \"%s\" has already been blacklisted."
 
   #
+  # Parameters: <new word>(%s)
+  #
+  ProfanityNotFound: "The word \"%s\" was not blacklisted."
+
+  #
+  # Parameters: <new word>(%s)
+  #
+  ProfanityNotFoundButSimilarFound: "The word \"%s\" is not blacklisted. Did you mean \"%s\"?"
+
+  #
   # Parameters: <new word>(%s), <existing word>(%s)
   #
   ProbablyDuplicateProfanity: "You specified the word \"%s\", but that word collides with existing blacklisted word \"%s\"."
@@ -110,6 +120,11 @@ messages:
   ProfanityAdded: "The word \"%s\" has been added to the blacklist."
 
   #
+  # Parameters: <word>(%s)
+  #
+  ProfanityRemoved: "The word \"%s\" has been removed from the blacklist."
+
+  #
   # Parameters: <new word>(%s)
   #
   AcceptedWordWasNotBlacklisted: "The word \"%s\" is not blacklisted, so it will not be added as whitelisted."
@@ -118,6 +133,16 @@ messages:
   # Parameters: <new word>(%s), <blacklisted word>(%s)
   #
   AcceptedWordAdded: "The word \"%s\" is now whitelisted, to prevent it from being mixed up with the blacklisted word \"%s\"."
+
+  #
+  # Parameters: <new word>(%s)
+  #
+  AcceptedWordNotFound: "The word \"%s\" was not whitelisted."
+
+  #
+  # Parameters: <word>(%s)
+  #
+  AcceptedWordRemoved: "The word \"%s\" is no longer whitelisted."
 
   #
   # Parameters: <new word>(%s)

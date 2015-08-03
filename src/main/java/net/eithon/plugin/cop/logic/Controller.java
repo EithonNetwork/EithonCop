@@ -17,8 +17,12 @@ public class Controller {
 		this._profanityFilterController.disable();
 	}
 
-	public String addProfanity(CommandSender sender, String word) {
-		return this._profanityFilterController.addProfanity(sender, word);
+	public String addProfanity(CommandSender sender, String word, boolean isLiteral, String synonyms) {
+		return this._profanityFilterController.addProfanity(sender, word, isLiteral, synonyms);
+	}
+
+	public String removeProfanity(CommandSender sender, String word) {
+		return this._profanityFilterController.removeProfanity(sender, word);
 	}
 
 	public String normalize(String word) {
@@ -27,6 +31,10 @@ public class Controller {
 
 	public String addAccepted(CommandSender sender, String word) {
 		return this._profanityFilterController.addAccepted(sender, word);
+	}
+
+	public String removeAccepted(CommandSender sender, String word) {
+		return this._profanityFilterController.removeAccepted(sender, word);
 	}
 
 	public String profanityFilter(Player player, String message) {

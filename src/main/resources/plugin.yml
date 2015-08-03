@@ -1,6 +1,6 @@
 name: EithonCop
 main: net.eithon.plugin.cop.Plugin
-version: 0.7
+version: 0.8
 author: vanbrayne
 depend: [EithonLibrary]
 description: A Minecraft plugin
@@ -16,10 +16,10 @@ permissions:
     eithoncop.blacklist: true
     eithoncop.whitelist: true
   eithoncop.blacklist:
-    description: Access to /eithoncop blacklist command
+    description: Access to /eithoncop blacklist commands
     default: op
   eithoncop.whitelist:
-    description: Access to /eithoncop whitelist command
+    description: Access to /eithoncop whitelist commands
     default: op
   eithoncop.notify-about-profanity:
     description: Get notified when someone uses a blacklisted word

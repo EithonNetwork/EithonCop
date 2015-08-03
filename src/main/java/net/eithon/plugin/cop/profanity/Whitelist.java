@@ -57,6 +57,14 @@ class Whitelist {
 		return profanity;
 	}
 
+	public String remove(String word) {
+		verbose("remove", "Enter: %s", word);
+		String normalized = Profanity.normalize(word);
+		this._whitelist.remove(normalized);
+		verbose("remove", "Removed: Leave %s", normalized);
+		return normalized;
+	}
+
 	public boolean isWhitelisted(String word) { return getProfanity(word) != null; }
 
 	Profanity getProfanity(String word) {

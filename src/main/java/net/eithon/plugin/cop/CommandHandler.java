@@ -8,10 +8,10 @@ import net.eithon.plugin.cop.logic.Controller;
 import org.bukkit.command.CommandSender;
 
 public class CommandHandler implements ICommandHandler {
-	private static final String BLACKLIST_COMMAND = "/eithoncop blacklist <profanity>";
-	private static final String WHITELIST_COMMAND = "/eithoncop whitelist <accepted word>";
+	private static final String BLACKLIST_COMMAND = "/eithoncop blacklist add|remove <profanity> [<isliteral>] [<synonyms>]";
+	private static final String WHITELIST_COMMAND = "/eithoncop whitelist add|remove <accepted word>";
 	private Controller _controller;
-	
+
 	public CommandHandler(EithonPlugin eithonPlugin, Controller controller) {
 		this._controller = controller;
 	}
@@ -33,30 +33,62 @@ public class CommandHandler implements ICommandHandler {
 	void blacklistCommand(CommandParser commandParser)
 	{
 		if (!commandParser.hasPermissionOrInformSender("eithoncop.blacklist")) return;
-		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(2, 2)) return;
+		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(3)) return;
+
+		String subCommand = commandParser.getArgumentStringAsLowercase();
+		if (!subCommand.equalsIgnoreCase("add") 
+				&& !subCommand.equalsIgnoreCase("remove")) {
+			showCommandSyntax(commandParser.getSender(), "blacklist");
+			return;
+		}
 
 		String profanity = commandParser.getArgumentStringAsLowercase();
 		if (profanity == null) return;
 
 		CommandSender sender = commandParser.getSender();
-		String addedWord = this._controller.addProfanity(sender, profanity);
-		if (addedWord == null) return;
-		Config.M.profanityAdded.sendMessage(sender, addedWord);
+
+		if (subCommand.equalsIgnoreCase("add")) {
+			if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(3)) return;
+			int isLiteralAsInt = commandParser.getArgumentInteger(1);
+			boolean isLiteral = isLiteralAsInt != 0;
+			String synonyms = commandParser.getArgumentRest();
+			String word = this._controller.addProfanity(sender, profanity, isLiteral, synonyms);
+			if (word == null) return;
+			Config.M.profanityAdded.sendMessage(sender, word);
+		} else if (subCommand.equalsIgnoreCase("remove")) {
+			if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(3, 3)) return;
+			String word = this._controller.removeProfanity(sender, profanity);
+			if (word == null) return;
+			Config.M.profanityRemoved.sendMessage(sender, word);
+		}
 	}
 
 	void whitelistCommand(CommandParser commandParser)
 	{
 		if (!commandParser.hasPermissionOrInformSender("eithoncop.whitelist")) return;
-		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(2, 2)) return;
+		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(3, 3)) return;
+
+		String subCommand = commandParser.getArgumentStringAsLowercase();
+		if (!subCommand.equalsIgnoreCase("add") && !subCommand.equalsIgnoreCase("remove")) {
+			showCommandSyntax(commandParser.getSender(), "blacklist");
+			return;
+		}
 
 		String acceptedWord = commandParser.getArgumentStringAsLowercase();
 		if (acceptedWord == null) return;
 		acceptedWord = this._controller.normalize(acceptedWord);
 
 		CommandSender sender = commandParser.getSender();
-		String profanity = this._controller.addAccepted(sender, acceptedWord);
-		if (profanity == null) return;
-		Config.M.acceptedWordAdded.sendMessage(sender, acceptedWord, profanity);
+
+		if (subCommand.equalsIgnoreCase("add")) {
+			String profanity = this._controller.addAccepted(sender, acceptedWord);
+			if (profanity == null) return;
+			Config.M.acceptedWordAdded.sendMessage(sender, acceptedWord, profanity);
+		} else if (subCommand.equalsIgnoreCase("remove")) {
+			String profanity = this._controller.removeAccepted(sender, acceptedWord);
+			if (profanity == null) return;
+			Config.M.acceptedWordRemoved.sendMessage(sender, acceptedWord, profanity);
+		}
 	}
 
 	@Override
