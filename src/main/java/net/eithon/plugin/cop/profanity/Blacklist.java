@@ -61,14 +61,24 @@ class Blacklist {
 		this._offenders = new CoolDown("BlacklistNotedOffenders", Config.V.profanityOffenderCooldownInSeconds);
 	}
 
-	Profanity add(String word) {
+	Profanity add(String word, boolean isLiteral) {
 		Profanity profanity = getProfanity(word);
 		if (profanity != null) {
-			this._eithonPlugin.getEithonLogger().warning("Blacklist.add: Trying to add a word that already exists: \"%s\".", word);
+			profanity.setIsLiteral(isLiteral);
 			return profanity;
 		}
-		profanity = new Profanity(word);
+		profanity = new Profanity(word, isLiteral);
 		add(profanity);
+		return profanity;
+	}
+
+	Profanity remove(String word) {
+		Profanity profanity = getProfanity(word);
+		if (profanity == null) {
+			this._eithonPlugin.getEithonLogger().warning("Blacklist.add: Trying to remove a word that isn't blacklisted: \"%s\".", word);
+			return null;
+		}
+		this._wordList.remove(word);
 		return profanity;
 	}
 
@@ -179,7 +189,7 @@ class Blacklist {
 			metaphone3.Encode();
 			String encoding = metaphone3.GetMetaph();
 			profanity = this._metaphoneList.get(encoding);
-			if ((profanity == null) || profanity.isLiteral()) {
+			if (profanity == null) {
 				encoding = metaphone3.GetAlternateMetaph();
 				if (encoding.length() > 0) profanity = this._metaphoneList.get(encoding);
 			}

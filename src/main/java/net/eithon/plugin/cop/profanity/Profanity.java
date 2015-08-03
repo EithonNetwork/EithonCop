@@ -66,10 +66,10 @@ class Profanity implements IJson<Profanity> {
 		};
 	}
 
-	Profanity(String word) {
+	Profanity(String word, boolean isLiteral) {
 		this._word = normalize(word);
 		this._type = ProfanityType.UNKNOWN;
-		this._isLiteral = true;
+		this._isLiteral = isLiteral;
 		this._synonyms = new ArrayList<String>();
 		prepare();
 	}
@@ -181,5 +181,16 @@ class Profanity implements IJson<Profanity> {
 		if (hasSecondary()) result += String.format(" [%s, %s]", getPrimary(), getSecondary());
 		else result += String.format(" [%s]", getPrimary());
 		return result;
+	}
+
+	public void setIsLiteral(boolean isLiteral) { this._isLiteral = isLiteral; }
+
+	public void setSynonyms(String[] synonyms) {
+		this._synonyms = new ArrayList<String>();
+		if (synonyms != null) {
+			for (String synonym : synonyms) {
+				this._synonyms.add(synonym);
+			}
+		}
 	}
 }

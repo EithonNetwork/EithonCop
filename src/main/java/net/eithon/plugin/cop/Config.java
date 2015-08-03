@@ -70,10 +70,15 @@ public class Config {
 	}
 	public static class M {
 		public static ConfigurableMessage probablyDuplicateProfanity;
+		public static ConfigurableMessage profanityNotFound;
+		public static ConfigurableMessage profanityNotFoundButSimilarFound;
 		public static ConfigurableMessage duplicateProfanity;
 		public static ConfigurableMessage profanityAdded;
+		public static ConfigurableMessage profanityRemoved;
 		public static ConfigurableMessage acceptedWordWasNotBlacklisted;
 		public static ConfigurableMessage acceptedWordAdded;
+		public static ConfigurableMessage acceptedWordNotFound;
+		public static ConfigurableMessage acceptedWordRemoved;
 		public static ConfigurableMessage acceptedWordWasBlacklisted;
 		public static ConfigurableMessage duplicateAcceptedWord;
 		public static ConfigurableMessage blackListWordMinimalLength;
@@ -83,16 +88,26 @@ public class Config {
 		public static ConfigurableMessage notifyAboutSimilar;
 
 		static void load(Configuration config) {
+			profanityNotFound = config.getConfigurableMessage("ProfanityNotFound", 1,
+					"The word \"%s\" was not blacklisted.");
+			profanityNotFoundButSimilarFound = config.getConfigurableMessage("ProfanityNotFoundButSimilarFound", 2,
+					"The word \"%s\" was not blacklisted. Did you mean \"%s\"?");
 			duplicateProfanity = config.getConfigurableMessage("DuplicateProfanity", 1,
 					"The word \"%s\" has already been blacklisted.");
 			probablyDuplicateProfanity = config.getConfigurableMessage("ProbablyDuplicateProfanity", 2,
 					"You specified the word \"%s\", but that word collides with existing blacklisted word \"%s\".");
 			profanityAdded = config.getConfigurableMessage("ProfanityAdded", 1,
 					"The word \"%s\" has been added to the blacklist.");
+			profanityRemoved = config.getConfigurableMessage("ProfanityRemoved", 1,
+					"The word \"%s\" has been removed from the blacklist.");
 			acceptedWordWasNotBlacklisted = config.getConfigurableMessage("AcceptedWordWasNotBlacklisted", 1,
 					"The word \"%s\" is not blacklisted, so it will not be added as whitelisted.");
+			acceptedWordNotFound = config.getConfigurableMessage("AcceptedWordNotFound", 1,
+					"The word \"%s\" was not whitelisted.");
 			acceptedWordAdded = config.getConfigurableMessage("AcceptedWordAdded", 2,
 					"The word \"%s\" is now whitelisted, to prevent it from being mixed up with the blacklisted word \"%s\".");
+			acceptedWordRemoved = config.getConfigurableMessage("AcceptedWordRemoved", 1,
+					"The word \"%s\" is no longer whitelisted.");
 			acceptedWordWasBlacklisted = config.getConfigurableMessage("AcceptedWordWasBlacklisted", 1,
 					"You can't whitelist \"%s\" because it is blacklisted with that spelling.");
 			duplicateAcceptedWord = config.getConfigurableMessage("DuplicateAcceptedWord", 1,
