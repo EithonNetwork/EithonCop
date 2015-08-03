@@ -48,8 +48,7 @@ public class Controller {
 		return this._spamController.reduceUpperCaseUsage(player, message);
 	}
 
-	public boolean isDuplicate(Player player, String profaneMessage) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isDuplicate(Player player, String message) {
+		return this._spamController.isDuplicate(player, message);
 	}
 }

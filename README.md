@@ -8,6 +8,7 @@ A Cop plugin for Minecraft.
 
 * NEW: Added configuration MaxNumberOfUpperCaseLettersInLine to limit the allowed number of upper case letters when chatting
 * NEW: Added configuration MaxNumberOfUpperCaseWordsInLine to limit the allowed number of upper case words when chatting
+* NEW: Checks for duplicate chat messages (configuration LineIsProbablyDuplicate and SecondsToRememberLines).
 
 ### 0.8 (2015-08-03)
 

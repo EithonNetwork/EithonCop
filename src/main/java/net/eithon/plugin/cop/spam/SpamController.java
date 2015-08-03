@@ -8,11 +8,10 @@ import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.plugin.cop.Config;
 
 public class SpamController {
-
-	private EithonPlugin _eithonPlugin;
+	private RepeatedLines _repeatedLines;
 
 	public SpamController(EithonPlugin eithonPlugin) {
-		this._eithonPlugin = eithonPlugin;
+		this._repeatedLines = new RepeatedLines();
 	}
 
 	public String reduceUpperCaseUsage(Player player, String message) {
@@ -48,8 +47,12 @@ public class SpamController {
 		int upperCaseLetters = 0;
 		for (int i = 0; i < message.length(); i++) {
 			char ch = message.charAt(i);
-		    if (Character.isUpperCase(ch)) upperCaseLetters++;
+			if (Character.isUpperCase(ch)) upperCaseLetters++;
 		}
-		return upperCaseLetters > Config.V.maxNumberOfUpperCaseLettersInLine;	}
+		return upperCaseLetters > Config.V.maxNumberOfUpperCaseLettersInLine;	
+	}
 
+	public boolean isDuplicate(Player player, String line) {
+		return this._repeatedLines.isDuplicate(player, line);
+	}
 }
