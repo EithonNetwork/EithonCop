@@ -8,10 +8,12 @@ class OldLine {
 
 	private String _line;
 	private LocalDateTime _time;
+	private int _duplicates;
 
 	OldLine(String line) {
 		this._line = line;
 		this._time = LocalDateTime.now();
+		this._duplicates = 0;
 	}
 
 	boolean isTooOld() {
@@ -19,4 +21,8 @@ class OldLine {
 	}
 
 	String getLine() { return this._line; }
+
+	public void addDuplicate() { this._duplicates++; }
+
+	public int numberOfDuplicates() { return this._duplicates; }
 }

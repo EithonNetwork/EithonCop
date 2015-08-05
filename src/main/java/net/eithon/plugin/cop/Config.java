@@ -43,6 +43,7 @@ public class Config {
 		public static int maxNumberOfUpperCaseWordsInLine;
 		public static double lineIsProbablyDuplicate;
 		public static long secondsToRememberLines;
+		public static int maxNumberOfRepeatedLines;
 		public static long defaultTempMuteInSeconds;
 		public static String defaultTempMuteReason;
 		public static List<String> mutedCommands;
@@ -70,10 +71,11 @@ public class Config {
 			markSimilar = config.getInt("MarkSimilar", 0) != 0;
 			markSimilarPrefix = config.getString("MarkSimilarPrefix", "<");
 			markSimilarPostfix = config.getString("MarkSimilarPostfix", ">");
-			maxNumberOfUpperCaseLettersInLine = config.getInt("MaxNumberOfUpperCaseLettersInLine", 15);
-			maxNumberOfUpperCaseWordsInLine = config.getInt("MaxNumberOfUpperCaseWordsInLine", 3);
-			lineIsProbablyDuplicate = config.getDouble("LineIsProbablyDuplicate", 0.9);
-			secondsToRememberLines = config.getInt("SecondsToRememberLines", 30);
+			maxNumberOfUpperCaseLettersInLine = config.getInt("spam.MaxNumberOfUpperCaseLettersInLine", 15);
+			maxNumberOfUpperCaseWordsInLine = config.getInt("spam.MaxNumberOfUpperCaseWordsInLine", 3);
+			lineIsProbablyDuplicate = config.getDouble("spam.LineIsProbablyDuplicate", 0.9);
+			secondsToRememberLines = config.getInt("spam.SecondsToRememberLines", 30);
+			maxNumberOfRepeatedLines = config.getInt("spam.MaxNumberOfRepeatedLines", 2);
 			defaultTempMuteInSeconds = config.getInt("mute.DefaultTempMuteInSeconds", 10);
 			defaultTempMuteReason = config.getString("mute.DefaultTempMuteReason", "Unspecified");
 			mutedCommands = config.getStringList("mute.MutedCommands");
