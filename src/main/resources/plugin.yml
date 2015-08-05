@@ -1,13 +1,13 @@
 name: EithonCop
 main: net.eithon.plugin.cop.Plugin
-version: 0.8
+version: 0.10
 author: vanbrayne
 depend: [EithonLibrary]
 description: A Minecraft plugin
 commands:
   eithoncop:
     description: Police activities
-    usage: /eithoncop blacklist | whitelist
+    usage: /eithoncop blacklist | whitelist | tempmute
     permission-message: You don't have <permission>
 permissions:
   eithoncop.*:
@@ -15,11 +15,17 @@ permissions:
     default: op
     eithoncop.blacklist: true
     eithoncop.whitelist: true
+    eithoncop.tempmute: true
+    eithoncop.notify-about-profanity: true
+    eithoncop.notify-about-similar: true
   eithoncop.blacklist:
     description: Access to /eithoncop blacklist commands
     default: op
   eithoncop.whitelist:
     description: Access to /eithoncop whitelist commands
+    default: op
+  eithoncop.tempmute:
+    description: Access to /eithoncop tempmute commands
     default: op
   eithoncop.notify-about-profanity:
     description: Get notified when someone uses a blacklisted word
