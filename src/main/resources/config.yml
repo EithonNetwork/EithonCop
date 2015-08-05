@@ -99,6 +99,22 @@ LineIsProbablyDuplicate: 0.9
 #
 SecondsToRememberLines: 30
 
+mute:
+  #
+  # The time that a player will be muted by tempmute if no time is specified in the command
+  #
+  DefaultTempMuteInSeconds: 60
+  
+  #
+  # The reason for the tempmute if not specified in the command
+  #
+  DefaultTempMuteReason: Unspecified
+  
+  #
+  # All commands that are muted.
+  #
+  MutedCommands: ["me"]
+
 eithon:
   UseMarkUpForMessages: 0
   UseWrappingForMessages: 0
@@ -111,6 +127,16 @@ eithon:
   #  3 = VERBOSE (all messages)
   #
   DebugLevel: 1
+
+commands:
+
+  mute:
+
+  #
+  # Parameters: <player name>(%s), <number of seconds>(%d), <reason>(%s)
+  #
+  TempMutePlayer: "tempmute %s %ds %s"
+    
 
 messages:
 
@@ -185,11 +211,17 @@ messages:
   NotifyAboutProfanity: "Player %s used the word \"%s\" (%s) which is blacklisted."
 
   #
-  # Parameters: <player name>(%s), <similar word>(%s), <exact phrasing>(%s), blacklisted word(%s)
+  # Parameters: <player name>(%s), <similar word>(%s), <exact phrasing>(%s), <blacklisted word>(%s)
   #
   NotifyAboutSimilar: "Player %s used the word \"%s\" (%s), that is similar to the blacklisted word \"%s\"."
 
   #
-  # Parameters: <player name>(%s), <composed word>(%s), <exact phrasing>(%s), blacklisted word(%s)
+  # Parameters: <player name>(%s), <composed word>(%s), <exact phrasing>(%s), <blacklisted word>(%s)
   #
   NotifyAboutComposed: "Player %s used the word \"%s\" (%s), that contains the blacklisted building block \"%s\"."
+  
+  mute:
+    #
+    # Parameters: <player name>(%s), <time>(%s), <reason>(%s)
+    #
+    TempMutedPlayer: "Player %s has been muted %s with reason \"%s\"."
