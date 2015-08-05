@@ -53,6 +53,7 @@ public class SpamController {
 	}
 
 	public boolean isDuplicate(Player player, String line) {
-		return this._repeatedLines.isDuplicate(player, line);
+		int sameMessages = 1 + this._repeatedLines.numberOfDuplicates(player, line);
+		return sameMessages > Config.V.maxNumberOfRepeatedLines;
 	}
 }

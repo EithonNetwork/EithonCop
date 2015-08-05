@@ -4,6 +4,11 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 0.10 (2015-08-05)
+
+* NEW: tempmute command. Added configurations DefaultTempMuteInSeconds, DefaultTempMuteReason and MutedCommands.
+* CHANGE: Added configuration MaxNumberOfRepeatedLines for spam.
+
 ### 0.9 (2015-08-03)
 
 * NEW: Added configuration MaxNumberOfUpperCaseLettersInLine to limit the allowed number of upper case letters when chatting

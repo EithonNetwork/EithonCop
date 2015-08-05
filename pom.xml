@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.eithon.plugin</groupId>
 	<artifactId>EithonCop</artifactId>
-	<version>0.9</version>
+	<version>0.10</version>
 	<name>EithonCop</name>
 	<build>
 		<plugins>
@@ -36,6 +36,13 @@
 			<artifactId>EithonLibrary</artifactId>
 			<version>[1.0,)</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.dthielke</groupId>
+			<artifactId>HeroChat</artifactId>
+			<version>5.6.7</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/dependencies/HeroChat-5.6.7.jar</systemPath>
 		</dependency>
 	</dependencies>
 </project>

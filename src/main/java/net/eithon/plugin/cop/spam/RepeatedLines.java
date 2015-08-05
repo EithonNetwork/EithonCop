@@ -15,27 +15,32 @@ class RepeatedLines {
 		this._oldLines =  new PlayerCollection<ArrayList<OldLine>>();
 	}
 	
-	boolean isDuplicate(Player player, String line) {
+	int numberOfDuplicates(Player player, String line) {
 		line = line.toLowerCase();
 		ArrayList<OldLine> oldLines = this._oldLines.get(player);
 		if (oldLines == null) {
 			oldLines = new ArrayList<OldLine>();
 			oldLines.add(new OldLine(line));
 			this._oldLines.put(player, oldLines);
-			return false;
+			return 1;
 		}
 		
 		Iterator<OldLine> iterator = oldLines.iterator();
+		int maxNumberOfDuplicates = 0;
 		while (iterator.hasNext()) {
 		    OldLine oldLine = iterator.next();
 		    if (oldLine.isTooOld()) {
 		        iterator.remove();
 		    } else {
-		    	if (isDuplicateLine(line, oldLine.getLine())) return true;
+		    	if (isDuplicateLine(line, oldLine.getLine())) {
+		    		oldLine.addDuplicate();
+		    		int numberOfDuplicates = oldLine.numberOfDuplicates();
+		    		if (numberOfDuplicates > maxNumberOfDuplicates) maxNumberOfDuplicates = numberOfDuplicates;
+		    	}
 		    }
 		}
 		oldLines.add(new OldLine(line));
-		return false;
+		return maxNumberOfDuplicates;
 	}
 	
 	private boolean isDuplicateLine(String line, String oldLine) {

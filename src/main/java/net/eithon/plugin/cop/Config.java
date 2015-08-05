@@ -1,6 +1,9 @@
 package net.eithon.plugin.cop;
 
+import java.util.List;
+
 import net.eithon.library.extensions.EithonPlugin;
+import net.eithon.library.plugin.ConfigurableCommand;
 import net.eithon.library.plugin.ConfigurableMessage;
 import net.eithon.library.plugin.Configuration;
 
@@ -40,6 +43,10 @@ public class Config {
 		public static int maxNumberOfUpperCaseWordsInLine;
 		public static double lineIsProbablyDuplicate;
 		public static long secondsToRememberLines;
+		public static int maxNumberOfRepeatedLines;
+		public static long defaultTempMuteInSeconds;
+		public static String defaultTempMuteReason;
+		public static List<String> mutedCommands;
 		
 		static void load(Configuration config) {
 			profanityBuildingBlocks = config.getStringList("ProfanityBuildingBlocks").toArray(new String[0]);
@@ -64,15 +71,23 @@ public class Config {
 			markSimilar = config.getInt("MarkSimilar", 0) != 0;
 			markSimilarPrefix = config.getString("MarkSimilarPrefix", "<");
 			markSimilarPostfix = config.getString("MarkSimilarPostfix", ">");
-			maxNumberOfUpperCaseLettersInLine = config.getInt("MaxNumberOfUpperCaseLettersInLine", 15);
-			maxNumberOfUpperCaseWordsInLine = config.getInt("MaxNumberOfUpperCaseWordsInLine", 3);
-			lineIsProbablyDuplicate = config.getDouble("LineIsProbablyDuplicate", 0.9);
-			secondsToRememberLines = config.getInt("SecondsToRememberLines", 30);
+			maxNumberOfUpperCaseLettersInLine = config.getInt("spam.MaxNumberOfUpperCaseLettersInLine", 15);
+			maxNumberOfUpperCaseWordsInLine = config.getInt("spam.MaxNumberOfUpperCaseWordsInLine", 3);
+			lineIsProbablyDuplicate = config.getDouble("spam.LineIsProbablyDuplicate", 0.9);
+			secondsToRememberLines = config.getInt("spam.SecondsToRememberLines", 30);
+			maxNumberOfRepeatedLines = config.getInt("spam.MaxNumberOfRepeatedLines", 2);
+			defaultTempMuteInSeconds = config.getInt("mute.DefaultTempMuteInSeconds", 10);
+			defaultTempMuteReason = config.getString("mute.DefaultTempMuteReason", "Unspecified");
+			mutedCommands = config.getStringList("mute.MutedCommands");
 		}
 
 	}
 	public static class C {
+		public static ConfigurableCommand tempMutePlayer;
+
 		static void load(Configuration config) {
+			tempMutePlayer = config.getConfigurableCommand("commands.mute.TempMutePlayer", 3, 
+					"tempmute %s %ds %s");
 		}
 
 	}
@@ -94,42 +109,45 @@ public class Config {
 		public static ConfigurableMessage notifyAboutProfanity;
 		public static ConfigurableMessage notifyAboutComposed;
 		public static ConfigurableMessage notifyAboutSimilar;
+		public static ConfigurableMessage tempMutedPlayer;
 
 		static void load(Configuration config) {
-			profanityNotFound = config.getConfigurableMessage("ProfanityNotFound", 1,
+			profanityNotFound = config.getConfigurableMessage("messages.ProfanityNotFound", 1,
 					"The word \"%s\" was not blacklisted.");
-			profanityNotFoundButSimilarFound = config.getConfigurableMessage("ProfanityNotFoundButSimilarFound", 2,
+			profanityNotFoundButSimilarFound = config.getConfigurableMessage("messages.ProfanityNotFoundButSimilarFound", 2,
 					"The word \"%s\" was not blacklisted. Did you mean \"%s\"?");
-			duplicateProfanity = config.getConfigurableMessage("DuplicateProfanity", 1,
+			duplicateProfanity = config.getConfigurableMessage("messages.DuplicateProfanity", 1,
 					"The word \"%s\" has already been blacklisted.");
-			probablyDuplicateProfanity = config.getConfigurableMessage("ProbablyDuplicateProfanity", 2,
+			probablyDuplicateProfanity = config.getConfigurableMessage("messages.ProbablyDuplicateProfanity", 2,
 					"You specified the word \"%s\", but that word collides with existing blacklisted word \"%s\".");
-			profanityAdded = config.getConfigurableMessage("ProfanityAdded", 1,
+			profanityAdded = config.getConfigurableMessage("messages.ProfanityAdded", 1,
 					"The word \"%s\" has been added to the blacklist.");
-			profanityRemoved = config.getConfigurableMessage("ProfanityRemoved", 1,
+			profanityRemoved = config.getConfigurableMessage("messages.ProfanityRemoved", 1,
 					"The word \"%s\" has been removed from the blacklist.");
-			acceptedWordWasNotBlacklisted = config.getConfigurableMessage("AcceptedWordWasNotBlacklisted", 1,
+			acceptedWordWasNotBlacklisted = config.getConfigurableMessage("messages.AcceptedWordWasNotBlacklisted", 1,
 					"The word \"%s\" is not blacklisted, so it will not be added as whitelisted.");
-			acceptedWordNotFound = config.getConfigurableMessage("AcceptedWordNotFound", 1,
+			acceptedWordNotFound = config.getConfigurableMessage("messages.AcceptedWordNotFound", 1,
 					"The word \"%s\" was not whitelisted.");
-			acceptedWordAdded = config.getConfigurableMessage("AcceptedWordAdded", 2,
+			acceptedWordAdded = config.getConfigurableMessage("messages.AcceptedWordAdded", 2,
 					"The word \"%s\" is now whitelisted, to prevent it from being mixed up with the blacklisted word \"%s\".");
-			acceptedWordRemoved = config.getConfigurableMessage("AcceptedWordRemoved", 1,
+			acceptedWordRemoved = config.getConfigurableMessage("messages.AcceptedWordRemoved", 1,
 					"The word \"%s\" is no longer whitelisted.");
-			acceptedWordWasBlacklisted = config.getConfigurableMessage("AcceptedWordWasBlacklisted", 1,
+			acceptedWordWasBlacklisted = config.getConfigurableMessage("messages.AcceptedWordWasBlacklisted", 1,
 					"You can't whitelist \"%s\" because it is blacklisted with that spelling.");
-			duplicateAcceptedWord = config.getConfigurableMessage("DuplicateAcceptedWord", 1,
+			duplicateAcceptedWord = config.getConfigurableMessage("messages.DuplicateAcceptedWord", 1,
 					"The word \"%s\" has already been whitelisted.");
-			blackListWordMinimalLength = config.getConfigurableMessage("BlacklistWordMinimalLength", 1,
+			blackListWordMinimalLength = config.getConfigurableMessage("messages.BlacklistWordMinimalLength", 1,
 					"A word that should be blacklisted must have at least %d characters.");
-			whitelistWordMinimalLength = config.getConfigurableMessage("WhitelistWordMinimalLength", 1,
+			whitelistWordMinimalLength = config.getConfigurableMessage("messages.WhitelistWordMinimalLength", 1,
 					"A word that should be whitelisted must have at least %d characters.");
-			notifyAboutProfanity = config.getConfigurableMessage("NotifyAboutProfanity", 3,
+			notifyAboutProfanity = config.getConfigurableMessage("messages.NotifyAboutProfanity", 3,
 					"Player %s used the word \"%s\" (%s) which is blacklisted.");
-			notifyAboutComposed = config.getConfigurableMessage("NotifyAboutComposed", 4,
+			notifyAboutComposed = config.getConfigurableMessage("messages.NotifyAboutComposed", 4,
 					"Player %s used the word \"%s\" (%s), that contains the blacklisted building block \"%s\".");
-			notifyAboutSimilar = config.getConfigurableMessage("NotifyAboutSimilar", 4,
+			notifyAboutSimilar = config.getConfigurableMessage("messages.NotifyAboutSimilar", 4,
 					"Player %s used the word \"%s\" (%s), that is similar to the blacklisted word \"%s\".");
+			tempMutedPlayer = config.getConfigurableMessage("messages.mute.TempMutedPlayer", 3,
+					"Player %s has been muted %s with reason \"%s\".");
 		}		
 	}
 
