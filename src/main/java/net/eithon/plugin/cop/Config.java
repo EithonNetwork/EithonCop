@@ -36,6 +36,10 @@ public class Config {
 		public static int profanityRecentOffenderCooldownInSeconds;
 		public static int profanityOffenderCooldownInSeconds;
 		public static boolean logOffenderMessages;
+		public static int maxNumberOfUpperCaseLettersInLine;
+		public static int maxNumberOfUpperCaseWordsInLine;
+		public static double lineIsProbablyDuplicate;
+		public static long secondsToRememberLines;
 		
 		static void load(Configuration config) {
 			profanityBuildingBlocks = config.getStringList("ProfanityBuildingBlocks").toArray(new String[0]);
@@ -60,6 +64,10 @@ public class Config {
 			markSimilar = config.getInt("MarkSimilar", 0) != 0;
 			markSimilarPrefix = config.getString("MarkSimilarPrefix", "<");
 			markSimilarPostfix = config.getString("MarkSimilarPostfix", ">");
+			maxNumberOfUpperCaseLettersInLine = config.getInt("MaxNumberOfUpperCaseLettersInLine", 15);
+			maxNumberOfUpperCaseWordsInLine = config.getInt("MaxNumberOfUpperCaseWordsInLine", 3);
+			lineIsProbablyDuplicate = config.getDouble("LineIsProbablyDuplicate", 0.9);
+			secondsToRememberLines = config.getInt("SecondsToRememberLines", 30);
 		}
 
 	}

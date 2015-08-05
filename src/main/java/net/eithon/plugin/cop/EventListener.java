@@ -17,8 +17,15 @@ public final class EventListener implements Listener {
 
 	@EventHandler
 	public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent e) {
+		if (e.isCancelled()) return;
+		
 		// Get the message
-		String profaneMessage = this._controller.profanityFilter(e.getPlayer(), e.getMessage());
+		String originalMessage = e.getMessage();
+		String maybeLowerase = this._controller.reduceUpperCaseUsage(e.getPlayer(), originalMessage);
+		String profaneMessage = this._controller.profanityFilter(e.getPlayer(), maybeLowerase);
+		if (this._controller.isDuplicate(e.getPlayer(), profaneMessage)) {
+			e.setCancelled(true);
+		}
 		e.setMessage(profaneMessage);
 	}
 }
