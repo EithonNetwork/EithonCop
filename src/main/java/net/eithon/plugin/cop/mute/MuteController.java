@@ -21,7 +21,13 @@ public class MuteController {
 	public boolean temporarilyMute(CommandSender sender,
 			Player player, long timeInSeconds, String reason) {
 		this._mutedPlayers.addIncident(player, timeInSeconds);
-		Config.C.tempMutePlayer.execute(player.getName(), timeInSeconds, reason);
+		Config.C.tempMutePlayer.executeAs(sender, player.getName(), timeInSeconds, reason);
+		return true;
+	}
+
+	public boolean unmute(CommandSender sender, Player player) {
+		this._mutedPlayers.removePlayer(player);
+		Config.C.unutePlayer.executeAs(sender, player.getName());
 		return true;
 	}
 

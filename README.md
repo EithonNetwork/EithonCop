@@ -4,6 +4,11 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 0.11 (2015-08-06)
+
+* NEW: unmute command
+* CHANGE: tempmute and unmute commands are now issued from the sender, not from console.
+
 ### 0.10 (2015-08-05)
 
 * NEW: tempmute command. Added configurations DefaultTempMuteInSeconds, DefaultTempMuteReason and MutedCommands.

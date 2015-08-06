@@ -142,6 +142,11 @@ commands:
   # Parameters: <player name>(%s), <number of seconds>(%d), <reason>(%s)
   #
   TempMutePlayer: "tempmute %s %ds %s"
+
+  #
+  # Parameters: <player name>(%s)
+  #
+  UnmutePlayer: "unmute %s"
     
 
 messages:
@@ -231,3 +236,8 @@ messages:
     # Parameters: <player name>(%s), <time>(%s), <reason>(%s)
     #
     TempMutedPlayer: "Player %s has been muted %s with reason \"%s\"."
+    
+    #
+    # Parameters: <player name>(%s)
+    #
+    UnmutedPlayer: "Player %s has been unmuted."

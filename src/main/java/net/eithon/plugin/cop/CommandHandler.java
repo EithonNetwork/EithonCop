@@ -15,6 +15,7 @@ public class CommandHandler implements ICommandHandler {
 	private static final String BLACKLIST_COMMAND = "/eithoncop blacklist add|remove <profanity> [<isliteral>] [<synonyms>]";
 	private static final String WHITELIST_COMMAND = "/eithoncop whitelist add|remove <accepted word>";
 	private static final String TEMPMUTE_COMMAND = "/copbot tempmute <player> [<time>] [<reason>]";
+	private static final String UNMUTE_COMMAND = "/copbot unmute <player>";
 	private Controller _controller;
 
 	public CommandHandler(EithonPlugin eithonPlugin, Controller controller) {
@@ -31,6 +32,8 @@ public class CommandHandler implements ICommandHandler {
 			whitelistCommand(commandParser);
 		} else if (command.equals("tempmute")) {
 			tempMuteCommand(commandParser);
+		} else if (command.equals("unmute")) {
+			unmuteCommand(commandParser);
 		} else {
 			commandParser.showCommandSyntax();
 		}
@@ -116,7 +119,25 @@ public class CommandHandler implements ICommandHandler {
 
 		boolean success = this._controller.tempMute(sender, eithonPlayer, timeInSeconds, reason);
 		if (!success) return;
-		Config.M.tempMutedPlayer.sendMessage(sender, eithonPlayer, TimeMisc.secondsToString(timeInSeconds), reason);		
+		Config.M.tempMutedPlayer.sendMessage(sender, eithonPlayer.getName(), TimeMisc.secondsToString(timeInSeconds), reason);		
+	}
+
+	void unmuteCommand(CommandParser commandParser)
+	{
+		if (!commandParser.hasPermissionOrInformSender("eithoncop.unmute")) return;
+		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(2, 2)) return;
+		
+		EithonPlayer eithonPlayer = commandParser.getArgumentEithonPlayer((EithonPlayer)null);
+		if (eithonPlayer == null) {
+			commandParser.showCommandSyntax();
+			return;
+		}
+
+		CommandSender sender = commandParser.getSender();
+		
+		boolean success = this._controller.unmute(sender, eithonPlayer);
+		if (!success) return;
+		Config.M.unmutedPlayer.sendMessage(sender, eithonPlayer.getName());		
 	}
 
 	@Override
@@ -127,6 +148,8 @@ public class CommandHandler implements ICommandHandler {
 			sender.sendMessage(WHITELIST_COMMAND);
 		} else if (command.equals("tempmute")) {
 			sender.sendMessage(TEMPMUTE_COMMAND);
+		} else if (command.equals("unmute")) {
+			sender.sendMessage(UNMUTE_COMMAND);
 		} else {
 			sender.sendMessage(String.format("Unknown command: %s.", command));
 		}
