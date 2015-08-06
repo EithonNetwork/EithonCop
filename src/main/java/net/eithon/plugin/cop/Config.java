@@ -84,10 +84,13 @@ public class Config {
 	}
 	public static class C {
 		public static ConfigurableCommand tempMutePlayer;
+		public static ConfigurableCommand unutePlayer;
 
 		static void load(Configuration config) {
 			tempMutePlayer = config.getConfigurableCommand("commands.mute.TempMutePlayer", 3, 
 					"tempmute %s %ds %s");
+			unutePlayer = config.getConfigurableCommand("commands.mute.UnmutePlayer", 1, 
+					"unmute %s");
 		}
 
 	}
@@ -110,6 +113,7 @@ public class Config {
 		public static ConfigurableMessage notifyAboutComposed;
 		public static ConfigurableMessage notifyAboutSimilar;
 		public static ConfigurableMessage tempMutedPlayer;
+		public static ConfigurableMessage unmutedPlayer;
 
 		static void load(Configuration config) {
 			profanityNotFound = config.getConfigurableMessage("messages.ProfanityNotFound", 1,
@@ -148,6 +152,8 @@ public class Config {
 					"Player %s used the word \"%s\" (%s), that is similar to the blacklisted word \"%s\".");
 			tempMutedPlayer = config.getConfigurableMessage("messages.mute.TempMutedPlayer", 3,
 					"Player %s has been muted %s with reason \"%s\".");
+			unmutedPlayer = config.getConfigurableMessage("messages.mute.UnmutedPlayer", 1,
+					"Player %s has been unmuted.");
 		}		
 	}
 

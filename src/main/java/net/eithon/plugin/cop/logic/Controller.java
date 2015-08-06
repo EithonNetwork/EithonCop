@@ -49,6 +49,10 @@ public class Controller {
 		return this._muteController.temporarilyMute(sender, eithonPlayer.getPlayer(), timeInSeconds, reason);
 	}
 
+	public boolean unmute(CommandSender sender, EithonPlayer eithonPlayer) {
+		return this._muteController.unmute(sender, eithonPlayer.getPlayer());
+	}
+
 	public String censorMessage(Player player, String originalMessage) {
 		String maybeLowerase = this._spamController.reduceUpperCaseUsage(player, originalMessage);
 		String profaneMessage = this._profanityFilterController.profanityFilter(player, maybeLowerase);
