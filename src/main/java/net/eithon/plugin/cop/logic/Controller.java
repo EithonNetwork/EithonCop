@@ -2,7 +2,6 @@ package net.eithon.plugin.cop.logic;
 
 import net.eithon.library.extensions.EithonPlayer;
 import net.eithon.library.extensions.EithonPlugin;
-import net.eithon.plugin.cop.mute.MuteController;
 import net.eithon.plugin.cop.profanity.ProfanityFilterController;
 import net.eithon.plugin.cop.spam.SpamController;
 

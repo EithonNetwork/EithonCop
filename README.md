@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 0.12 ()
+
+* CHANGE: All time span configuration values are now in the general TimeSpan format instead of hard coded to seconds or minutes or hours.
+
 ### 0.11 (2015-08-06)
 
 * NEW: unmute command

@@ -27,15 +27,15 @@ LogOffenderMessages: 1
 # When a player has entered a profanity, this is how long time he/she is considered an "offender".
 # A player is only considered an offender if a word he/she has written is stopped according to ProfanityLevel.
 #
-ProfanityOffenderCooldownInSeconds: 3600
+ProfanityOffenderCooldownTimeSpan: 1h
 
 #
 # When a player has entered a profanity, this is how long time he/she is considered a recent "offender".
-# Recent offender messages will be logged for this time period to see if they try to circumvent the blacklist system.
+# Recent offender messages will be logged over this time span to see if they try to circumvent the blacklist system.
 # This does not take into account the ProfanityLevel. This means that if you are an offender, then you will continue to be
 # considered a recent offender if you use similar words to blacklisted words any time while you are an offender.
 #
-ProfanityRecentOffenderCooldownInSeconds: 20
+ProfanityRecentOffenderCooldownTimeSpan: 20s
 
 #
 # Should we save a file with all words that are similar to blacklisted words?
@@ -98,7 +98,7 @@ spam:
   #
   # The time that we will keep old lines to check for duplicates
   #
-  SecondsToRememberLines: 30
+  TimeSpanToRememberLines: 30s
   
   #
   # The time that we will keep old lines to check for duplicates
@@ -109,7 +109,7 @@ mute:
   #
   # The time that a player will be muted by tempmute if no time is specified in the command
   #
-  DefaultTempMuteInSeconds: 60
+  DefaultTempMuteTimeSpan: 60s
   
   #
   # The reason for the tempmute if not specified in the command
