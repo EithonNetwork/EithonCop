@@ -36,8 +36,8 @@ public class Config {
 		public static String markSimilarPrefix;
 		public static String markSimilarPostfix;
 		public static int profanityWordMinimumLength = 3;
-		public static int profanityRecentOffenderCooldownInSeconds;
-		public static int profanityOffenderCooldownInSeconds;
+		public static long profanityRecentOffenderCooldownInSeconds;
+		public static long profanityOffenderCooldownInSeconds;
 		public static boolean logOffenderMessages;
 		public static int maxNumberOfUpperCaseLettersInLine;
 		public static int maxNumberOfUpperCaseWordsInLine;
@@ -62,8 +62,8 @@ public class Config {
 			categoryDerogative = config.getStringList("CategoryDerogative").toArray(new String[0]);
 			profanityLevel = config.getInt("ProfanityLevel", 0);
 			logOffenderMessages = config.getInt("LogOffenderMessages", 0) != 0;
-			profanityRecentOffenderCooldownInSeconds = config.getInt("ProfanityOffenderCooldownInSeconds", 20);
-			profanityOffenderCooldownInSeconds = config.getInt("ProfanityOffenderCooldownInSeconds", 3600);
+			profanityRecentOffenderCooldownInSeconds = config.getSeconds("ProfanityRecentOffenderCooldownTimeSpan", 20);
+			profanityOffenderCooldownInSeconds = config.getSeconds("ProfanityOffenderCooldownTimeSpan", "1h");
 			saveSimilar = config.getInt("SaveSimilar", 0) != 0;
 			markReplacement = config.getInt("MarkReplacement", 0) != 0;
 			markReplacementPrefix = config.getString("MarkReplacementPrefix", "'");
@@ -74,9 +74,9 @@ public class Config {
 			maxNumberOfUpperCaseLettersInLine = config.getInt("spam.MaxNumberOfUpperCaseLettersInLine", 15);
 			maxNumberOfUpperCaseWordsInLine = config.getInt("spam.MaxNumberOfUpperCaseWordsInLine", 3);
 			lineIsProbablyDuplicate = config.getDouble("spam.LineIsProbablyDuplicate", 0.9);
-			secondsToRememberLines = config.getInt("spam.SecondsToRememberLines", 30);
+			secondsToRememberLines = config.getSeconds("spam.TimeSpanToRememberLines", 30);
 			maxNumberOfRepeatedLines = config.getInt("spam.MaxNumberOfRepeatedLines", 2);
-			defaultTempMuteInSeconds = config.getInt("mute.DefaultTempMuteInSeconds", 10);
+			defaultTempMuteInSeconds = config.getSeconds("mute.DefaultTempMuteTimeSpan", 10);
 			defaultTempMuteReason = config.getString("mute.DefaultTempMuteReason", "Unspecified");
 			mutedCommands = config.getStringList("mute.MutedCommands");
 		}
