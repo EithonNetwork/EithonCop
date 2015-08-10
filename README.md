@@ -4,9 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
-### 0.12 ()
+### 0.12 (2015-08-10)
 
 * CHANGE: All time span configuration values are now in the general TimeSpan format instead of hard coded to seconds or minutes or hours.
+* BUG: The blacklist command without synonyms resulted in a null pointer exception.
 
 ### 0.11 (2015-08-06)
 
