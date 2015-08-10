@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.0 (2015-08-11)
+
+* NEW: Added an API for other plugins to use copbot.
+
 ### 0.12 (2015-08-10)
 
 * CHANGE: All time span configuration values are now in the general TimeSpan format instead of hard coded to seconds or minutes or hours.
