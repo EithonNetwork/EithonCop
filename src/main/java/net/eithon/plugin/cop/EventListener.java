@@ -11,13 +11,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.ChannelChatEvent;
 
 public final class EventListener implements Listener {
 
 	private Controller _controller;
 	private EithonPlugin _eithonPlugin;
-	
+
 	public EventListener(EithonPlugin eithonPlugin, Controller controller) {
 		this._eithonPlugin = eithonPlugin;
 		this._controller = controller;
@@ -27,9 +28,9 @@ public final class EventListener implements Listener {
 	@EventHandler
 	public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent e) {
 		if (e.isCancelled()) return;
-		
+
 		String originalMessage = e.getMessage();
-		
+
 		String newMessage = this._controller.censorMessage(e.getPlayer(), originalMessage);
 		if (newMessage == null) e.setCancelled(true);
 		else e.setMessage(newMessage);
@@ -39,17 +40,24 @@ public final class EventListener implements Listener {
 	@EventHandler
 	public void onChannelChatEvent(ChannelChatEvent e) {
 		String originalMessage = e.getMessage();
+		String newMessage = originalMessage;
 		Player player = e.getSender().getPlayer();
 
-		String newMessage = this._controller.censorMessage(player, originalMessage);
-		if (newMessage == null) e.setResult(null);
-		else e.setMessage(newMessage);
-		
+		if (isPrivateChannel(e.getChannel())) {
+			newMessage = this._controller.censorMessage(player, originalMessage);
+			if (newMessage == null) e.setResult(null);
+			else e.setMessage(newMessage);
+		}
+
 		if (this._controller.isMuted(player)) {
 			verbose("onChannelChatEvent", "Trying to mute player %s from sending message \"%s\".", newMessage);
 			e.setResult(null);
 			return;
 		}
+	}
+
+	private boolean isPrivateChannel(Channel channel) {
+		return channel.getMembers().size() < 3;
 	}
 
 	// Mute certain commands

@@ -6,6 +6,7 @@ A Cop plugin for Minecraft.
 
 ### 1.0 (2015-08-11)
 
+* NEW: No censoring of private (one-to-one) chats.
 * NEW: Added an API for other plugins to use copbot.
 
 ### 0.12 (2015-08-10)
