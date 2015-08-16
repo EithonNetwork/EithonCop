@@ -103,7 +103,7 @@ spam:
   #
   # The time that we will keep old lines to check for duplicates
   #
-  MaxNumberOfRepeatedLines: 2
+  MaxNumberOfRepeatedLines: 6
 
 mute:
   #
@@ -132,7 +132,7 @@ eithon:
   #  2 = MINOR (also minor messages)
   #  3 = VERBOSE (all messages)
   #
-  DebugLevel: 1
+  DebugLevel: 2
 
 commands:
 
