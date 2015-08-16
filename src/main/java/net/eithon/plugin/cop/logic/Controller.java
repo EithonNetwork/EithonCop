@@ -53,6 +53,7 @@ public class Controller {
 	}
 
 	public String censorMessage(Player player, String originalMessage) {
+		if (originalMessage == null) return null;
 		String maybeLowerase = this._spamController.reduceUpperCaseUsage(player, originalMessage);
 		String profaneMessage = this._profanityFilterController.profanityFilter(player, maybeLowerase);
 		if (this._spamController.isDuplicate(player, profaneMessage)) return null;

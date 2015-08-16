@@ -15,6 +15,7 @@ public class SpamController {
 	}
 
 	public String reduceUpperCaseUsage(Player player, String message) {
+		if (message == null) return null;
 		if (hasTooManyUpperCaseLetters(message)
 				|| hasTooManyUpperCaseWords(message)) {
 			return message.toLowerCase();

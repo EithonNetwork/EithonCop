@@ -74,6 +74,7 @@ public class ProfanityFilterController {
 	}
 
 	public String profanityFilter(Player player, String message) {
+		if (message == null) return null;
 		ProfanityFilter filter = new ProfanityFilter(this, player, message);
 		String filteredMessage = filter.getFilteredMessage();
 		this._blacklist.delayedSaveOffenderMessage(player, message, filteredMessage);
