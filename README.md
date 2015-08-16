@@ -4,6 +4,14 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.0.2 (2015-08-16)
+
+* CHANGE: Now has configurable documentation for the tempmute command.
+
+### 1.0.1 (2015-08-16)
+
+* BUG: Censor method could not handle null messages.
+
 ### 1.0 (2015-08-11)
 
 * NEW: No censoring of private (one-to-one) chats.
