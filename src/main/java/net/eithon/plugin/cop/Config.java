@@ -114,6 +114,7 @@ public class Config {
 		public static ConfigurableMessage notifyAboutSimilar;
 		public static ConfigurableMessage tempMutedPlayer;
 		public static ConfigurableMessage unmutedPlayer;
+		public static ConfigurableMessage tempMuteCommandDoc;
 
 		static void load(Configuration config) {
 			profanityNotFound = config.getConfigurableMessage("messages.ProfanityNotFound", 1,
@@ -154,6 +155,8 @@ public class Config {
 					"Player %s has been muted %s with reason \"%s\".");
 			unmutedPlayer = config.getConfigurableMessage("messages.mute.UnmutedPlayer", 1,
 					"Player %s has been unmuted.");
+			tempMuteCommandDoc = config.getConfigurableMessage("messages.doc.TempMuteCommand", 0,
+					"/eithoncop tempmute <player> [<time>] [<reason>]");
 		}		
 	}
 

@@ -241,3 +241,7 @@ messages:
     # Parameters: <player name>(%s)
     #
     UnmutedPlayer: "Player %s has been unmuted."
+
+  doc:
+     TempMuteCommand: "/eithoncop tempmute <player> [<time>] [<reason>]"
+    
