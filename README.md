@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.0.2-dev (2015-08-19)
+
+* CHANGE: Now ignores the word "I" when considering upper and lower case words.
+
 ### 1.0.2 (2015-08-16)
 
 * CHANGE: Now has configurable documentation for the tempmute command.
