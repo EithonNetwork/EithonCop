@@ -30,6 +30,7 @@ public class SpamController {
 			String token = tokenizer.nextToken();
 			boolean isLowerCase = false;
 			int upperCaseCharacters = 0;
+			if (token.equalsIgnoreCase("i")) continue;
 			for (int i = 0; i < token.length(); i++) {
 				char ch = token.charAt(i);
 				if (Character.isUpperCase(ch)) {

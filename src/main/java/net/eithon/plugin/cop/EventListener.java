@@ -28,18 +28,20 @@ public final class EventListener implements Listener {
 	@EventHandler
 	public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent e) {
 		if (e.isCancelled()) return;
-
 		String originalMessage = e.getMessage();
+		verbose("onAsyncPlayerChatEvent", "Enter:  \"%s\".", originalMessage);
 
 		String newMessage = this._controller.censorMessage(e.getPlayer(), originalMessage);
 		if (newMessage == null) e.setCancelled(true);
 		else e.setMessage(newMessage);
+		verbose("onAsyncPlayerChatEvent", "Leave:  \"%s\".", newMessage == null ? "null" : newMessage);
 	}
 
 	// Censor channel chats, mute channel chats
 	@EventHandler
 	public void onChannelChatEvent(ChannelChatEvent e) {
 		String originalMessage = e.getMessage();
+		verbose("onChannelChatEvent", "Enter:  \"%s\".", originalMessage);
 		String newMessage = originalMessage;
 		Player player = e.getSender().getPlayer();
 
@@ -50,10 +52,11 @@ public final class EventListener implements Listener {
 		}
 
 		if (this._controller.isMuted(player)) {
-			verbose("onChannelChatEvent", "Trying to mute player %s from sending message \"%s\".", newMessage);
+			verbose("onChannelChatEvent", "Leave: Trying to mute player %s from sending message \"%s\".", player.getName(), newMessage);
 			e.setResult(null);
 			return;
 		}
+		verbose("onAsyncPlayerChatEvent", "Leave:  \"%s\".", newMessage == null ? "null" : newMessage);
 	}
 
 	private boolean isPrivateChannel(Channel channel) {
