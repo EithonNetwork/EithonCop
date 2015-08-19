@@ -7,7 +7,8 @@ A Cop plugin for Minecraft.
 ### 1.0.2-dev (2015-08-19)
 
 * CHANGE: Now ignores the word "I" when considering upper and lower case words.
-* BUG: Could not mute players properly because of a formatting error.
+* CHANGE: Now has configurable documentation for the unmute command.
+* BUG: Could get problem when muting players because of a formatting error.
 * MISC: Added debug printouts to find out how the event sequence for chat events looks like
 
 ### 1.0.2 (2015-08-16)

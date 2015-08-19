@@ -244,4 +244,5 @@ messages:
 
   doc:
      TempMuteCommand: "/eithoncop tempmute <player> [<time>] [<reason>]"
+     UnmuteCommand: "/eithoncop unmute <player>"
     
