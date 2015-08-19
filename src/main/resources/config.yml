@@ -169,7 +169,7 @@ messages:
   #
   # Parameters: <new word>(%s), <existing word>(%s)
   #
-  ProbablyDuplicateProfanity: "You specified the word \"%s\", but that word collides with existing blacklisted word \"%s\"."
+  ProbablyDuplicateProfanity: "You specified the word \"%s\", please note that it is similar to the existing blacklisted word \"%s\"."
 
   #
   # Parameters: <new word>(%s)

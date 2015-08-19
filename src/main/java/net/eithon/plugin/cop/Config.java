@@ -125,7 +125,7 @@ public class Config {
 			duplicateProfanity = config.getConfigurableMessage("messages.DuplicateProfanity", 1,
 					"The word \"%s\" has already been blacklisted.");
 			probablyDuplicateProfanity = config.getConfigurableMessage("messages.ProbablyDuplicateProfanity", 2,
-					"You specified the word \"%s\", but that word collides with existing blacklisted word \"%s\".");
+					"You specified the word \"%s\", please note that it is similar to the existing blacklisted word \"%s\".");
 			profanityAdded = config.getConfigurableMessage("messages.ProfanityAdded", 1,
 					"The word \"%s\" has been added to the blacklist.");
 			profanityRemoved = config.getConfigurableMessage("messages.ProfanityRemoved", 1,

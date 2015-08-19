@@ -4,10 +4,11 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
-### 1.0.2-dev (2015-08-19)
+### 1.1 (2015-08-19)
 
 * CHANGE: Now ignores the word "I" when considering upper and lower case words.
 * CHANGE: Now has configurable documentation for the unmute command.
+* CHANGE: Now accepts new blacklisted words that are similar to existing words.
 * BUG: Could get problem when muting players because of a formatting error.
 * MISC: Added debug printouts to find out how the event sequence for chat events looks like
 

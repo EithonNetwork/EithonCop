@@ -97,21 +97,19 @@ public class ProfanityFilterController {
 			return null;
 		}
 		Profanity profanity = this._blacklist.getProfanity(word);
-		if (profanity == null) {
-			profanity = this._blacklist.add(word, isLiteral);
-			if (synonyms != null) profanity.setSynonyms(synonyms.split("\\W"));
-			this._blacklist.delayedSave();
-			return profanity.getWord();
-		}
-		if (word.equalsIgnoreCase(profanity.getWord())) {
+		if ((profanity != null) && word.equalsIgnoreCase(profanity.getWord())) {
 			profanity.setIsLiteral(isLiteral);
 			if (synonyms != null) profanity.setSynonyms(synonyms.split("\\W"));
 			this._blacklist.delayedSave();
 			return profanity.getWord();
-		} else {
+		}
+		if (profanity != null) {
 			Config.M.probablyDuplicateProfanity.sendMessage(sender, word, profanity.getWord());
 		}
-		return null;
+		profanity = this._blacklist.add(word, isLiteral);
+		if (synonyms != null) profanity.setSynonyms(synonyms.split("\\W"));
+		this._blacklist.delayedSave();
+		return profanity.getWord();
 	}
 
 	public String removeProfanity(CommandSender sender, String word) {
@@ -173,7 +171,7 @@ public class ProfanityFilterController {
 			Config.M.acceptedWordNotFound.sendMessage(sender, word);
 			return null;
 		}
-		
+
 		this._whitelist.remove(normalized);
 		this._whitelist.delayedSave();
 		return normalized;
