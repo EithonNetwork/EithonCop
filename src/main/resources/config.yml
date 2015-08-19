@@ -243,6 +243,6 @@ messages:
     UnmutedPlayer: "Player %s has been unmuted."
 
   doc:
-     TempMuteCommand: "/eithoncop tempmute <player> [<time>] [<reason>]"
-     UnmuteCommand: "/eithoncop unmute <player>"
+     TempMuteCommand: "/tempmute <player> [<time>] [<reason>]"
+     UnmuteCommand: "/unmute <player>"
     
