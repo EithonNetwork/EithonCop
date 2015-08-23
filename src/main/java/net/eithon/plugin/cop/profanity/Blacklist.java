@@ -62,12 +62,7 @@ class Blacklist {
 	}
 
 	Profanity add(String word, boolean isLiteral) {
-		Profanity profanity = getProfanity(word);
-		if (profanity != null) {
-			profanity.setIsLiteral(isLiteral);
-			return profanity;
-		}
-		profanity = new Profanity(word, isLiteral);
+		Profanity profanity = new Profanity(word, isLiteral);
 		add(profanity);
 		return profanity;
 	}

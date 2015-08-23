@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.1.1 (2015-08-23)
+
+* BUG: A new blacklisted words that was similar to existing word could not be added.
+
 ### 1.1 (2015-08-19)
 
 * CHANGE: Now ignores the word "I" when considering upper and lower case words.
