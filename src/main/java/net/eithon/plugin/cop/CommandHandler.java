@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 public class CommandHandler implements ICommandHandler {
 	private static final String BLACKLIST_COMMAND = "/eithoncop blacklist add|remove <profanity> [<isliteral>] [<synonyms>]";
 	private static final String WHITELIST_COMMAND = "/eithoncop whitelist add|remove <accepted word>";
-	private static final String UNMUTE_COMMAND = "/eithoncop unmute <player>";
 	private Controller _controller;
 
 	public CommandHandler(EithonPlugin eithonPlugin, Controller controller) {
@@ -146,7 +145,7 @@ public class CommandHandler implements ICommandHandler {
 		} else if (command.equals("tempmute")) {
 			Config.M.tempMuteCommandDoc.sendMessage(sender);
 		} else if (command.equals("unmute")) {
-			sender.sendMessage(UNMUTE_COMMAND);
+			Config.M.unmuteCommandDoc.sendMessage(sender);
 		} else {
 			sender.sendMessage(String.format("Unknown command: %s.", command));
 		}

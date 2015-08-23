@@ -62,12 +62,7 @@ class Blacklist {
 	}
 
 	Profanity add(String word, boolean isLiteral) {
-		Profanity profanity = getProfanity(word);
-		if (profanity != null) {
-			profanity.setIsLiteral(isLiteral);
-			return profanity;
-		}
-		profanity = new Profanity(word, isLiteral);
+		Profanity profanity = new Profanity(word, isLiteral);
 		add(profanity);
 		return profanity;
 	}
@@ -86,8 +81,12 @@ class Blacklist {
 		if (this._wordList.containsKey(profanity.getWord())) return;
 		this._wordList.put(profanity.getWord(), profanity);
 		if (profanity.isLiteral()) return;
-		this._metaphoneList.put(profanity.getPrimary(), profanity);
-		if (profanity.hasSecondary()) this._metaphoneList.put(profanity.getSecondary(), profanity);
+		if (!this._metaphoneList.containsKey(profanity.getPrimary())) {
+			this._metaphoneList.put(profanity.getPrimary(), profanity);
+		}
+		if (profanity.hasSecondary() && !this._metaphoneList.containsKey(profanity.getSecondary())) {
+			this._metaphoneList.put(profanity.getSecondary(), profanity);
+		}
 	}
 
 	boolean isBlacklisted(String word) {

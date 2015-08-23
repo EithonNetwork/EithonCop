@@ -115,6 +115,7 @@ public class Config {
 		public static ConfigurableMessage tempMutedPlayer;
 		public static ConfigurableMessage unmutedPlayer;
 		public static ConfigurableMessage tempMuteCommandDoc;
+		public static ConfigurableMessage unmuteCommandDoc;
 
 		static void load(Configuration config) {
 			profanityNotFound = config.getConfigurableMessage("messages.ProfanityNotFound", 1,
@@ -124,7 +125,7 @@ public class Config {
 			duplicateProfanity = config.getConfigurableMessage("messages.DuplicateProfanity", 1,
 					"The word \"%s\" has already been blacklisted.");
 			probablyDuplicateProfanity = config.getConfigurableMessage("messages.ProbablyDuplicateProfanity", 2,
-					"You specified the word \"%s\", but that word collides with existing blacklisted word \"%s\".");
+					"You specified the word \"%s\", please note that it is similar to the existing blacklisted word \"%s\".");
 			profanityAdded = config.getConfigurableMessage("messages.ProfanityAdded", 1,
 					"The word \"%s\" has been added to the blacklist.");
 			profanityRemoved = config.getConfigurableMessage("messages.ProfanityRemoved", 1,
@@ -157,6 +158,8 @@ public class Config {
 					"Player %s has been unmuted.");
 			tempMuteCommandDoc = config.getConfigurableMessage("messages.doc.TempMuteCommand", 0,
 					"/eithoncop tempmute <player> [<time>] [<reason>]");
+			unmuteCommandDoc = config.getConfigurableMessage("messages.doc.UnmuteCommand", 0,
+					"/eithoncop unmute <player>");
 		}		
 	}
 

@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.eithon.plugin</groupId>
 	<artifactId>EithonCop</artifactId>
-	<version>1.0.2-dev</version>
+	<version>1.1.1</version>
 	<name>EithonCop</name>
 	<build>
 		<plugins>

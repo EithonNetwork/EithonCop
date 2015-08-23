@@ -1,3 +1,16 @@
+eithon:
+  UseMarkUpForMessages: 0
+  UseWrappingForMessages: 0
+  
+  #
+  # Debug level
+  #  0 = NONE (no debug messages)
+  #  1 = MAJOR (only major messages)
+  #  2 = MINOR (also minor messages)
+  #  3 = VERBOSE (all messages)
+  #
+  DebugLevel: 2
+
 #
 # How tough should we be at stopping profanity?
 #
@@ -121,19 +134,6 @@ mute:
   #
   MutedCommands: ["me"]
 
-eithon:
-  UseMarkUpForMessages: 0
-  UseWrappingForMessages: 0
-  
-  #
-  # Debug level
-  #  0 = NONE (no debug messages)
-  #  1 = MAJOR (only major messages)
-  #  2 = MINOR (also minor messages)
-  #  3 = VERBOSE (all messages)
-  #
-  DebugLevel: 2
-
 commands:
 
   mute:
@@ -169,7 +169,7 @@ messages:
   #
   # Parameters: <new word>(%s), <existing word>(%s)
   #
-  ProbablyDuplicateProfanity: "You specified the word \"%s\", but that word collides with existing blacklisted word \"%s\"."
+  ProbablyDuplicateProfanity: "You specified the word \"%s\", please note that it is similar to the existing blacklisted word \"%s\"."
 
   #
   # Parameters: <new word>(%s)
@@ -243,5 +243,6 @@ messages:
     UnmutedPlayer: "Player %s has been unmuted."
 
   doc:
-     TempMuteCommand: "/eithoncop tempmute <player> [<time>] [<reason>]"
+     TempMuteCommand: "/tempmute <player> [<time>] [<reason>]"
+     UnmuteCommand: "/unmute <player>"
     
