@@ -100,7 +100,7 @@ public class CommandHandler implements ICommandHandler {
 	void tempMuteCommand(CommandParser commandParser)
 	{
 		if (!commandParser.hasPermissionOrInformSender("eithoncop.tempmute")) return;
-		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(2, 4)) return;
+		if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(2)) return;
 		
 		EithonPlayer eithonPlayer = commandParser.getArgumentEithonPlayer((EithonPlayer)null);
 		if (eithonPlayer == null) {

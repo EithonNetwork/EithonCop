@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.1.2 (2015-08-24)
+
+* BUG: Could not give a multi word explanation to the tempmute command.
+
 ### 1.1.1 (2015-08-23)
 
 * BUG: A new blacklisted words that was similar to existing word could not be added.
