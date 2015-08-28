@@ -45,7 +45,7 @@ public final class EventListener implements Listener {
 		String newMessage = originalMessage;
 		Player player = e.getSender().getPlayer();
 
-		if (isPrivateChannel(e.getChannel())) {
+		if (!isPrivateChannel(e.getChannel())) {
 			newMessage = this._controller.censorMessage(player, originalMessage);
 			if (newMessage == null) e.setResult(null);
 			else e.setMessage(newMessage);
