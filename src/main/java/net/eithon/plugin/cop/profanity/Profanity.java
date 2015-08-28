@@ -21,9 +21,9 @@ class Profanity implements IJson<Profanity> {
 	static final int PROFANITY_LEVEL_MAX = 3;
 	static Metaphone3 metaphone3;
 
-	private static EnumMap<ProfanityType, Integer> profanityTypeToInteger = new EnumMap<Profanity.ProfanityType, Integer>(ProfanityType.class);
-	private static HashMap<Integer, ProfanityType> integerToProfanityType = new HashMap<Integer, Profanity.ProfanityType>();
-	private static EnumMap<ProfanityType, String[]> synonyms = new EnumMap<Profanity.ProfanityType, String[]>(ProfanityType.class);
+	private static EnumMap<ProfanityType, Integer> profanityTypeToInteger;
+	private static HashMap<Integer, ProfanityType> integerToProfanityType;
+	private static EnumMap<ProfanityType, String[]> synonyms;
 	private static Comparator<Profanity> profanityComparator;
 
 	private String _word;
@@ -33,10 +33,13 @@ class Profanity implements IJson<Profanity> {
 	private boolean _isLiteral;
 	private List<String> _synonyms;
 
-	static {
+	static void initialize() {
 		metaphone3 = new Metaphone3();
 		metaphone3.SetEncodeVowels(true);
 		metaphone3.SetEncodeExact(true);
+		profanityTypeToInteger = new EnumMap<Profanity.ProfanityType, Integer>(ProfanityType.class);
+		integerToProfanityType = new HashMap<Integer, Profanity.ProfanityType>();
+		synonyms = new EnumMap<Profanity.ProfanityType, String[]>(ProfanityType.class);
 		addProfanityType(ProfanityType.UNKNOWN, 0);
 		addProfanityType(ProfanityType.BODY_CONTENT, 1);
 		addProfanityType(ProfanityType.BODY_PART, 2);

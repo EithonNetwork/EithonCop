@@ -23,7 +23,7 @@ class Whitelist {
 	private Blacklist _blacklist;
 	private HashMap<String, Profanity> _whitelist;
 
-	static {
+	static void initialize() {
 		stringComparator = new Comparator<String>(){
 			public int compare(String f1, String f2)
 			{

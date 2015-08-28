@@ -4,6 +4,14 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.2 (2015-08-28)
+
+* CHANGE: Should work better with plugman.
+
+### 1.1.3 (2015-08-28)
+
+* BUG: Could not remove blacklisted words.
+
 ### 1.1.2 (2015-08-24)
 
 * BUG: Could not give a multi word explanation to the tempmute command.

@@ -38,7 +38,7 @@ class Blacklist {
 	private static Metaphone3 metaphone3;
 	private static Comparator<String> stringComparator;
 
-	static {
+	static void initialize() {
 		metaphone3 = new Metaphone3();
 		metaphone3.SetEncodeVowels(true);
 		metaphone3.SetEncodeExact(true);
@@ -69,11 +69,24 @@ class Blacklist {
 
 	Profanity remove(String word) {
 		Profanity profanity = getProfanity(word);
-		if (profanity == null) {
+		if ((profanity == null) || !profanity.isSameWord(word)) {
 			this._eithonPlugin.getEithonLogger().warning("Blacklist.add: Trying to remove a word that isn't blacklisted: \"%s\".", word);
 			return null;
 		}
 		this._wordList.remove(word);
+		if (profanity.isLiteral()) return profanity;
+		String metaphone = profanity.getPrimary();
+		Profanity found = this._metaphoneList.get(metaphone);
+		if (found != null) {
+			if (found.equals(profanity)) this._metaphoneList.remove(metaphone);
+		}
+		if (profanity.hasSecondary()) {
+			metaphone = profanity.getSecondary();
+			found = this._metaphoneList.get(metaphone);
+			if (found != null) {
+				if (found.equals(profanity)) this._metaphoneList.remove(metaphone);
+			}
+		}
 		return profanity;
 	}
 
