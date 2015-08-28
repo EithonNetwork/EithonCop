@@ -26,6 +26,9 @@ public class ProfanityFilterController {
 
 	public ProfanityFilterController(EithonPlugin eithonPlugin){
 		this._eithonPlugin = eithonPlugin;
+		Profanity.initialize();
+		Blacklist.initialize();
+		Whitelist.initialize();
 		this._blacklist = new Blacklist(eithonPlugin);
 		this._blacklist.delayedLoad();
 		this._whitelist = new Whitelist(eithonPlugin, this._blacklist);

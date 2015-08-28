@@ -38,7 +38,7 @@ class Blacklist {
 	private static Metaphone3 metaphone3;
 	private static Comparator<String> stringComparator;
 
-	static {
+	static void initialize() {
 		metaphone3 = new Metaphone3();
 		metaphone3.SetEncodeVowels(true);
 		metaphone3.SetEncodeExact(true);
