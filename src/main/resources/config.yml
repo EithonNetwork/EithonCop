@@ -116,7 +116,7 @@ spam:
   #
   # The time that we will keep old lines to check for duplicates
   #
-  MaxNumberOfRepeatedLines: 6
+  MaxNumberOfRepeatedLines: 3
 
 mute:
   #

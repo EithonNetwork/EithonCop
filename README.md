@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### dev
+
+* CHANGE: Now only censors messages that comes through HeroChat.
+
 ### 1.2 (2015-08-28)
 
 * CHANGE: Should work better with plugman.
