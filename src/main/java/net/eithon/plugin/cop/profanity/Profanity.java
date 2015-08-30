@@ -178,12 +178,18 @@ class Profanity implements IJson<Profanity> {
 	}
 
 	@Override
-	public 
-	String toString() {
+	public String toString() {
 		String result = String.format("%s (%s, %d)", getWord(), this._isLiteral ? "literal" : "not literal", profanityTypeToInteger.get(this._type));
 		if (hasSecondary()) result += String.format(" [%s, %s]", getPrimary(), getSecondary());
 		else result += String.format(" [%s]", getPrimary());
 		return result;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Profanity)) return false;
+		Profanity that = (Profanity) o;
+		return (this._word.equalsIgnoreCase(that._word));
 	}
 
 	public void setIsLiteral(boolean isLiteral) { this._isLiteral = isLiteral; }

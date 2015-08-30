@@ -8,6 +8,7 @@ A Cop plugin for Minecraft.
 
 * CHANGE: Added cool down for number of chat messages per second.
 * CHANGE: Now only censors messages that comes through HeroChat.
+* BUG: Could not remove blacklisted words.
 
 ### 1.2 (2015-08-28)
 
