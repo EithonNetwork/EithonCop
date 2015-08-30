@@ -57,10 +57,10 @@ public class Controller {
 		if (originalMessage == null) return null;
 		if (this._spamController.isTooFast(player)) {
 			Config.M.chattingTooFast.sendMessage(
-					player, 
+					player,
+					this._spamController.secondsLeft(player), 
 					Config.V.chatCoolDownAllowedTimes,
-					Config.V.chatCoolDownInSeconds,
-					this._spamController.secondsLeft(player));
+					Config.V.chatCoolDownInSeconds);
 			return null;
 		}
 		String maybeLowerase = this._spamController.reduceUpperCaseUsage(player, originalMessage);

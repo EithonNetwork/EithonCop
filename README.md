@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.3.1 (2015-08-30)
+
+* BUG: Any message was considered to be too fast.
+
 ### 1.3 (2015-08-30)
 
 * CHANGE: Added cool down for number of chat messages per second.
