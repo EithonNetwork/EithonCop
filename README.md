@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.3.2 (2015-08-30)
+
+* BUG: No blacklisted word was handled. Added debug messages.
+
 ### 1.3.1 (2015-08-30)
 
 * BUG: Any message was considered to be too fast.
