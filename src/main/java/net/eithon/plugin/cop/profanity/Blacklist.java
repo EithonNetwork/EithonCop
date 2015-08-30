@@ -75,19 +75,17 @@ class Blacklist {
 		}
 		this._wordList.remove(word);
 		if (profanity.isLiteral()) return profanity;
-		String metaphone = profanity.getPrimary();
-		Profanity found = this._metaphoneList.get(metaphone);
+		removeMetaphone(profanity, profanity.getPrimary());
+		removeMetaphone(profanity, profanity.getSecondary());
+		return profanity;
+	}
+
+	void removeMetaphone(Profanity profanity, String metaphone) {
+		Profanity found;
+		found = this._metaphoneList.get(metaphone);
 		if (found != null) {
 			if (found.equals(profanity)) this._metaphoneList.remove(metaphone);
 		}
-		if (profanity.hasSecondary()) {
-			metaphone = profanity.getSecondary();
-			found = this._metaphoneList.get(metaphone);
-			if (found != null) {
-				if (found.equals(profanity)) this._metaphoneList.remove(metaphone);
-			}
-		}
-		return profanity;
 	}
 
 	private void add(Profanity profanity) {

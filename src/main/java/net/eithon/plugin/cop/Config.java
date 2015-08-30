@@ -47,6 +47,8 @@ public class Config {
 		public static long defaultTempMuteInSeconds;
 		public static String defaultTempMuteReason;
 		public static List<String> mutedCommands;
+		public static long chatCoolDownInSeconds;
+		public static int chatCoolDownAllowedTimes;
 		
 		static void load(Configuration config) {
 			profanityBuildingBlocks = config.getStringList("ProfanityBuildingBlocks").toArray(new String[0]);
@@ -73,9 +75,13 @@ public class Config {
 			markSimilarPostfix = config.getString("MarkSimilarPostfix", ">");
 			maxNumberOfUpperCaseLettersInLine = config.getInt("spam.MaxNumberOfUpperCaseLettersInLine", 15);
 			maxNumberOfUpperCaseWordsInLine = config.getInt("spam.MaxNumberOfUpperCaseWordsInLine", 3);
+			// Spam
 			lineIsProbablyDuplicate = config.getDouble("spam.LineIsProbablyDuplicate", 0.9);
 			secondsToRememberLines = config.getSeconds("spam.TimeSpanToRememberLines", 30);
 			maxNumberOfRepeatedLines = config.getInt("spam.MaxNumberOfRepeatedLines", 2);
+			chatCoolDownInSeconds = config.getSeconds("spam.ChatCoolDownTimeSpan", "30s");
+			chatCoolDownAllowedTimes = config.getInt("spam.ChatCoolDownAllowedTimes", 15);
+			// Mute
 			defaultTempMuteInSeconds = config.getSeconds("mute.DefaultTempMuteTimeSpan", 10);
 			defaultTempMuteReason = config.getString("mute.DefaultTempMuteReason", "Unspecified");
 			mutedCommands = config.getStringList("mute.MutedCommands");
@@ -116,6 +122,8 @@ public class Config {
 		public static ConfigurableMessage unmutedPlayer;
 		public static ConfigurableMessage tempMuteCommandDoc;
 		public static ConfigurableMessage unmuteCommandDoc;
+		public static ConfigurableMessage chattingTooFast;
+		public static ConfigurableMessage chatDuplicateMessage;
 
 		static void load(Configuration config) {
 			profanityNotFound = config.getConfigurableMessage("messages.ProfanityNotFound", 1,
@@ -152,10 +160,17 @@ public class Config {
 					"Player %s used the word \"%s\" (%s), that contains the blacklisted building block \"%s\".");
 			notifyAboutSimilar = config.getConfigurableMessage("messages.NotifyAboutSimilar", 4,
 					"Player %s used the word \"%s\" (%s), that is similar to the blacklisted word \"%s\".");
+			// Spam
+			chattingTooFast = config.getConfigurableMessage("messages.spam.ChattingTooFast", 3,
+					"You can't chat for another %d seconds (you are limited to %d messages per %d seconds)");
+			chatDuplicateMessage = config.getConfigurableMessage("messages.spam.ChatDuplicateMessage", 0,
+					"You are not allowed to enter the same message many times.");
+			// Mute
 			tempMutedPlayer = config.getConfigurableMessage("messages.mute.TempMutedPlayer", 3,
 					"Player %s has been muted %s with reason \"%s\".");
 			unmutedPlayer = config.getConfigurableMessage("messages.mute.UnmutedPlayer", 1,
 					"Player %s has been unmuted.");
+			// Doc
 			tempMuteCommandDoc = config.getConfigurableMessage("messages.doc.TempMuteCommand", 0,
 					"/eithoncop tempmute <player> [<time>] [<reason>]");
 			unmuteCommandDoc = config.getConfigurableMessage("messages.doc.UnmuteCommand", 0,

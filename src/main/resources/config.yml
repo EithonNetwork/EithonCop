@@ -116,7 +116,17 @@ spam:
   #
   # The time that we will keep old lines to check for duplicates
   #
-  MaxNumberOfRepeatedLines: 6
+  MaxNumberOfRepeatedLines: 3
+  
+  #
+  # The time that we have a restriction on the number of chats produced by a single player
+  #
+  ChatCoolDownTimeSpan: 30s
+  
+  #
+  # The maximum number of produced chats by a single player during the ChatCoolDownTimeSpan
+  #
+  ChatCoolDownAllowedTimes: 15
 
 mute:
   #
@@ -231,6 +241,18 @@ messages:
   #
   NotifyAboutComposed: "Player %s used the word \"%s\" (%s), that contains the blacklisted building block \"%s\"."
   
+  spam:
+    #
+    # Parameters: <number of messages>(%d), <seconds>(%d)
+    #
+    ChattingTooFast: "The chat intensity is limited per player, maximum is %d messages per %d seconds."
+    
+    #
+    # Parameters: -
+    #
+    ChatDuplicateMessage: "You are not allowed to repeat the same message many times."
+
+  
   mute:
     #
     # Parameters: <player name>(%s), <time>(%s), <reason>(%s)
@@ -245,4 +267,3 @@ messages:
   doc:
      TempMuteCommand: "/tempmute <player> [<time>] [<reason>]"
      UnmuteCommand: "/unmute <player>"
-    

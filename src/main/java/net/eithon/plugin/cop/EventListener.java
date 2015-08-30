@@ -8,7 +8,6 @@ import net.eithon.plugin.cop.logic.Controller;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import com.dthielke.herochat.Channel;
@@ -24,6 +23,7 @@ public final class EventListener implements Listener {
 		this._controller = controller;
 	}
 
+	/*
 	// Censor chats
 	@EventHandler
 	public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent e) {
@@ -35,7 +35,7 @@ public final class EventListener implements Listener {
 		if (newMessage == null) e.setCancelled(true);
 		else e.setMessage(newMessage);
 		verbose("onAsyncPlayerChatEvent", "Leave:  \"%s\".", newMessage == null ? "null" : newMessage);
-	}
+	}*/
 
 	// Censor channel chats, mute channel chats
 	@EventHandler
@@ -45,7 +45,7 @@ public final class EventListener implements Listener {
 		String newMessage = originalMessage;
 		Player player = e.getSender().getPlayer();
 
-		if (isPrivateChannel(e.getChannel())) {
+		if (!isPrivateChannel(e.getChannel())) {
 			newMessage = this._controller.censorMessage(player, originalMessage);
 			if (newMessage == null) e.setResult(null);
 			else e.setMessage(newMessage);

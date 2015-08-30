@@ -2,6 +2,7 @@ package net.eithon.plugin.cop.logic;
 
 import net.eithon.library.extensions.EithonPlayer;
 import net.eithon.library.extensions.EithonPlugin;
+import net.eithon.plugin.cop.Config;
 import net.eithon.plugin.cop.profanity.ProfanityFilterController;
 import net.eithon.plugin.cop.spam.SpamController;
 
@@ -54,9 +55,20 @@ public class Controller {
 
 	public String censorMessage(Player player, String originalMessage) {
 		if (originalMessage == null) return null;
+		if (this._spamController.isTooFast(player)) {
+			Config.M.chattingTooFast.sendMessage(
+					player, 
+					Config.V.chatCoolDownAllowedTimes,
+					Config.V.chatCoolDownInSeconds,
+					this._spamController.secondsLeft(player));
+			return null;
+		}
 		String maybeLowerase = this._spamController.reduceUpperCaseUsage(player, originalMessage);
 		String profaneMessage = this._profanityFilterController.profanityFilter(player, maybeLowerase);
-		if (this._spamController.isDuplicate(player, profaneMessage)) return null;
+		if (this._spamController.isDuplicate(player, profaneMessage)) {
+			Config.M.chatDuplicateMessage.sendMessage(player);
+			return null;
+		}
 		return profaneMessage;
 	}
 

@@ -1,6 +1,6 @@
 name: EithonCop
 main: net.eithon.plugin.cop.Plugin
-version: 1.2
+version: 1.3
 author: vanbrayne
 depend: [EithonLibrary]
 description: A Minecraft plugin
@@ -19,6 +19,8 @@ permissions:
     eithoncop.unmute: true
     eithoncop.notify-about-profanity: true
     eithoncop.notify-about-similar: true
+    eithoncop.spam.has-no-cool-down: true
+    eithoncop.spam.can-repeat-messages: true
   eithoncop.blacklist:
     description: Access to /eithoncop blacklist commands
     default: op
@@ -37,3 +39,10 @@ permissions:
   eithoncop.notify-about-similar:
     description: Get notified when someone uses a word similar to a blacklisted word
     default: op
+  eithoncop.spam.has-no-cool-down:
+    description: The chat cool down rules are not applied if a player has this permission
+    default: op
+  eithoncop.spam.can-repeat-messages:
+    description: The spam repeat rules are not applied if a player has this permission
+    default: op
+
