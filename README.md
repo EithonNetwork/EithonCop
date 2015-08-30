@@ -4,8 +4,9 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
-### dev
+### 1.3 (2015-08-30)
 
+* CHANGE: Added cool down for number of chat messages per second.
 * CHANGE: Now only censors messages that comes through HeroChat.
 
 ### 1.2 (2015-08-28)
