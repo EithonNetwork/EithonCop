@@ -57,11 +57,13 @@ public class SpamController {
 	}
 
 	public boolean isDuplicate(Player player, String line) {
+		if (player.hasPermission("eithoncop.spam.can-repeat-messages")) return false;
 		int sameMessages = 1 + this._repeatedLines.numberOfDuplicates(player, line);
 		return sameMessages > Config.V.maxNumberOfRepeatedLines;
 	}
 
 	public boolean isTooFast(Player player) {
+		if (player.hasPermission("eithoncop.spam.has-no-cool-down")) return false;
 		return this._chatCoolDown.addIncidentOrFalse(player);
 	}
 

@@ -126,7 +126,7 @@ spam:
   #
   # The maximum number of produced chats by a single player during the ChatCoolDownTimeSpan
   #
-  ChatCoolDownAllowedTimes: 10
+  ChatCoolDownAllowedTimes: 15
 
 mute:
   #

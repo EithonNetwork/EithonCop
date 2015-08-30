@@ -80,7 +80,7 @@ public class Config {
 			secondsToRememberLines = config.getSeconds("spam.TimeSpanToRememberLines", 30);
 			maxNumberOfRepeatedLines = config.getInt("spam.MaxNumberOfRepeatedLines", 2);
 			chatCoolDownInSeconds = config.getSeconds("spam.ChatCoolDownTimeSpan", "30s");
-			chatCoolDownAllowedTimes = config.getInt("spam.ChatCoolDownAllowedTimes", 10);
+			chatCoolDownAllowedTimes = config.getInt("spam.ChatCoolDownAllowedTimes", 15);
 			// Mute
 			defaultTempMuteInSeconds = config.getSeconds("mute.DefaultTempMuteTimeSpan", 10);
 			defaultTempMuteReason = config.getString("mute.DefaultTempMuteReason", "Unspecified");
