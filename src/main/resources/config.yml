@@ -267,4 +267,3 @@ messages:
   doc:
      TempMuteCommand: "/tempmute <player> [<time>] [<reason>]"
      UnmuteCommand: "/unmute <player>"
-    
