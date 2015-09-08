@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.ChannelChatEvent;
-import com.dthielke.herochat.Chatter;
 
 public final class EventListener implements Listener {
 
@@ -43,12 +42,11 @@ public final class EventListener implements Listener {
 	public void onChannelChatEvent(ChannelChatEvent e) {
 		Player player = e.getSender().getPlayer();
 		String originalMessage = e.getMessage();
-		verbose("onChannelChatEvent", "Enter:  %s sendt \"%s\".", player.getName(), originalMessage);
+		verbose("onChannelChatEvent", "Enter:  %s sending on channel %s: \"%s\".", player.getName(), e.getChannel().getName(), originalMessage);
 		String newMessage = originalMessage;
 
 		if (isPrivateChannel(e.getChannel())) {
 			verbose("onChannelChatEvent", "The message will not be censored, because the channel was private.");			
-			verbose("onChannelChatEvent", "There are currently %d on-line players on the server.", player.getServer().getOnlinePlayers().size());			
 		} else {
 			newMessage = this._controller.censorMessage(player, originalMessage);
 			if (newMessage == null) e.setResult(null);
@@ -64,19 +62,8 @@ public final class EventListener implements Listener {
 	}
 
 	private boolean isPrivateChannel(Channel channel) {
-		final boolean isPrivate = channel.getMembers().size() < 3;
-		if (this._eithonPlugin.getEithonLogger().shouldDebug(DebugPrintLevel.VERBOSE)) {
-			String chatterNames = "";
-			for (Chatter chatter : channel.getMembers()) {
-				if (!chatterNames.isEmpty()) chatterNames += ", ";
-				chatterNames += chatter.getName();
-			}
-			verbose("isPrivateChannel", "The channel %s has the following members: %s",
-					channel.getName(), chatterNames);			
-			verbose("isPrivateChannel", "The channel %s has %d members, so considered %s",
-					channel.getName(), channel.getMembers().size(), isPrivate ? "private" : "public");	
-		}
-		return isPrivate;
+		if (channel.getMembers().size() > 2) return false;
+		return channel.getName().startsWith("convo");
 	}
 
 	// Mute certain commands
