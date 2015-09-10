@@ -243,9 +243,9 @@ messages:
   
   spam:
     #
-    # Parameters: <number of messages>(%d), <seconds>(%d)
+    # Parameters: <wait seconds>%d, <number of messages>(%d), <seconds>(%d)
     #
-    ChattingTooFast: "The chat intensity is limited per player, maximum is %d messages per %d seconds."
+    ChattingTooFast: "You can't chat for another %d seconds (you are limited to %d messages per %d seconds)"
     
     #
     # Parameters: -

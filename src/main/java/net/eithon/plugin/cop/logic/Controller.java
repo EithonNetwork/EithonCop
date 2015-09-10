@@ -1,7 +1,9 @@
 package net.eithon.plugin.cop.logic;
 
+import net.eithon.library.core.CoreMisc;
 import net.eithon.library.extensions.EithonPlayer;
 import net.eithon.library.extensions.EithonPlugin;
+import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.plugin.cop.Config;
 import net.eithon.plugin.cop.profanity.ProfanityFilterController;
 import net.eithon.plugin.cop.spam.SpamController;
@@ -13,8 +15,10 @@ public class Controller {
 	private ProfanityFilterController _profanityFilterController;
 	private SpamController _spamController;
 	private MuteController _muteController;
+	private EithonPlugin _eithonPlugin;
 	
 	public Controller(EithonPlugin eithonPlugin){
+		this._eithonPlugin = eithonPlugin;
 		this._profanityFilterController = new ProfanityFilterController(eithonPlugin);
 		this._spamController = new SpamController(eithonPlugin);
 		this._muteController = new MuteController(eithonPlugin);
@@ -54,21 +58,26 @@ public class Controller {
 	}
 
 	public String censorMessage(Player player, String originalMessage) {
+		verbose("censorMessage", "Enter, Player %s: \"%s\"", player.getName(), originalMessage);
 		if (originalMessage == null) return null;
 		if (this._spamController.isTooFast(player)) {
+			verbose("censorMessage", "Leave, Player %s: too fast! Return null", player.getName());
 			Config.M.chattingTooFast.sendMessage(
-					player, 
+					player,
+					this._spamController.secondsLeft(player), 
 					Config.V.chatCoolDownAllowedTimes,
-					Config.V.chatCoolDownInSeconds,
-					this._spamController.secondsLeft(player));
+					Config.V.chatCoolDownInSeconds);
 			return null;
 		}
 		String maybeLowerase = this._spamController.reduceUpperCaseUsage(player, originalMessage);
 		String profaneMessage = this._profanityFilterController.profanityFilter(player, maybeLowerase);
+		verbose("censorMessage", "Player %s: Case and profanity fixed: \"%s\"", player.getName(), profaneMessage);
 		if (this._spamController.isDuplicate(player, profaneMessage)) {
+			verbose("censorMessage", "Leave, Player %s: Duplicates! Return null", player.getName());
 			Config.M.chatDuplicateMessage.sendMessage(player);
 			return null;
 		}
+		verbose("censorMessage", "Player %s: Leave, return \"%s\"", player.getName(), profaneMessage);
 		return profaneMessage;
 	}
 
@@ -78,5 +87,10 @@ public class Controller {
 
 	public boolean isPlayerMutedForCommand(Player player, String command) {
 		return this._muteController.isPlayerMutedForCommand(player, command);
+	}
+
+	private void verbose(String method, String format, Object... args) {
+		String message = CoreMisc.safeFormat(format, args);
+		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Controller.%s: %s", method, message);
 	}
 }

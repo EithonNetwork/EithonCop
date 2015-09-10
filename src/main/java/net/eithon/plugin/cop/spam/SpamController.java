@@ -64,7 +64,7 @@ public class SpamController {
 
 	public boolean isTooFast(Player player) {
 		if (player.hasPermission("eithoncop.spam.has-no-cool-down")) return false;
-		return this._chatCoolDown.addIncidentOrFalse(player);
+		return !this._chatCoolDown.addIncidentOrFalse(player);
 	}
 
 	public long secondsLeft(Player player) {

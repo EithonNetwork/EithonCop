@@ -40,12 +40,14 @@ public final class EventListener implements Listener {
 	// Censor channel chats, mute channel chats
 	@EventHandler
 	public void onChannelChatEvent(ChannelChatEvent e) {
-		String originalMessage = e.getMessage();
-		verbose("onChannelChatEvent", "Enter:  \"%s\".", originalMessage);
-		String newMessage = originalMessage;
 		Player player = e.getSender().getPlayer();
+		String originalMessage = e.getMessage();
+		verbose("onChannelChatEvent", "Enter:  %s sending on channel %s: \"%s\".", player.getName(), e.getChannel().getName(), originalMessage);
+		String newMessage = originalMessage;
 
-		if (!isPrivateChannel(e.getChannel())) {
+		if (isPrivateChannel(e.getChannel())) {
+			verbose("onChannelChatEvent", "The message will not be censored, because the channel was private.");			
+		} else {
 			newMessage = this._controller.censorMessage(player, originalMessage);
 			if (newMessage == null) e.setResult(null);
 			else e.setMessage(newMessage);
@@ -60,7 +62,8 @@ public final class EventListener implements Listener {
 	}
 
 	private boolean isPrivateChannel(Channel channel) {
-		return channel.getMembers().size() < 3;
+		if (channel.getMembers().size() > 2) return false;
+		return channel.getName().startsWith("convo");
 	}
 
 	// Mute certain commands

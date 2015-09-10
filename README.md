@@ -4,6 +4,18 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.3.3 (2015-09-08)
+
+* BUG: Now has new condition for private channels; < 3 channel members and channel name starting with "convo".
+
+### 1.3.2 (2015-08-30)
+
+* BUG: No blacklisted word was handled. Added debug messages.
+
+### 1.3.1 (2015-08-30)
+
+* BUG: Any message was considered to be too fast.
+
 ### 1.3 (2015-08-30)
 
 * CHANGE: Added cool down for number of chat messages per second.
