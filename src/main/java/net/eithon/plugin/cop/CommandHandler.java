@@ -55,8 +55,7 @@ public class CommandHandler implements ICommandHandler {
 
 		if (subCommand.equalsIgnoreCase("add")) {
 			if (!commandParser.hasCorrectNumberOfArgumentsOrShowSyntax(3)) return;
-			int isLiteralAsInt = commandParser.getArgumentInteger(1);
-			boolean isLiteral = isLiteralAsInt != 0;
+			boolean isLiteral = commandParser.getArgumentBoolean(true);
 			String synonyms = commandParser.getArgumentRest();
 			String word = this._controller.addProfanity(sender, profanity, isLiteral, synonyms);
 			if (word == null) return;
