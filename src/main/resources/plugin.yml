@@ -1,6 +1,6 @@
 name: EithonCop
 main: net.eithon.plugin.cop.Plugin
-version: 1.3.4
+version: 1.4
 author: vanbrayne
 depend: [EithonLibrary]
 description: A Minecraft plugin

@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.4 (2015-10-18)
+
+* CHANGE: Refactoring EithonLibrary.
+
 ### 1.3.4 (2015-09-17)
 
 * BUG: Could not handle text instead of boolean in commands gracefully.
