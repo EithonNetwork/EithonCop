@@ -7,13 +7,13 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 
-import net.eithon.library.json.IJson;
+import net.eithon.library.json.JsonObject;
 import net.eithon.plugin.cop.Config;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-class Profanity implements IJson<Profanity> {
+class Profanity extends JsonObject<Profanity> {
 	static final int PROFANITY_LEVEL_NONE = 0;
 	static final int PROFANITY_LEVEL_LITERAL = 1;
 	static final int PROFANITY_LEVEL_COMPOSED = 2;
