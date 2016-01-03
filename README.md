@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.4.1 (2016-01-02)
+
+* BUG: Did not catch messages to IRC via PurpleIRC.
+
 ### 1.4 (2015-10-18)
 
 * CHANGE: Refactoring EithonLibrary.

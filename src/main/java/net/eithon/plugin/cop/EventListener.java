@@ -7,7 +7,9 @@ import net.eithon.plugin.cop.logic.Controller;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import com.dthielke.herochat.Channel;
@@ -23,22 +25,29 @@ public final class EventListener implements Listener {
 		this._controller = controller;
 	}
 
-	/*
-	// Censor chats
-	@EventHandler
-	public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent e) {
-		if (e.isCancelled()) return;
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onAsyncPlayerChatEventLowest(AsyncPlayerChatEvent e) {
 		String originalMessage = e.getMessage();
-		verbose("onAsyncPlayerChatEvent", "Enter:  \"%s\".", originalMessage);
+		Player player = e.getPlayer();
+		verbose("onAsyncPlayerChatEvent", "Enter:  %s sending: \"%s\".", player.getName(), originalMessage);
+		String newMessage = originalMessage;
 
-		String newMessage = this._controller.censorMessage(e.getPlayer(), originalMessage);
+		newMessage = this._controller.censorMessage(player, originalMessage);
 		if (newMessage == null) e.setCancelled(true);
 		else e.setMessage(newMessage);
+
+		if (this._controller.isMuted(player)) {
+			newMessage = null;
+			e.setCancelled(true);
+			verbose("onAsyncPlayerChatEvent", "Leave: Trying to mute player %s from sending message \"%s\".",
+					player.getName(), originalMessage);
+			return;
+		}
 		verbose("onAsyncPlayerChatEvent", "Leave:  \"%s\".", newMessage == null ? "null" : newMessage);
-	}*/
+	}
 
 	// Censor channel chats, mute channel chats
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onChannelChatEvent(ChannelChatEvent e) {
 		Player player = e.getSender().getPlayer();
 		String originalMessage = e.getMessage();
