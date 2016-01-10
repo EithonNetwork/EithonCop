@@ -4,6 +4,14 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.4.3 (2016-01-10)
+
+* BUG: All messages was censored twice, leading to spam filter actions.
+
+### 1.4.2 (2016-01-10)
+
+* BUG: Links with capital letters could trigger a conversion to lowercase.
+
 ### 1.4.1 (2016-01-02)
 
 * BUG: Did not catch messages to IRC via PurpleIRC.

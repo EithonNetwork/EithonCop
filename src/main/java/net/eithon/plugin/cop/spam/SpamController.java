@@ -18,11 +18,16 @@ public class SpamController {
 
 	public String reduceUpperCaseUsage(Player player, String message) {
 		if (message == null) return null;
-		if (hasTooManyUpperCaseLetters(message)
-				|| hasTooManyUpperCaseWords(message)) {
+		String textMessage = removeHttpLinks(message);
+		if (hasTooManyUpperCaseLetters(textMessage)
+				|| hasTooManyUpperCaseWords(textMessage)) {
 			return message.toLowerCase();
 		}
 		return message;
+	}
+
+	private String removeHttpLinks(String message) {
+		return message.replaceAll("\\b(https?|ftp|file)://\\S+", "");
 	}
 
 	private boolean hasTooManyUpperCaseWords(String message) {
