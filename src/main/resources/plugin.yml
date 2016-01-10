@@ -1,6 +1,6 @@
 name: EithonCop
 main: net.eithon.plugin.cop.Plugin
-version: 1.4.2
+version: 1.4.3
 author: vanbrayne
 depend: [EithonLibrary, Herochat]
 description: A Minecraft plugin

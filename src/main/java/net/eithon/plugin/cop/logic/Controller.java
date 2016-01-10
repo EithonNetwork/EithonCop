@@ -16,7 +16,7 @@ public class Controller {
 	private SpamController _spamController;
 	private MuteController _muteController;
 	private EithonPlugin _eithonPlugin;
-	
+
 	public Controller(EithonPlugin eithonPlugin){
 		this._eithonPlugin = eithonPlugin;
 		this._profanityFilterController = new ProfanityFilterController(eithonPlugin);
@@ -62,12 +62,15 @@ public class Controller {
 		if (originalMessage == null) return null;
 		if (this._spamController.isTooFast(player)) {
 			verbose("censorMessage", "Leave, Player %s: too fast! Return null", player.getName());
-			Config.M.chattingTooFast.sendMessage(
-					player,
-					this._spamController.secondsLeft(player), 
-					Config.V.chatCoolDownAllowedTimes,
-					Config.V.chatCoolDownInSeconds);
-			return null;
+			long secondsLeft = this._spamController.secondsLeft(player);
+			if (secondsLeft > 0) {
+				Config.M.chattingTooFast.sendMessage(
+						player,
+						secondsLeft, 
+						Config.V.chatCoolDownAllowedTimes,
+						Config.V.chatCoolDownInSeconds);
+				return null;
+			}
 		}
 		String maybeLowerase = this._spamController.reduceUpperCaseUsage(player, originalMessage);
 		String profaneMessage = this._profanityFilterController.profanityFilter(player, maybeLowerase);

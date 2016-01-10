@@ -25,6 +25,7 @@ public final class EventListener implements Listener {
 		this._controller = controller;
 	}
 
+	/*
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onAsyncPlayerChatEventLowest(AsyncPlayerChatEvent e) {
 		String originalMessage = e.getMessage();
@@ -45,6 +46,7 @@ public final class EventListener implements Listener {
 		}
 		verbose("onAsyncPlayerChatEvent", "Leave:  \"%s\".", newMessage == null ? "null" : newMessage);
 	}
+	*/
 
 	// Censor channel chats, mute channel chats
 	@EventHandler(priority = EventPriority.LOWEST)
