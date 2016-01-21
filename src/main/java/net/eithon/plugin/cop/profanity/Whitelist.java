@@ -149,6 +149,10 @@ class Whitelist {
 		return file;
 	}
 
+	public String[] getAllWords() {
+		return this._whitelist.keySet().toArray(new String[0]);
+	}
+
 	private void verbose(String method, String format, Object... args) {
 		String message = String.format(format, args);
 		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Whitelist.%s(): %s", method, message);

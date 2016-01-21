@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.5 (2016-01-??)
+
+* NEW: Moved the freeze command here from EithonFixes
+
 ### 1.4.3 (2016-01-10)
 
 * BUG: All messages was censored twice, leading to spam filter actions.

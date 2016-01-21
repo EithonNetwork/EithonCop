@@ -49,6 +49,8 @@ public class Config {
 		public static List<String> mutedCommands;
 		public static long chatCoolDownInSeconds;
 		public static int chatCoolDownAllowedTimes;
+		public static double freezeRestoreWalkSpeed;
+		public static double freezeRestoreFlySpeed;
 		
 		static void load(Configuration config) {
 			profanityBuildingBlocks = config.getStringList("ProfanityBuildingBlocks").toArray(new String[0]);
@@ -85,6 +87,9 @@ public class Config {
 			defaultTempMuteInSeconds = config.getSeconds("mute.DefaultTempMuteTimeSpan", 10);
 			defaultTempMuteReason = config.getString("mute.DefaultTempMuteReason", "Unspecified");
 			mutedCommands = config.getStringList("mute.MutedCommands");
+			// Freeze
+			freezeRestoreWalkSpeed = config.getDouble("freeze.FreezeRestoreWalkSpeed", 0.2);
+			freezeRestoreFlySpeed = config.getDouble("freeze.FreezeRestoreFlySpeed", 0.2);
 		}
 
 	}
@@ -124,6 +129,12 @@ public class Config {
 		public static ConfigurableMessage unmuteCommandDoc;
 		public static ConfigurableMessage chattingTooFast;
 		public static ConfigurableMessage chatDuplicateMessage;
+		public static ConfigurableMessage playerAlreadyFrozen;
+		public static ConfigurableMessage playerNotFrozen;
+		public static ConfigurableMessage playerFrozen;
+		public static ConfigurableMessage playerThawn;
+		public static ConfigurableMessage frozenPlayerCannotTeleport;
+		public static ConfigurableMessage playerRestored;
 
 		static void load(Configuration config) {
 			profanityNotFound = config.getConfigurableMessage("messages.ProfanityNotFound", 1,
@@ -175,6 +186,19 @@ public class Config {
 					"/eithoncop tempmute <player> [<time>] [<reason>]");
 			unmuteCommandDoc = config.getConfigurableMessage("messages.doc.UnmuteCommand", 0,
 					"/eithoncop unmute <player>");
+			// Freeze
+			playerAlreadyFrozen = config.getConfigurableMessage("messages.freeze.PlayerAlreadyFrozen", 1,
+					"The player %s has already been frozen.");
+			playerNotFrozen = config.getConfigurableMessage("messages.freeze.PlayerNotFrozen", 1,
+					"The player %s can't be thawn - was not frozen.");
+			playerFrozen = config.getConfigurableMessage("messages.freeze.PlayerFrozen", 1,
+					"The player %s has now been frozen.");
+			playerThawn = config.getConfigurableMessage("messages.freeze.PlayerThawn", 1,
+					"The player %s has now been thawn.");
+			playerRestored = config.getConfigurableMessage("messages.freeze.PlayerRestored", 1,
+					"The player %s has now been restored.");
+			frozenPlayerCannotTeleport = config.getConfigurableMessage("messages.freeze.FrozenPlayerCannotTeleport", 0,
+					"You have been frozen and are not allowed to teleport.");
 		}		
 	}
 

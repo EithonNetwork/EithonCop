@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import net.eithon.library.core.CoreMisc;
 import net.eithon.library.extensions.EithonPlugin;
@@ -191,5 +193,13 @@ public class ProfanityFilterController {
 	void verbose(String method, String format, Object... args) {
 		String message = CoreMisc.safeFormat(format, args);
 		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "ProfanityFilterController.%s: %s", method, message);
+	}
+
+	public List<String> getAllBlacklistedWords() {
+		return Arrays.asList(this._blacklist.getAllWords());
+	}
+
+	public List<String> getAllWhitelistedWords() {
+		return Arrays.asList(this._whitelist.getAllWords());
 	}
 }

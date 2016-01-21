@@ -143,6 +143,20 @@ mute:
   # All commands that are muted.
   #
   MutedCommands: ["me"]
+ 
+freeze:
+
+  #
+  # If the "freeze off" command fails to restore the player, you can use "freeze restore" command.
+  # It will restore the walk speed to this value 
+  #
+  FreezeRestoreWalkSpeed: 0.2
+
+  #
+  # If the "freeze off" command fails to restore the player, you can use "freeze restore" command.
+  # It will restore the fly speed to this value 
+  #
+  FreezeRestoreFlySpeed: 0.2
 
 commands:
 
@@ -267,3 +281,31 @@ messages:
   doc:
      TempMuteCommand: "/tempmute <player> [<time>] [<reason>]"
      UnmuteCommand: "/unmute <player>"
+     
+  freeze:
+  
+
+    #
+    # Parameters: <player name> (%s)
+    PlayerAlreadyFrozen: "The player %s has already been frozen."
+
+    #
+    # Parameters: <player name> (%s)
+    PlayerFrozen: "The player %s has now been frozen."
+
+    #
+    # Parameters: <player name> (%s)
+    PlayerNotFrozen: "The player %s can"t be thawn - was not frozen."
+
+    #
+    # Parameters: <player name> (%s)
+    PlayerThawn: "The player %s has now been thawn."
+
+    #
+    # Parameters: <player name> (%s)
+    PlayerRestored: "The player %s has now been restored."
+
+    #
+    # Parameters: -
+    FrozenPlayerCannotTeleport: "You have been frozen and are not allowed to teleport."
+  

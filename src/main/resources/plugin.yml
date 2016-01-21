@@ -7,7 +7,7 @@ description: A Minecraft plugin
 commands:
   eithoncop:
     description: Police activities
-    usage: /eithoncop blacklist | whitelist | tempmute | unmute
+    usage: /eithoncop blacklist | whitelist | tempmute | unmute | freeze
     permission-message: You don't have <permission>
 permissions:
   eithoncop.*:
@@ -21,6 +21,10 @@ permissions:
     eithoncop.notify-about-similar: true
     eithoncop.spam.has-no-cool-down: true
     eithoncop.spam.can-repeat-messages: true
+    eithoncop.freeze.on : true
+    eithoncop.freeze.off : true
+    eithoncop.freeze.restore : true
+    eithoncop.freeze.list : true
   eithoncop.blacklist:
     description: Access to /eithoncop blacklist commands
     default: op
@@ -32,6 +36,18 @@ permissions:
     default: op
   eithoncop.unmute:
     description: Access to /eithoncop unmute commands
+    default: op
+  eithoncop.freeze.on:
+    description: Access to /eithoncop freeze on command
+    default: op
+  eithoncop.freeze.off:
+    description: Access to /eithoncop freeze off command
+    default: op
+  eithoncop.freeze.restore:
+    description: Access to /eithoncop freeze restore command
+    default: op
+  eithoncop.freeze.list:
+    description: Access to /eithoncop freeze list command
     default: op
   eithoncop.notify-about-profanity:
     description: Get notified when someone uses a blacklisted word
