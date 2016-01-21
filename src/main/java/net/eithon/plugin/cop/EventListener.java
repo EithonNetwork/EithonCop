@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 
 import com.dthielke.herochat.Channel;
 import com.dthielke.herochat.ChannelChatEvent;
@@ -103,13 +104,13 @@ public final class EventListener implements Listener {
 	public void onPlayerTeleportEvent(PlayerTeleportEvent event) {
 		verbose("onPlayerTeleportEvent", "Enter");
 		Player player = event.getPlayer();
-		
-		if (this._controller.isFrozen(player)) {
-			verbose("onPlayerTeleportEvent", "Player is frozen. Cancel and return.");
-			Config.M.frozenPlayerCannotTeleport.sendMessage(player);
-			event.setCancelled(true);
-			return;
-		}
+
+		if (this._controller.canTeleport(player)) return;
+
+		verbose("onPlayerTeleportEvent", "Player is frozen. Cancel and return.");
+		Config.M.frozenPlayerCannotTeleport.sendMessage(player);
+		event.setCancelled(true);
+		return;
 	}
 
 	// Frozen players can't interact
@@ -124,7 +125,7 @@ public final class EventListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
 		verbose("onEntityDamageByEntityEvent", "Enter");
-		
+
 		// Frozen player is the damager?
 		if (event.getDamager() instanceof Player) {
 			Player player = (Player) event.getDamager();
@@ -156,7 +157,7 @@ public final class EventListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockBreakEvent(BlockBreakEvent event) {
 		verbose("onBlockBreakEvent", "Enter");
-		
+
 		// Frozen player is the damager?
 		Player player = event.getPlayer();
 		verbose("onBlockBreakEvent", "Player %s is breaking a block.", player.getName());
@@ -167,7 +168,7 @@ public final class EventListener implements Listener {
 			verbose("onBlockBreakEvent", "Leave");
 			return;
 		}
-		
+
 		verbose("onBlockBreakEvent", "Leave");
 	}			
 
@@ -175,7 +176,7 @@ public final class EventListener implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockPlaceEvent(BlockPlaceEvent event) {
 		verbose("onBlockPlaceEvent", "Enter");
-		
+
 		// Frozen player is the damager?
 		Player player = event.getPlayer();
 		verbose("onBlockPlaceEvent", "Player %s is placing a block.", player.getName());
@@ -186,8 +187,25 @@ public final class EventListener implements Listener {
 			verbose("onBlockPlaceEvent", "Leave");
 			return;
 		}
-		
+
 		verbose("onBlockPlaceEvent", "Leave");
+	}		
+
+	// Frozen players should not be able to be damaged or damage
+	@EventHandler(ignoreCancelled = true)
+	public void onPlayerToggleSprintEvent(PlayerToggleSprintEvent event) {
+		verbose("onPlayerToggleSprintEvent", "Enter");
+
+		if (!event.isSprinting()) return;
+		
+		// Frozen player is the damager?
+		Player player = event.getPlayer();
+		if (this._controller.isFrozen(player)) {
+			event.setCancelled(true);
+			return;
+		}
+
+		verbose("onPlayerToggleSprintEvent", "Leave");
 	}
 
 	private void verbose(String method, String format, Object... args) {

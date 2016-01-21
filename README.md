@@ -6,7 +6,9 @@ A Cop plugin for Minecraft.
 
 ### 1.5 (2016-01-??)
 
-* NEW: Moved the freeze command here from EithonFixes
+* NEW: Moved the freeze command here from EithonFixes.
+* CHANGE: Now teleports frozen players back to their original location every second.
+* CHANGE: Frozen players are now set to fly mode while frozen.
 
 ### 1.4.3 (2016-01-10)
 

@@ -22,7 +22,7 @@ public class CommandHandler {
 	public CommandHandler(EithonPlugin eithonPlugin, Controller controller) {
 		this._controller = controller;
 
-		ICommandSyntax commandSyntax = EithonCommand.createRootCommand("eithonfixes");
+		ICommandSyntax commandSyntax = EithonCommand.createRootCommand("eithoncop");
 		commandSyntax.setPermissionsAutomatically();
 
 		try {
@@ -53,7 +53,7 @@ public class CommandHandler {
 		
 		ICommandSyntax unmute = commandSyntax.parseCommandSyntax("unmute <player>");
 		
-		tempmute
+		unmute
 		.getParameterSyntax("player")
 		.setMandatoryValues(ec -> getMutedPlayerNames(ec));
 	}

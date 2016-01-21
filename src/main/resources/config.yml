@@ -295,7 +295,7 @@ messages:
 
     #
     # Parameters: <player name> (%s)
-    PlayerNotFrozen: "The player %s can"t be thawn - was not frozen."
+    PlayerNotFrozen: "The player %s can't be thawn - was not frozen."
 
     #
     # Parameters: <player name> (%s)

@@ -8,6 +8,7 @@ import net.eithon.library.core.PlayerCollection;
 import net.eithon.library.extensions.EithonPlayer;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
+import net.eithon.library.time.AlarmTrigger;
 import net.eithon.plugin.cop.Config;
 import net.eithon.plugin.cop.profanity.ProfanityFilterController;
 import net.eithon.plugin.cop.spam.SpamController;
@@ -22,6 +23,8 @@ public class Controller {
 	private MuteController _muteController;
 	private EithonPlugin _eithonPlugin;
 	private PlayerCollection<FrozenPlayer> _frozenPlayers;
+	private int _repeatCount;
+	private boolean _needNewRepeat ;
 
 	public Controller(EithonPlugin eithonPlugin){
 		this._eithonPlugin = eithonPlugin;
@@ -29,6 +32,7 @@ public class Controller {
 		this._spamController = new SpamController(eithonPlugin);
 		this._muteController = new MuteController(eithonPlugin);
 		this._frozenPlayers = new PlayerCollection<FrozenPlayer>();
+		this._needNewRepeat = true;
 	}
 
 	public void disable() {
@@ -104,12 +108,28 @@ public class Controller {
 		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Controller.%s: %s", method, message);
 	}
 
+	public List<String> getMutePlayerNames() {
+		return this._muteController.getMutedPlayers().stream().map(p->p.getName()).collect(Collectors.toList());
+	}
+
+	public List<String> getAllBlacklistedWords() {
+		return this._profanityFilterController.getAllBlacklistedWords();
+	}
+
+	public List<String> getAllWhitelistedWords() {
+		return this._profanityFilterController.getAllWhitelistedWords();
+	}
+
 	public boolean freezePlayer(CommandSender sender, Player player) {
 		if (this._frozenPlayers.hasInformation(player)) {
 			Config.M.playerAlreadyFrozen.sendMessage(sender, player.getName());
 			return false;
 		}
 		this._frozenPlayers.put(player, new FrozenPlayer(player));
+		if (this._needNewRepeat) {
+			this._needNewRepeat = false;
+			repeatedlyTeleportFrozenPlayers(this._repeatCount);
+		}
 		return true;
 	}
 
@@ -121,6 +141,10 @@ public class Controller {
 		}
 		frozenPlayer.thaw();
 		this._frozenPlayers.remove(player);
+		if (this._frozenPlayers.size() == 0) {
+			this._repeatCount++;
+			this._needNewRepeat = true;
+		}
 		return true;
 	}
 
@@ -131,6 +155,12 @@ public class Controller {
 
 	public boolean isFrozen(Player player) {
 		return this._frozenPlayers.hasInformation(player);
+	}
+
+	public boolean canTeleport(Player player) {
+		FrozenPlayer frozenPlayer = this._frozenPlayers.get(player);
+		if (frozenPlayer == null) return true;
+		return frozenPlayer.canTeleport();
 	}
 
 	public List<String> getFrozenPlayerNames() {
@@ -146,16 +176,17 @@ public class Controller {
 			sender.sendMessage(frozenPlayer.getName());
 		}
 	}
-
-	public List<String> getMutePlayerNames() {
-		return this._muteController.getMutedPlayers().stream().map(p->p.getName()).collect(Collectors.toList());
+	
+	public void repeatedlyTeleportFrozenPlayers(final int count) {
+		AlarmTrigger.get().repeat("KeepPlayersFrozen", 1, () -> {
+			teleportFrozenPlayers(); 
+			return count == this._repeatCount;
+			});
 	}
 
-	public List<String> getAllBlacklistedWords() {
-		return this._profanityFilterController.getAllBlacklistedWords();
-	}
-
-	public List<String> getAllWhitelistedWords() {
-		return this._profanityFilterController.getAllWhitelistedWords();
+	private void teleportFrozenPlayers() {
+		for (FrozenPlayer frozenPlayer : this._frozenPlayers) {
+			frozenPlayer.telePortBack();
+		}
 	}
 }
