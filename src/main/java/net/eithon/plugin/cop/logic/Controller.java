@@ -154,7 +154,9 @@ public class Controller {
 	}
 
 	public boolean isFrozen(Player player) {
-		return this._frozenPlayers.hasInformation(player);
+		FrozenPlayer frozenPlayer = this._frozenPlayers.get(player);
+		if (frozenPlayer == null) return false;
+		return frozenPlayer.isFrozen();
 	}
 
 	public boolean canTeleport(Player player) {

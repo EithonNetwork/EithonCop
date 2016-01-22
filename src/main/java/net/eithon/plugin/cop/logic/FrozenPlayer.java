@@ -17,11 +17,15 @@ public class FrozenPlayer {
 	private boolean _isFlying;
 	private Location _location;
 	private boolean _canTeleport;
+	private boolean _allowFlight;
+	private boolean _isFrozen;
 
 	public FrozenPlayer(Player player) {
+		this._isFrozen = false;
 		this._eithonPlayer = new EithonPlayer(player);
 		this._location = player.getLocation();
 		freeze();
+		this._isFrozen = true;
 	}
 
 	public Player getPlayer() { return this._eithonPlayer.getPlayer();	}
@@ -30,8 +34,10 @@ public class FrozenPlayer {
 	public void freeze() {
 		Player player = getPlayer();
 		this._canTeleport = false;
+		this._allowFlight = player.getAllowFlight();
 		this._isFlying = player.isFlying();
 		try {
+			player.setAllowFlight(true);
 			player.setFlying(true);
 		} catch (Exception e) {}
 		this._walkSpeed = player.getWalkSpeed();
@@ -47,6 +53,7 @@ public class FrozenPlayer {
 
 	public void thaw() {
 		if (!this._eithonPlayer.isOnline()) return;
+		this._isFrozen = false;
 		this._canTeleport = true;
 		Player player = getPlayer();
 		player.setWalkSpeed(this._walkSpeed);
@@ -54,6 +61,7 @@ public class FrozenPlayer {
 		player.setFireTicks(this._fireTicks);
 		player.setFoodLevel(this._foodLevel);
 		try {
+			player.setAllowFlight(this._allowFlight);
 			player.setFlying(this._isFlying);
 		} catch (Exception e) {}
 		player.removePotionEffect(PotionEffectType.JUMP);
@@ -78,4 +86,8 @@ public class FrozenPlayer {
 	}
 
 	public boolean canTeleport() { return this._canTeleport; }
+
+	public boolean isFrozen() {
+		return this._isFrozen;
+	}
 }

@@ -5,6 +5,8 @@ import net.eithon.library.plugin.Logger;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.plugin.cop.logic.Controller;
 
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,9 +14,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 
 import com.dthielke.herochat.Channel;
@@ -206,6 +211,40 @@ public final class EventListener implements Listener {
 		}
 
 		verbose("onPlayerToggleSprintEvent", "Leave");
+	}
+
+	// Frozen players should not become a target
+	@EventHandler(ignoreCancelled = true)
+	public void onEntityTargetLivingEntityEvent(EntityTargetLivingEntityEvent event) {
+		Entity target = event.getTarget();
+		if (!(target instanceof Player)) return;
+		Player player = (Player) target;
+
+		if (!(event.getEntity() instanceof Monster)) return;
+
+		if (!this._controller.isFrozen(player)) return;
+
+		event.setCancelled(true);
+	}
+
+	// No damage on frozen players
+	@EventHandler(ignoreCancelled = true)
+	public void onEntityDamageEvent(EntityDamageEvent event) {
+		Entity entity = event.getEntity();
+		if (!(entity instanceof Player)) return;
+		Player player = (Player) entity;
+
+		if (!this._controller.isFrozen(player)) return;
+
+		event.setCancelled(true);
+	}
+	
+	// Frozen players can't toggle flight 
+	@EventHandler(ignoreCancelled = true)
+	public void onPlayerToggleFlightEvent(PlayerToggleFlightEvent event) {
+		Player player = event.getPlayer();
+		if (!this._controller.isFrozen(player)) return;
+		event.setCancelled(true);
 	}
 
 	private void verbose(String method, String format, Object... args) {

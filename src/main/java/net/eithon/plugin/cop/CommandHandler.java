@@ -85,8 +85,8 @@ public class CommandHandler {
 
 		// freeze restore
 		ICommandSyntax restore = freeze.parseCommandSyntax(String.format(
-				"restore <player> <walk-speed:REAL {%.1f,...}> <fly-speed:REAL {%.1f,...}>",
-				Config.V.freezeRestoreWalkSpeed, Config.V.freezeRestoreFlySpeed))
+				"restore <player> <walk-speed:REAL {_%s_,...}> <fly-speed:REAL {_%s_,...}>",
+				Double.toString(Config.V.freezeRestoreWalkSpeed), Double.toString(Config.V.freezeRestoreFlySpeed)))
 				.setCommandExecutor(ec -> freezeRestoreCommand(ec));
 
 		restore

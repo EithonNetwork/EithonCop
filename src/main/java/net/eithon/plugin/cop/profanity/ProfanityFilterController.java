@@ -104,7 +104,7 @@ public class ProfanityFilterController {
 		Profanity profanity = this._blacklist.getProfanity(word);
 		if ((profanity != null) && word.equalsIgnoreCase(profanity.getWord())) {
 			profanity.setIsLiteral(isLiteral);
-			if (synonyms != null) profanity.setSynonyms(synonyms.split("\\W"));
+			if (synonyms != null) profanity.setSynonyms(synonyms.split("\\W+"));
 			this._blacklist.delayedSave();
 			return profanity.getWord();
 		}
@@ -112,7 +112,7 @@ public class ProfanityFilterController {
 			Config.M.probablyDuplicateProfanity.sendMessage(sender, word, profanity.getWord());
 		}
 		profanity = this._blacklist.add(word, isLiteral);
-		if (synonyms != null) profanity.setSynonyms(synonyms.split("\\W"));
+		if (synonyms != null) profanity.setSynonyms(synonyms.split("\\W+"));
 		this._blacklist.delayedSave();
 		return profanity.getWord();
 	}
