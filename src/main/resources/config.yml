@@ -9,7 +9,7 @@ eithon:
   #  2 = MINOR (also minor messages)
   #  3 = VERBOSE (all messages)
   #
-  DebugLevel: 2
+  DebugLevel: 1
 
 #
 # How tough should we be at stopping profanity?
@@ -96,7 +96,7 @@ spam:
   #
   # If a chat line consists of more than this number of upper case letters, then the entire line will be converted into lower case
   #
-  MaxNumberOfUpperCaseLettersInLine: 15
+  MaxNumberOfUpperCaseLettersInLine: 10
   
   #
   # If a chat line consists of more than this number of upper case words, then the entire line will be converted into lower case
@@ -116,17 +116,17 @@ spam:
   #
   # The time that we will keep old lines to check for duplicates
   #
-  MaxNumberOfRepeatedLines: 3
+  MaxNumberOfRepeatedLines: 2
   
   #
   # The time that we have a restriction on the number of chats produced by a single player
   #
-  ChatCoolDownTimeSpan: 30s
+  ChatCoolDownTimeSpan: 5s
   
   #
   # The maximum number of produced chats by a single player during the ChatCoolDownTimeSpan
   #
-  ChatCoolDownAllowedTimes: 15
+  ChatCoolDownAllowedTimes: 3
 
 mute:
   #
@@ -143,6 +143,20 @@ mute:
   # All commands that are muted.
   #
   MutedCommands: ["me"]
+ 
+freeze:
+
+  #
+  # If the "freeze off" command fails to restore the player, you can use "freeze restore" command.
+  # It will restore the walk speed to this value 
+  #
+  FreezeRestoreWalkSpeed: 0.2
+
+  #
+  # If the "freeze off" command fails to restore the player, you can use "freeze restore" command.
+  # It will restore the fly speed to this value 
+  #
+  FreezeRestoreFlySpeed: 0.2
 
 commands:
 
@@ -267,3 +281,31 @@ messages:
   doc:
      TempMuteCommand: "/tempmute <player> [<time>] [<reason>]"
      UnmuteCommand: "/unmute <player>"
+     
+  freeze:
+  
+
+    #
+    # Parameters: <player name> (%s)
+    PlayerAlreadyFrozen: "The player %s has already been frozen."
+
+    #
+    # Parameters: <player name> (%s)
+    PlayerFrozen: "The player %s has now been frozen."
+
+    #
+    # Parameters: <player name> (%s)
+    PlayerNotFrozen: "The player %s can't be thawn - was not frozen."
+
+    #
+    # Parameters: <player name> (%s)
+    PlayerThawn: "The player %s has now been thawn."
+
+    #
+    # Parameters: <player name> (%s)
+    PlayerRestored: "The player %s has now been restored."
+
+    #
+    # Parameters: -
+    FrozenPlayerCannotTeleport: "You have been frozen and are not allowed to teleport."
+  

@@ -1,5 +1,8 @@
 package net.eithon.plugin.cop.logic;
 
+import java.util.Collection;
+import java.util.List;
+
 import net.eithon.library.core.CoreMisc;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
@@ -75,5 +78,9 @@ public class MuteController {
 	void verbose(String method, String format, Object... args) {
 		String message = CoreMisc.safeFormat(format, args);
 		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "MuteController.%s: %s", method, message);
+	}
+
+	public List<Player> getMutedPlayers() {
+		return this._mutedPlayers.getPlayers();
 	}
 }

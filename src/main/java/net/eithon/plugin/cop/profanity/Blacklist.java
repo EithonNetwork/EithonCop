@@ -423,6 +423,10 @@ class Blacklist {
 		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.MINOR, "Blacklist: %s", message);
 	}
 
+	public String[] getAllWords() {
+		return this._wordList.keySet().toArray(new String[0]);
+	}
+
 	private void verbose(String method, String format, Object... args) {
 		String message = CoreMisc.safeFormat(format, args);
 		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Blacklist.%s(): %s", method, message);
