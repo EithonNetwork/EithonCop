@@ -1,8 +1,8 @@
 package net.eithon.plugin.cop;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import net.eithon.library.command.BukkitValueLists;
 import net.eithon.library.command.CommandSyntaxException;
 import net.eithon.library.command.EithonCommand;
 import net.eithon.library.command.ICommandSyntax;
@@ -45,7 +45,7 @@ public class CommandHandler {
 		
 		tempmute
 		.getParameterSyntax("player")
-		.setMandatoryValues(ec -> getOnlinePlayerNames(ec));
+		.setMandatoryValues(ec -> BukkitValueLists.getOnlinePlayerNames(ec));
 		
 		tempmute
 		.getParameterSyntax("time-span")
@@ -73,7 +73,7 @@ public class CommandHandler {
 
 		on
 		.getParameterSyntax("player")
-		.setMandatoryValues(sender -> getOnlinePlayerNames(sender));
+		.setMandatoryValues(ec -> BukkitValueLists.getOnlinePlayerNames(ec));
 
 		// freeze off
 		ICommandSyntax off = freeze.parseCommandSyntax("off <player>")
@@ -81,7 +81,7 @@ public class CommandHandler {
 
 		off
 		.getParameterSyntax("player")
-		.setMandatoryValues(sender->getFrozenPlayerNames());
+		.setMandatoryValues(ec->getFrozenPlayerNames());
 
 		// freeze restore
 		ICommandSyntax restore = freeze.parseCommandSyntax(String.format(
@@ -91,7 +91,7 @@ public class CommandHandler {
 
 		restore
 		.getParameterSyntax("player")
-		.setMandatoryValues(sender -> getOnlinePlayerNames(sender));
+		.setMandatoryValues(ec -> BukkitValueLists.getOnlinePlayerNames(ec));
 
 		// freeze list
 		freeze.parseCommandSyntax("list")
@@ -148,16 +148,6 @@ public class CommandHandler {
 
 	private String getSenderAsOnlinePlayer(EithonCommand command) {
 		return command.getPlayer().getName();
-	}
-
-	private List<String> getOnlinePlayerNames(EithonCommand command) {
-		return command
-				.getSender()
-				.getServer()
-				.getOnlinePlayers()
-				.stream()
-				.map(p -> p.getName())
-				.collect(Collectors.toList());
 	}
 
 	void blacklistAddCommand(EithonCommand command)
