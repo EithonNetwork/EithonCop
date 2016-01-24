@@ -1,8 +1,8 @@
 package net.eithon.plugin.cop;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import net.eithon.library.command.EithonCommandUtilities;
 import net.eithon.library.command.CommandSyntaxException;
 import net.eithon.library.command.EithonCommand;
 import net.eithon.library.command.ICommandSyntax;
@@ -21,6 +21,10 @@ public class CommandHandler {
 
 	public CommandHandler(EithonPlugin eithonPlugin, Controller controller) {
 		this._controller = controller;
+	}
+
+	public ICommandSyntax getCommandSyntax() {
+		if (this._commandSyntax != null) return this._commandSyntax;
 
 		ICommandSyntax commandSyntax = EithonCommand.createRootCommand("eithoncop");
 		commandSyntax.setPermissionsAutomatically();
@@ -31,28 +35,29 @@ public class CommandHandler {
 			setupWhitelistCommand(commandSyntax);
 			setupMuteCommand(commandSyntax);
 		} catch (CommandSyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 		this._commandSyntax = commandSyntax;
+		return this._commandSyntax;
 	}
-
-	public ICommandSyntax getCommandSyntax() { return this._commandSyntax;	}
 
 	public void setupMuteCommand(ICommandSyntax commandSyntax)
 			throws CommandSyntaxException {
-		ICommandSyntax tempmute = commandSyntax.parseCommandSyntax("tempmute <player> <time-span : TIME_SPAN> <reason : REST>");
-		
+		ICommandSyntax tempmute = commandSyntax.parseCommandSyntax("tempmute <player> <time-span : TIME_SPAN> <reason : REST>")
+				.setCommandExecutor(ec->tempMuteCommand(ec));
+
 		tempmute
 		.getParameterSyntax("player")
-		.setMandatoryValues(ec -> getOnlinePlayerNames(ec));
-		
+		.setMandatoryValues(ec -> EithonCommandUtilities.getOnlinePlayerNames(ec));
+
 		tempmute
 		.getParameterSyntax("time-span")
 		.setDefault(Config.V.defaultTempMuteInSeconds);
-		
-		ICommandSyntax unmute = commandSyntax.parseCommandSyntax("unmute <player>");
-		
+
+		ICommandSyntax unmute = commandSyntax.parseCommandSyntax("unmute <player>")
+				.setCommandExecutor(ec->unmuteCommand(ec));
+
 		unmute
 		.getParameterSyntax("player")
 		.setMandatoryValues(ec -> getMutedPlayerNames(ec));
@@ -73,7 +78,7 @@ public class CommandHandler {
 
 		on
 		.getParameterSyntax("player")
-		.setMandatoryValues(sender -> getOnlinePlayerNames(sender));
+		.setMandatoryValues(ec -> EithonCommandUtilities.getOnlinePlayerNames(ec));
 
 		// freeze off
 		ICommandSyntax off = freeze.parseCommandSyntax("off <player>")
@@ -81,7 +86,7 @@ public class CommandHandler {
 
 		off
 		.getParameterSyntax("player")
-		.setMandatoryValues(sender->getFrozenPlayerNames());
+		.setMandatoryValues(ec->getFrozenPlayerNames());
 
 		// freeze restore
 		ICommandSyntax restore = freeze.parseCommandSyntax(String.format(
@@ -91,7 +96,7 @@ public class CommandHandler {
 
 		restore
 		.getParameterSyntax("player")
-		.setMandatoryValues(sender -> getOnlinePlayerNames(sender));
+		.setMandatoryValues(ec -> EithonCommandUtilities.getOnlinePlayerNames(ec));
 
 		// freeze list
 		freeze.parseCommandSyntax("list")
@@ -148,16 +153,6 @@ public class CommandHandler {
 
 	private String getSenderAsOnlinePlayer(EithonCommand command) {
 		return command.getPlayer().getName();
-	}
-
-	private List<String> getOnlinePlayerNames(EithonCommand command) {
-		return command
-				.getSender()
-				.getServer()
-				.getOnlinePlayers()
-				.stream()
-				.map(p -> p.getName())
-				.collect(Collectors.toList());
 	}
 
 	void blacklistAddCommand(EithonCommand command)
@@ -222,7 +217,7 @@ public class CommandHandler {
 		CommandSender sender = command.getSender();
 
 		long timeInSeconds = command.getArgument("time-span").asSeconds();
-		String reason = command.getArgument("rest").asString();
+		String reason = command.getArgument("reason").asString();
 		if (reason == null) reason = Config.V.defaultTempMuteReason;
 
 		boolean success = this._controller.tempMute(sender, eithonPlayer, timeInSeconds, reason);

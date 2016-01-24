@@ -4,6 +4,18 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.6.2 (2016-01-24)
+
+* BUG: Wrong parameter name for tempmute <reason>
+
+### 1.6.1 (2016-01-24)
+
+* BUG: Compiled with the wrong version of EithonLibrary
+
+### 1.6 (2016-01-24)
+
+* CHANGE: Moved to EithonLibrary 4.0
+
 ### 1.5 (2016-01-22)
 
 * NEW: Moved the freeze command here from EithonFixes.
