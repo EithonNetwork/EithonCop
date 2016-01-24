@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.6.1 (2016-01-24)
+
+* BUG: Compiled with the wrong version of EithonLibrary
+
 ### 1.6 (2016-01-24)
 
 * CHANGE: Moved to EithonLibrary 4.0
