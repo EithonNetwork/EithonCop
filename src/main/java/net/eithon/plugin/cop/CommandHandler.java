@@ -44,7 +44,8 @@ public class CommandHandler {
 
 	public void setupMuteCommand(ICommandSyntax commandSyntax)
 			throws CommandSyntaxException {
-		ICommandSyntax tempmute = commandSyntax.parseCommandSyntax("tempmute <player> <time-span : TIME_SPAN> <reason : REST>");
+		ICommandSyntax tempmute = commandSyntax.parseCommandSyntax("tempmute <player> <time-span : TIME_SPAN> <reason : REST>")
+				.setCommandExecutor(ec->tempMuteCommand(ec));
 
 		tempmute
 		.getParameterSyntax("player")
@@ -54,7 +55,8 @@ public class CommandHandler {
 		.getParameterSyntax("time-span")
 		.setDefault(Config.V.defaultTempMuteInSeconds);
 
-		ICommandSyntax unmute = commandSyntax.parseCommandSyntax("unmute <player>");
+		ICommandSyntax unmute = commandSyntax.parseCommandSyntax("unmute <player>")
+				.setCommandExecutor(ec->unmuteCommand(ec));
 
 		unmute
 		.getParameterSyntax("player")
@@ -215,7 +217,7 @@ public class CommandHandler {
 		CommandSender sender = command.getSender();
 
 		long timeInSeconds = command.getArgument("time-span").asSeconds();
-		String reason = command.getArgument("rest").asString();
+		String reason = command.getArgument("reason").asString();
 		if (reason == null) reason = Config.V.defaultTempMuteReason;
 
 		boolean success = this._controller.tempMute(sender, eithonPlayer, timeInSeconds, reason);
