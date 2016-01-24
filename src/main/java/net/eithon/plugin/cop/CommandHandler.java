@@ -2,7 +2,7 @@ package net.eithon.plugin.cop;
 
 import java.util.List;
 
-import net.eithon.library.command.BukkitValueLists;
+import net.eithon.library.command.EithonCommandUtilities;
 import net.eithon.library.command.CommandSyntaxException;
 import net.eithon.library.command.EithonCommand;
 import net.eithon.library.command.ICommandSyntax;
@@ -21,6 +21,10 @@ public class CommandHandler {
 
 	public CommandHandler(EithonPlugin eithonPlugin, Controller controller) {
 		this._controller = controller;
+	}
+
+	public ICommandSyntax getCommandSyntax() {
+		if (this._commandSyntax != null) return this._commandSyntax;
 
 		ICommandSyntax commandSyntax = EithonCommand.createRootCommand("eithoncop");
 		commandSyntax.setPermissionsAutomatically();
@@ -31,28 +35,27 @@ public class CommandHandler {
 			setupWhitelistCommand(commandSyntax);
 			setupMuteCommand(commandSyntax);
 		} catch (CommandSyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 		this._commandSyntax = commandSyntax;
+		return this._commandSyntax;
 	}
-
-	public ICommandSyntax getCommandSyntax() { return this._commandSyntax;	}
 
 	public void setupMuteCommand(ICommandSyntax commandSyntax)
 			throws CommandSyntaxException {
 		ICommandSyntax tempmute = commandSyntax.parseCommandSyntax("tempmute <player> <time-span : TIME_SPAN> <reason : REST>");
-		
+
 		tempmute
 		.getParameterSyntax("player")
-		.setMandatoryValues(ec -> BukkitValueLists.getOnlinePlayerNames(ec));
-		
+		.setMandatoryValues(ec -> EithonCommandUtilities.getOnlinePlayerNames(ec));
+
 		tempmute
 		.getParameterSyntax("time-span")
 		.setDefault(Config.V.defaultTempMuteInSeconds);
-		
+
 		ICommandSyntax unmute = commandSyntax.parseCommandSyntax("unmute <player>");
-		
+
 		unmute
 		.getParameterSyntax("player")
 		.setMandatoryValues(ec -> getMutedPlayerNames(ec));
@@ -73,7 +76,7 @@ public class CommandHandler {
 
 		on
 		.getParameterSyntax("player")
-		.setMandatoryValues(ec -> BukkitValueLists.getOnlinePlayerNames(ec));
+		.setMandatoryValues(ec -> EithonCommandUtilities.getOnlinePlayerNames(ec));
 
 		// freeze off
 		ICommandSyntax off = freeze.parseCommandSyntax("off <player>")
@@ -91,7 +94,7 @@ public class CommandHandler {
 
 		restore
 		.getParameterSyntax("player")
-		.setMandatoryValues(ec -> BukkitValueLists.getOnlinePlayerNames(ec));
+		.setMandatoryValues(ec -> EithonCommandUtilities.getOnlinePlayerNames(ec));
 
 		// freeze list
 		freeze.parseCommandSyntax("list")

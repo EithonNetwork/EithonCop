@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 1.6 (2016-01-24)
+
+* CHANGE: Moved to EithonLibrary 4.0
+
 ### 1.5 (2016-01-22)
 
 * NEW: Moved the freeze command here from EithonFixes.
