@@ -11,6 +11,28 @@ eithon:
   #
   DebugLevel: 1
 
+database:
+  Name: DEV_eithon_cop
+  Hostname: mc.eithon.net
+  Port: 3306
+  Username: DEV_eithon_cop
+  Password: waCaxp3y6zdGPGQ2
+
+# PRD
+#  Name: eithon_stats
+#  Username: eithon_stats
+#  Password: W9txKfyzAmyaGeWV
+
+# TST
+#  Name: TST_eithon_stats
+#  Username: TST_eithon_stats
+#  Password: rCmTrcKAZf53ZGqy
+
+# DEV
+#  Name: DEV_eithon_cop
+#  Username: DEV_eithon_cop
+#  Password: waCaxp3y6zdGPGQ2
+
 #
 # How tough should we be at stopping profanity?
 #
