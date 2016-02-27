@@ -12,7 +12,6 @@ import net.eithon.library.mysql.IDbRecord;
 public class Blacklist extends DbRecord<Blacklist> implements IDbRecord<Blacklist> {
 	private String word;
 	private boolean isLiteral;
-	private static Blacklist instance = new Blacklist();
 
 	public static Blacklist create(Database database, String word, boolean isLiteral) {
 		Blacklist blacklist = getByWord(database, word);
@@ -36,14 +35,14 @@ public class Blacklist extends DbRecord<Blacklist> implements IDbRecord<Blacklis
 	}
 
 	private Blacklist(Database database) {
-		super(new DbTable(database, "blacklist"), instance);
+		super(new DbTable(database, "blacklist"));
 	}
 
 	private Blacklist(DbTable table, long id) {
-		super(table, id, instance);
+		super(table, id);
 	}
 
-	public Blacklist() {
+	private Blacklist() {
 		super();
 	}
 
