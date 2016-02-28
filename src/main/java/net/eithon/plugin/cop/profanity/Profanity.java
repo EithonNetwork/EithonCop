@@ -7,6 +7,8 @@ import java.util.List;
 
 import net.eithon.plugin.cop.Config;
 import net.eithon.plugin.cop.db.DbBlacklist;
+import net.eithon.plugin.cop.db.DbSimilar;
+import net.eithon.plugin.cop.db.DbWhitelist;
 
 class Profanity {
 	static final int PROFANITY_LEVEL_NONE = 0;
@@ -109,6 +111,8 @@ class Profanity {
 
 	public void deleteFromDb() {
 		if (this._dbBlacklist == null) return;
+		DbWhitelist.deleteByBlacklistId(Config.V.database, this._dbBlacklist.getDbId());
+		DbSimilar.deleteByBlacklistId(Config.V.database, this._dbBlacklist.getDbId());
 		this._dbBlacklist.delete();
 		this._dbBlacklist = null;
 	}

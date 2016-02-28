@@ -13,6 +13,7 @@ import net.eithon.library.mysql.IDbRecord;
 public class DbWhitelist extends DbRecord<DbWhitelist> implements IDbRecord<DbWhitelist> {
 	private String word;
 	private long blacklistId;
+	
 	public static DbWhitelist create(Database database, String word, long blacklistId) {
 		DbWhitelist whitelist = getByWord(database, word);
 		if (whitelist == null) {
@@ -33,6 +34,11 @@ public class DbWhitelist extends DbRecord<DbWhitelist> implements IDbRecord<DbWh
 	public static void deleteByWord(Database database, String word) {
 		DbWhitelist whitelist = getByWord(database, word);
 		whitelist.delete();
+	}
+
+	public static void deleteByBlacklistId(Database database, long blacklistId) {
+		DbWhitelist whitelist = new DbWhitelist(database);
+		whitelist.deleteByWhere("blacklist_id=", blacklistId);
 	}
 
 	private DbWhitelist(Database database, String word, long blacklistId) {

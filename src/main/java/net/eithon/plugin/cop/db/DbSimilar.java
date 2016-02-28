@@ -31,6 +31,11 @@ public class DbSimilar extends DbRecord<DbSimilar> implements IDbRecord<DbSimila
 		return findByWhere(database, "1=", 1);
 	}
 
+	public static void deleteByBlacklistId(Database database, long blacklistId) {
+		DbSimilar similar = new DbSimilar(database);
+		similar.deleteByWhere("blacklist_id=", blacklistId);
+	}
+
 	private DbSimilar(Database database, String word, long blacklistId, boolean isVerified) {
 		this(database);
 		this.word = word;
