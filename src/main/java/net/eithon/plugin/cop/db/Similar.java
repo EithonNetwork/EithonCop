@@ -23,7 +23,7 @@ public class Similar extends DbRecord<Similar> implements IDbRecord<Similar> {
 	}
 
 	public static Similar getByWord(Database database, String word) {
-		return getByWhere(database, String.format("word='%s'", word));
+		return getByWhere(database, "word=", word);
 	}
 
 	private Similar(Database database, String word, long blacklistId, boolean isVerified) {
@@ -60,9 +60,9 @@ public class Similar extends DbRecord<Similar> implements IDbRecord<Similar> {
 		dbUpdate();
 	}
 
-	private static Similar getByWhere(Database database, String where) {
+	private static Similar getByWhere(Database database, Object... whereParts) {
 		Similar similar = new Similar(database);
-		return similar.getByWhere(where);
+		return similar.getByWhere(whereParts);
 	}
 
 	@Override

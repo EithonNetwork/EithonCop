@@ -22,7 +22,7 @@ public class Whitelist extends DbRecord<Whitelist> implements IDbRecord<Whitelis
 	}
 
 	public static Whitelist getByWord(Database database, String word) {
-		return getByWhere(database, String.format("word='%s'", word));
+		return getByWhere(database, "word=", word);
 	}
 
 	private Whitelist(Database database, String word, long blacklistId) {
@@ -55,9 +55,9 @@ public class Whitelist extends DbRecord<Whitelist> implements IDbRecord<Whitelis
 		dbUpdate();
 	}
 
-	private static Whitelist getByWhere(Database database, String where) {
+	private static Whitelist getByWhere(Database database, Object... whereParts) {
 		Whitelist whitelist = new Whitelist(database);
-		return whitelist.getByWhere(where);
+		return whitelist.getByWhere(whereParts);
 	}
 
 	@Override

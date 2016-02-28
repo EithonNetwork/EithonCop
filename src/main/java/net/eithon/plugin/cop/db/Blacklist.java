@@ -25,7 +25,7 @@ public class Blacklist extends DbRecord<Blacklist> implements IDbRecord<Blacklis
 	}
 
 	public static Blacklist getByWord(Database database, String word) {
-		return getByWhere(database, String.format("word='%s'", word));
+		return getByWhere(database, "word=", word);
 	}
 
 	private Blacklist(Database database, String word, boolean isLiteral) {
@@ -56,9 +56,9 @@ public class Blacklist extends DbRecord<Blacklist> implements IDbRecord<Blacklis
 		dbUpdate();
 	}
 
-	private static Blacklist getByWhere(Database database, String where) {
+	private static Blacklist getByWhere(Database database, Object... whereParts) {
 		Blacklist blacklist = new Blacklist(database);
-		return blacklist.getByWhere(where);
+		return blacklist.getByWhere(whereParts);
 	}
 
 	@Override
