@@ -2,7 +2,7 @@ package net.eithon.plugin.cop.test;
 
 import static org.junit.Assert.assertEquals;
 import net.eithon.library.mysql.Database;
-import net.eithon.plugin.cop.db.Blacklist;
+import net.eithon.plugin.cop.db.DbBlacklist;
 
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ public class TestBlacklist {
 		String word = "a";
 		boolean isLiteral = true;
 		Database database = TestSupport.getDatabaseAndTruncateTables();
-		Blacklist blacklist = Blacklist.create(database, word, isLiteral);
+		DbBlacklist blacklist = DbBlacklist.create(database, word, isLiteral);
 		assertEquals(word, blacklist.getWord());
 		assertEquals(isLiteral, blacklist.getIsLiteral());
 	}	
@@ -23,8 +23,8 @@ public class TestBlacklist {
 		String word = "a";
 		boolean isLiteral = true;
 		Database database = TestSupport.getDatabaseAndTruncateTables();
-		Blacklist blacklist = Blacklist.create(database, word, isLiteral);
-		blacklist = Blacklist.getByWord(database, word);
+		DbBlacklist blacklist = DbBlacklist.create(database, word, isLiteral);
+		blacklist = DbBlacklist.getByWord(database, word);
 		assertEquals(word, blacklist.getWord());
 		assertEquals(isLiteral, blacklist.getIsLiteral());
 	}	
@@ -34,11 +34,11 @@ public class TestBlacklist {
 		String word = "a";
 		boolean isLiteral = true;
 		Database database = TestSupport.getDatabaseAndTruncateTables();
-		Blacklist blacklist = Blacklist.create(database, word, isLiteral);
-		blacklist = Blacklist.getByWord(database, word);
+		DbBlacklist blacklist = DbBlacklist.create(database, word, isLiteral);
+		blacklist = DbBlacklist.getByWord(database, word);
 		isLiteral = !isLiteral;
 		blacklist.update(isLiteral);
-		blacklist = Blacklist.getByWord(database, word);
+		blacklist = DbBlacklist.getByWord(database, word);
 		assertEquals(isLiteral, blacklist.getIsLiteral());
 	}
 

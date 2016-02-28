@@ -3,20 +3,21 @@ package net.eithon.plugin.cop.db;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 
 import net.eithon.library.mysql.Database;
 import net.eithon.library.mysql.DbRecord;
 import net.eithon.library.mysql.DbTable;
 import net.eithon.library.mysql.IDbRecord;
 
-public class Blacklist extends DbRecord<Blacklist> implements IDbRecord<Blacklist> {
+public class DbBlacklist extends DbRecord<DbBlacklist> implements IDbRecord<DbBlacklist> {
 	private String word;
 	private boolean isLiteral;
 
-	public static Blacklist create(Database database, String word, boolean isLiteral) {
-		Blacklist blacklist = getByWord(database, word);
+	public static DbBlacklist create(Database database, String word, boolean isLiteral) {
+		DbBlacklist blacklist = getByWord(database, word);
 		if (blacklist == null) {
-			blacklist = new Blacklist(database, word, isLiteral);
+			blacklist = new DbBlacklist(database, word, isLiteral);
 			blacklist.dbCreate();
 		} else {
 			blacklist.update(isLiteral);
@@ -24,21 +25,25 @@ public class Blacklist extends DbRecord<Blacklist> implements IDbRecord<Blacklis
 		return blacklist;
 	}
 
-	public static Blacklist getByWord(Database database, String word) {
+	public static DbBlacklist getByWord(Database database, String word) {
 		return getByWhere(database, "word=", word);
 	}
 
-	private Blacklist(Database database, String word, boolean isLiteral) {
+	public static List<DbBlacklist> findAll(Database database) {
+		return findByWhere(database, "1=", 1);
+	}
+
+	private DbBlacklist(Database database, String word, boolean isLiteral) {
 		this(database);
 		this.word = word;
 		this.isLiteral = isLiteral;
 	}
 
-	private Blacklist(Database database) {
+	private DbBlacklist(Database database) {
 		super(new DbTable(database, "blacklist"));
 	}
 
-	private Blacklist(DbTable table, long id) {
+	private DbBlacklist(DbTable table, long id) {
 		super(table, id);
 	}
 	
@@ -56,13 +61,18 @@ public class Blacklist extends DbRecord<Blacklist> implements IDbRecord<Blacklis
 		dbUpdate();
 	}
 
-	private static Blacklist getByWhere(Database database, Object... whereParts) {
-		Blacklist blacklist = new Blacklist(database);
+	private static DbBlacklist getByWhere(Database database, Object... whereParts) {
+		DbBlacklist blacklist = new DbBlacklist(database);
 		return blacklist.getByWhere(whereParts);
 	}
 
+	private static List<DbBlacklist> findByWhere(Database database, Object... whereParts) {
+		DbBlacklist blacklist = new DbBlacklist(database);
+		return blacklist.findByWhere(whereParts);
+	}
+
 	@Override
-	public Blacklist fromDb(ResultSet resultSet) throws SQLException {
+	public DbBlacklist fromDb(ResultSet resultSet) throws SQLException {
 		this.word = resultSet.getString("word");
 		this.isLiteral = resultSet.getBoolean("is_literal");
 		return this;
@@ -77,7 +87,7 @@ public class Blacklist extends DbRecord<Blacklist> implements IDbRecord<Blacklis
 	}
 
 	@Override
-	public Blacklist factory(DbTable table, long id) {
-		return new Blacklist(table, id);
+	public DbBlacklist factory(DbTable table, long id) {
+		return new DbBlacklist(table, id);
 	}
 }

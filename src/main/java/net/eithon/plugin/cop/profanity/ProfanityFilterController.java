@@ -42,9 +42,6 @@ public class ProfanityFilterController {
 	}
 
 	public void disable() {
-		this._whitelist.save();
-		this._blacklist.save();
-		this._blacklist.saveSimilar(this._whitelist);
 	}
 
 	private void delayedLoadSeed(double delaySeconds)
@@ -104,16 +101,12 @@ public class ProfanityFilterController {
 		Profanity profanity = this._blacklist.getProfanity(word);
 		if ((profanity != null) && word.equalsIgnoreCase(profanity.getWord())) {
 			profanity.setIsLiteral(isLiteral);
-			if (synonyms != null) profanity.setSynonyms(synonyms.split("\\W+"));
-			this._blacklist.delayedSave();
 			return profanity.getWord();
 		}
 		if (profanity != null) {
 			Config.M.probablyDuplicateProfanity.sendMessage(sender, word, profanity.getWord());
 		}
 		profanity = this._blacklist.add(word, isLiteral);
-		if (synonyms != null) profanity.setSynonyms(synonyms.split("\\W+"));
-		this._blacklist.delayedSave();
 		return profanity.getWord();
 	}
 
@@ -134,7 +127,6 @@ public class ProfanityFilterController {
 			return null;
 		}
 		this._blacklist.remove(word);
-		this._blacklist.delayedSave();
 		return found;
 	}
 
@@ -158,8 +150,7 @@ public class ProfanityFilterController {
 				Config.M.acceptedWordWasBlacklisted.sendMessage(sender, word);
 				return null;
 			}
-			this._whitelist.add(word);
-			this._whitelist.delayedSave();
+			this._whitelist.create(word);
 			return profanity.getWord();
 		}
 		Config.M.acceptedWordWasNotBlacklisted.sendMessage(sender, word);
@@ -178,7 +169,6 @@ public class ProfanityFilterController {
 		}
 
 		this._whitelist.remove(normalized);
-		this._whitelist.delayedSave();
 		return normalized;
 	}
 
