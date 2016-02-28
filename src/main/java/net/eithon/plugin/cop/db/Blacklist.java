@@ -41,11 +41,7 @@ public class Blacklist extends DbRecord<Blacklist> implements IDbRecord<Blacklis
 	private Blacklist(DbTable table, long id) {
 		super(table, id);
 	}
-
-	private Blacklist() {
-		super();
-	}
-
+	
 	public String getWord() { return this.word; }
 	public boolean getIsLiteral() { return this.isLiteral; }
 

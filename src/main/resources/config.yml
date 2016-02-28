@@ -12,11 +12,11 @@ eithon:
   DebugLevel: 1
 
 database:
-  Name: DEV_eithon_cop
+  Name: TST_eithon_cop
   Hostname: mc.eithon.net
   Port: 3306
-  Username: DEV_eithon_cop
-  Password: waCaxp3y6zdGPGQ2
+  Username: TST_eithon_cop
+  Password: PaHYhGqpjEcrjTCQ
 
 # PRD
 #  Name: eithon_stats
@@ -24,9 +24,9 @@ database:
 #  Password: W9txKfyzAmyaGeWV
 
 # TST
-#  Name: TST_eithon_stats
-#  Username: TST_eithon_stats
-#  Password: rCmTrcKAZf53ZGqy
+#  Name: TST_eithon_cop
+#  Username: TST_eithon_cop
+#  Password: PaHYhGqpjEcrjTCQ
 
 # DEV
 #  Name: DEV_eithon_cop

@@ -35,12 +35,12 @@ public class Whitelist extends DbRecord<Whitelist> implements IDbRecord<Whitelis
 		super(new DbTable(database, "whitelist"));
 	}
 
-	private Whitelist(DbTable table, long id) {
+	protected Whitelist(DbTable table, long id) {
 		super(table, id);
 	}
 
-	private Whitelist() {
-		super();
+	protected Whitelist(DbTable dbTable) {
+		super(dbTable);
 	}
 
 	public String getWord() { return this.word; }

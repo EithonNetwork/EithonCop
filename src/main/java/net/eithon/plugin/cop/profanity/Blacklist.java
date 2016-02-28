@@ -297,6 +297,8 @@ class Blacklist {
 					if (profanity == null) continue;
 					if (!profanity.isSameWord(word)) continue;
 					this._similarWords.put(similarWord, profanity);
+					net.eithon.plugin.cop.db.Blacklist blacklisted = net.eithon.plugin.cop.db.Blacklist.getByWord(Config.V.database, profanity.getWord());
+					net.eithon.plugin.cop.db.Similar.create(Config.V.database, similarWord, blacklisted.getDbId(), false);					
 				}
 			} catch (FileNotFoundException e) {
 				this._eithonPlugin.getEithonLogger().error("(1) Could not read from file %s: %s", file.getName(), e.getMessage());
@@ -394,6 +396,7 @@ class Blacklist {
 				}
 				this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Loaded profanity %s", profanity.toString());
 				this.add(profanity);
+				net.eithon.plugin.cop.db.Blacklist.create(Config.V.database, profanity.getWord(), profanity.isLiteral());
 			} catch (Exception e) {
 				this._eithonPlugin.getEithonLogger().error("Could not load profanity %d (exception).", i);
 				if (profanity != null) this._eithonPlugin.getEithonLogger().error("Could not load profanity %s", profanity.getWord());

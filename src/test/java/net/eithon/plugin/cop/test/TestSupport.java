@@ -15,8 +15,9 @@ public class TestSupport {
 		try {
 			Connection connection = mySql.getOrOpenConnection();
 			Statement statement = connection.createStatement();
-			statement.executeUpdate("DELETE FROM `blacklist`");
 			statement.executeUpdate("DELETE FROM `whitelist`");
+			statement.executeUpdate("DELETE FROM `similar_to_blacklisted`");
+			statement.executeUpdate("DELETE FROM `blacklist`");
 			return mySql;
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();

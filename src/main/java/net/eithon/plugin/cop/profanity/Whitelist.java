@@ -11,6 +11,7 @@ import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.json.FileContent;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.library.time.TimeMisc;
+import net.eithon.plugin.cop.Config;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -135,6 +136,11 @@ class Whitelist {
 			try {
 				word = (String) array.get(i);
 				add(word);
+				Profanity profanity = this._blacklist.getProfanity(word);
+				if (profanity != null) {
+					net.eithon.plugin.cop.db.Blacklist blacklisted = net.eithon.plugin.cop.db.Blacklist.getByWord(Config.V.database, profanity.getWord());
+					net.eithon.plugin.cop.db.Whitelist.create(Config.V.database, word, blacklisted.getDbId());
+				}
 			} catch (Exception e) {
 				this._eithonPlugin.getEithonLogger().error("Could not load word %d (exception).", i);
 				if (word != null) this._eithonPlugin.getEithonLogger().error("Could not load word %s", word);
