@@ -93,7 +93,7 @@ public class ProfanityFilterController {
 		return file;
 	}
 
-	public String addProfanity(CommandSender sender, String word, boolean isLiteral, String synonyms) {
+	public String addProfanity(CommandSender sender, String word, boolean isLiteral) {
 		if (word.length() < profanityWordMinimumLength) {
 			Config.M.blackListWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
 			return null;

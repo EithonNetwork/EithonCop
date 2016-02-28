@@ -109,7 +109,7 @@ public class CommandHandler {
 		ICommandSyntax blacklist = commandSyntax.addKeyWord("blacklist");
 
 		// blacklist add
-		blacklist.parseCommandSyntax("add <profanity> <is-literal : BOOLEAN {_true_, false}> <synonyms:REST>")
+		blacklist.parseCommandSyntax("add <profanity> <is-literal : BOOLEAN {_true_, false}>")
 		.setCommandExecutor(ec -> blacklistAddCommand(ec));
 
 		// blacklist remove
@@ -163,8 +163,7 @@ public class CommandHandler {
 		CommandSender sender = command.getSender();
 
 		boolean isLiteral = command.getArgument("is-literal").asBoolean();
-		String synonyms = command.getArgument("synonyms").asLowerCase();
-		String word = this._controller.addProfanity(sender, profanity, isLiteral, synonyms);
+		String word = this._controller.addProfanity(sender, profanity, isLiteral);
 		if (word == null) return;
 		Config.M.profanityAdded.sendMessage(sender, word);
 	}

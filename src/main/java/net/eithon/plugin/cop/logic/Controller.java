@@ -39,8 +39,8 @@ public class Controller {
 		this._profanityFilterController.disable();
 	}
 
-	public String addProfanity(CommandSender sender, String word, boolean isLiteral, String synonyms) {
-		return this._profanityFilterController.addProfanity(sender, word, isLiteral, synonyms);
+	public String addProfanity(CommandSender sender, String word, boolean isLiteral) {
+		return this._profanityFilterController.addProfanity(sender, word, isLiteral);
 	}
 
 	public String removeProfanity(CommandSender sender, String word) {
