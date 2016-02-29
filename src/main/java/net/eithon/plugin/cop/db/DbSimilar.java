@@ -14,13 +14,22 @@ public class DbSimilar extends DbRecord<DbSimilar> implements IDbRecord<DbSimila
 	private String word;
 	private long blacklistId;
 	private boolean isVerified;
+	
 	public static DbSimilar create(Database database, String word, long blacklistId, boolean isVerified) {
-		DbSimilar similar = getByWord(database, word);
-		if (similar == null) {
-			similar = new DbSimilar(database, word, blacklistId, isVerified);
-			similar.dbCreate();
+		DbSimilar similar = create(database, word, blacklistId);
+		if (similar.getIsVerified() != isVerified) {
+			similar.update(isVerified);
 		}
 		return similar;
+	}
+
+	public static DbSimilar create(Database database, String word, long blacklistId) {
+		DbSimilar similar = getByWord(database, word);
+		if (similar == null) {
+			similar = new DbSimilar(database, word, blacklistId, false);
+			similar.dbCreate();
+		}
+		return similar;	
 	}
 
 	public static DbSimilar getByWord(Database database, String word) {

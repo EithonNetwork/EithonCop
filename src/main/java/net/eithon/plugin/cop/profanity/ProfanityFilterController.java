@@ -35,9 +35,6 @@ public class ProfanityFilterController {
 		this._blacklist.delayedLoad();
 		this._whitelist = new Whitelist(eithonPlugin, this._blacklist);
 		this._whitelist.delayedLoad(1);
-		if (Config.V.saveSimilar) {
-			this._blacklist.delayedLoadSimilar(2);
-		}
 		delayedLoadSeed(4);
 	}
 

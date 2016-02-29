@@ -10,7 +10,6 @@ import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.file.FileMisc;
 import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.library.time.CoolDown;
-import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 import net.eithon.plugin.cop.db.DbBlacklist;
 import net.eithon.plugin.cop.db.DbSimilar;
@@ -23,7 +22,6 @@ class Blacklist {
 	private EithonPlugin _eithonPlugin;
 	private HashMap<String, Profanity> _metaphoneList;
 	private HashMap<String, Profanity> _wordList;
-	private HashMap<String, Profanity> _similarWords;
 	private CoolDown _recentOffenders;
 	private CoolDown _offenders;
 
@@ -40,7 +38,6 @@ class Blacklist {
 		this._eithonPlugin = eithonPlugin;
 		this._metaphoneList = new HashMap<String, Profanity>();
 		this._wordList = new HashMap<String, Profanity>();
-		this._similarWords = new HashMap<String, Profanity>();
 		this._recentOffenders = new CoolDown("BlacklistRecentOffenders", Config.V.profanityRecentOffenderCooldownInSeconds);
 		this._offenders = new CoolDown("BlacklistNotedOffenders", Config.V.profanityOffenderCooldownInSeconds);
 	}
@@ -95,9 +92,7 @@ class Blacklist {
 		if (profanity == null) return replaceIfBuildingStone(player, normalized, originalWord);
 		int profanityLevel = profanity.getProfanityLevel(normalized);
 		boolean isConsideredForbidden = profanityLevel <= Config.V.profanityLevel;
-		if (Config.V.saveSimilar 
-				&& (profanityLevel == Profanity.PROFANITY_LEVEL_SIMILAR)
-				&& !this._similarWords.containsKey(normalized)) {
+		if (Config.V.saveSimilar && (profanityLevel == Profanity.PROFANITY_LEVEL_SIMILAR)) {
 			delayedSaveSimilar(normalized, profanity);
 		}
 		notifySomePlayers(player, normalized, originalWord, profanity.getWord(), profanityLevel, isConsideredForbidden);
@@ -114,18 +109,13 @@ class Blacklist {
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
 			public void run() {
-				saveSimilar(similarWord, profanity, false);
+				saveSimilar(similarWord, profanity);
 			}
 		});	
 	}
 
-	void saveSimilar(String similarWord, Profanity profanity, boolean force) {
-		synchronized (this._similarWords) {
-			if (!force && this._similarWords.containsKey(similarWord)) return;
-			this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.MINOR, "Added similar %s: %s", similarWord, profanity.toString());
-			this._similarWords.put(similarWord, profanity);
-			DbSimilar.create(Config.V.database, similarWord, profanity.getDbId(), false);
-		}
+	void saveSimilar(String similarWord, Profanity profanity) {
+		DbSimilar.create(Config.V.database, similarWord, profanity.getDbId());
 	}
 
 	private String markSimilar(String originalWord) {
@@ -209,26 +199,6 @@ class Blacklist {
 		}
 		if ((profanity != null) && profanity.isLiteral()) return null;
 		return profanity;
-	}
-
-	void delayedLoadSimilar(double waitSeconds) {
-		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
-			public void run() {
-				loadSimilar();
-			}
-		}, TimeMisc.secondsToTicks(waitSeconds));	
-	}
-
-	void loadSimilar() {
-		this._similarWords = new HashMap<String, Profanity>();
-		List<DbSimilar> list = DbSimilar.findAll(Config.V.database);
-		for (DbSimilar dbSimilar : list) {
-			String similarWord = dbSimilar.getWord();
-			Profanity profanity = getProfanity(similarWord);
-			if (profanity == null) continue;
-			this._similarWords.put(similarWord, profanity);
-		}
 	}
 
 	void delayedSaveOffenderMessage(Player player, String message,
