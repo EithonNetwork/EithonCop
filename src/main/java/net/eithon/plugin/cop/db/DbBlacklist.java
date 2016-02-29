@@ -26,11 +26,11 @@ public class DbBlacklist extends DbRecord<DbBlacklist> implements IDbRecord<DbBl
 	}
 
 	public static DbBlacklist getByWord(Database database, String word) {
-		return getByWhere(database, "word=", word);
+		return getByWhere(database, "word=?", word);
 	}
 
 	public static List<DbBlacklist> findAll(Database database) {
-		return findByWhere(database, "1=", 1);
+		return findByWhere(database, "1=1");
 	}
 
 	private DbBlacklist(Database database, String word, boolean isLiteral) {
@@ -61,14 +61,14 @@ public class DbBlacklist extends DbRecord<DbBlacklist> implements IDbRecord<DbBl
 		dbUpdate();
 	}
 
-	private static DbBlacklist getByWhere(Database database, Object... whereParts) {
+	private static DbBlacklist getByWhere(Database database, String format, Object... arguments) {
 		DbBlacklist blacklist = new DbBlacklist(database);
-		return blacklist.getByWhere(whereParts);
+		return blacklist.getByWhere(format, arguments);
 	}
 
-	private static List<DbBlacklist> findByWhere(Database database, Object... whereParts) {
+	private static List<DbBlacklist> findByWhere(Database database, String format, Object... arguments) {
 		DbBlacklist blacklist = new DbBlacklist(database);
-		return blacklist.findByWhere(whereParts);
+		return blacklist.findByWhere(format, arguments);
 	}
 
 	@Override

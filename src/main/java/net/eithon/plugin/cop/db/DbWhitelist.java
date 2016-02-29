@@ -24,11 +24,11 @@ public class DbWhitelist extends DbRecord<DbWhitelist> implements IDbRecord<DbWh
 	}
 
 	public static DbWhitelist getByWord(Database database, String word) {
-		return getByWhere(database, "word=", word);
+		return getByWhere(database, "word=?", word);
 	}
 
 	public static List<DbWhitelist> findAll(Database database) {
-		return findByWhere(database, "1=", 1);
+		return findByWhere(database, "1=1");
 	}
 
 	public static void deleteByWord(Database database, String word) {
@@ -71,14 +71,14 @@ public class DbWhitelist extends DbRecord<DbWhitelist> implements IDbRecord<DbWh
 		dbUpdate();
 	}
 
-	private static DbWhitelist getByWhere(Database database, Object... whereParts) {
+	private static DbWhitelist getByWhere(Database database, String format, Object... arguments) {
 		DbWhitelist whitelist = new DbWhitelist(database);
-		return whitelist.getByWhere(whereParts);
+		return whitelist.getByWhere(format, arguments);
 	}
 
-	private static List<DbWhitelist> findByWhere(Database database, Object... whereParts) {
+	private static List<DbWhitelist> findByWhere(Database database, String format, Object... arguments) {
 		DbWhitelist whitelist = new DbWhitelist(database);
-		return whitelist.findByWhere(whereParts);
+		return whitelist.findByWhere(format, arguments);
 	}
 
 	@Override

@@ -24,11 +24,11 @@ public class DbSimilar extends DbRecord<DbSimilar> implements IDbRecord<DbSimila
 	}
 
 	public static DbSimilar getByWord(Database database, String word) {
-		return getByWhere(database, "word=", word);
+		return getByWhere(database, "word=?", word);
 	}
 
 	public static List<DbSimilar> findAll(Database database) {
-		return findByWhere(database, "1=", 1);
+		return findByWhere(database, "1=1");
 	}
 
 	public static void deleteByBlacklistId(Database database, long blacklistId) {
@@ -70,14 +70,14 @@ public class DbSimilar extends DbRecord<DbSimilar> implements IDbRecord<DbSimila
 		dbUpdate();
 	}
 
-	private static DbSimilar getByWhere(Database database, Object... whereParts) {
+	private static DbSimilar getByWhere(Database database, String format, Object... arguments) {
 		DbSimilar similar = new DbSimilar(database);
-		return similar.getByWhere(whereParts);
+		return similar.getByWhere(format, arguments);
 	}
 
-	private static List<DbSimilar> findByWhere(Database database, Object... whereParts) {
+	private static List<DbSimilar> findByWhere(Database database, String format, Object... arguments) {
 		DbSimilar similar = new DbSimilar(database);
-		return similar.findByWhere(whereParts);
+		return similar.findByWhere(format, arguments);
 	}
 
 	@Override
