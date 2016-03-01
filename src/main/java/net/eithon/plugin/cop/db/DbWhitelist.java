@@ -7,7 +7,6 @@ import java.util.List;
 
 import net.eithon.library.mysql.Database;
 import net.eithon.library.mysql.DbRecord;
-import net.eithon.library.mysql.DbTable;
 import net.eithon.library.mysql.IDbRecord;
 
 public class DbWhitelist extends DbRecord<DbWhitelist> implements IDbRecord<DbWhitelist> {
@@ -38,8 +37,13 @@ public class DbWhitelist extends DbRecord<DbWhitelist> implements IDbRecord<DbWh
 
 	public static void deleteByBlacklistId(Database database, long blacklistId) {
 		DbWhitelist whitelist = new DbWhitelist(database);
-		whitelist.deleteByWhere("blacklist_id=", blacklistId);
+		whitelist.deleteByWhere("blacklist_id=?", blacklistId);
 	}
+	
+	public static List<DbWhitelist> findByBlacklistId(Database database, long blacklistId) {
+		return findByWhere(database, "blacklist_id=?", blacklistId);
+	}
+
 
 	private DbWhitelist(Database database, String word, long blacklistId) {
 		this(database);
@@ -48,15 +52,11 @@ public class DbWhitelist extends DbRecord<DbWhitelist> implements IDbRecord<DbWh
 	}
 
 	private DbWhitelist(Database database) {
-		super(new DbTable(database, "whitelist"));
+		this(database, -1);
 	}
 
-	protected DbWhitelist(DbTable table, long id) {
-		super(table, id);
-	}
-
-	protected DbWhitelist(DbTable dbTable) {
-		super(dbTable);
+	protected DbWhitelist(Database database, long id) {
+		super(database, "whitelist", id);
 	}
 
 	public String getWord() { return this.word; }
@@ -97,7 +97,7 @@ public class DbWhitelist extends DbRecord<DbWhitelist> implements IDbRecord<DbWh
 	}
 
 	@Override
-	public DbWhitelist factory(DbTable table, long id) {
-		return new DbWhitelist(table, id);
+	public DbWhitelist factory(Database database, long id) {
+		return new DbWhitelist(database, id);
 	}
 }

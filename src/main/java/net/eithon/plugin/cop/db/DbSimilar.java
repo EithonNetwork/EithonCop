@@ -7,7 +7,6 @@ import java.util.List;
 
 import net.eithon.library.mysql.Database;
 import net.eithon.library.mysql.DbRecord;
-import net.eithon.library.mysql.DbTable;
 import net.eithon.library.mysql.IDbRecord;
 
 public class DbSimilar extends DbRecord<DbSimilar> implements IDbRecord<DbSimilar> {
@@ -42,7 +41,11 @@ public class DbSimilar extends DbRecord<DbSimilar> implements IDbRecord<DbSimila
 
 	public static void deleteByBlacklistId(Database database, long blacklistId) {
 		DbSimilar similar = new DbSimilar(database);
-		similar.deleteByWhere("blacklist_id=", blacklistId);
+		similar.deleteByWhere("blacklist_id=?", blacklistId);
+	}
+
+	public static List<DbSimilar> findByBlacklistId(Database database, long blacklistId) {
+		return findByWhere(database, "blacklist_id=?", blacklistId);
 	}
 
 	private DbSimilar(Database database, String word, long blacklistId, boolean isVerified) {
@@ -53,15 +56,11 @@ public class DbSimilar extends DbRecord<DbSimilar> implements IDbRecord<DbSimila
 	}
 
 	private DbSimilar(Database database) {
-		super(new DbTable(database, "similar_to_blacklisted"));
+		this(database, -1);
 	}
 
-	protected DbSimilar(DbTable table, long id) {
-		super(table, id);
-	}
-
-	protected DbSimilar(DbTable dbTable) {
-		super(dbTable);
+	protected DbSimilar(Database database, long id) {
+		super(database, "similar_to_blacklisted", id);
 	}
 
 	public String getWord() { return this.word; }
@@ -107,7 +106,7 @@ public class DbSimilar extends DbRecord<DbSimilar> implements IDbRecord<DbSimila
 	}
 
 	@Override
-	public DbSimilar factory(DbTable table, long id) {
-		return new DbSimilar(table, id);
+	public DbSimilar factory(Database database, long id) {
+		return new DbSimilar(database, id);
 	}
 }

@@ -7,7 +7,6 @@ import java.util.List;
 
 import net.eithon.library.mysql.Database;
 import net.eithon.library.mysql.DbRecord;
-import net.eithon.library.mysql.DbTable;
 import net.eithon.library.mysql.IDbRecord;
 
 public class DbBlacklist extends DbRecord<DbBlacklist> implements IDbRecord<DbBlacklist> {
@@ -40,11 +39,11 @@ public class DbBlacklist extends DbRecord<DbBlacklist> implements IDbRecord<DbBl
 	}
 
 	private DbBlacklist(Database database) {
-		super(new DbTable(database, "blacklist"));
+		this(database, -1);
 	}
 
-	private DbBlacklist(DbTable table, long id) {
-		super(table, id);
+	private DbBlacklist(Database database, long id) {
+		super(database, "blacklist", id);
 	}
 	
 	public String getWord() { return this.word; }
@@ -87,7 +86,7 @@ public class DbBlacklist extends DbRecord<DbBlacklist> implements IDbRecord<DbBl
 	}
 
 	@Override
-	public DbBlacklist factory(DbTable table, long id) {
-		return new DbBlacklist(table, id);
+	public DbBlacklist factory(Database database, long id) {
+		return new DbBlacklist(database, id);
 	}
 }

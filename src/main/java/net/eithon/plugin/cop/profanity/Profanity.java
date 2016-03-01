@@ -111,8 +111,9 @@ class Profanity {
 
 	public void deleteFromDb() {
 		if (this._dbBlacklist == null) return;
-		DbWhitelist.deleteByBlacklistId(Config.V.database, this._dbBlacklist.getDbId());
+
 		DbSimilar.deleteByBlacklistId(Config.V.database, this._dbBlacklist.getDbId());
+		DbWhitelist.deleteByBlacklistId(Config.V.database, this._dbBlacklist.getDbId());
 		this._dbBlacklist.delete();
 		this._dbBlacklist = null;
 	}
