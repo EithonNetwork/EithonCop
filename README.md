@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 2.0 (2016-02-28)
+
+* NEW: Save profanities in a database
+
 ### 1.6.2 (2016-01-24)
 
 * BUG: Wrong parameter name for tempmute <reason>

@@ -35,16 +35,10 @@ public class ProfanityFilterController {
 		this._blacklist.delayedLoad();
 		this._whitelist = new Whitelist(eithonPlugin, this._blacklist);
 		this._whitelist.delayedLoad(1);
-		if (Config.V.saveSimilar) {
-			this._blacklist.delayedLoadSimilar(2);
-		}
 		delayedLoadSeed(4);
 	}
 
 	public void disable() {
-		this._whitelist.save();
-		this._blacklist.save();
-		this._blacklist.saveSimilar(this._whitelist);
 	}
 
 	private void delayedLoadSeed(double delaySeconds)
@@ -96,7 +90,7 @@ public class ProfanityFilterController {
 		return file;
 	}
 
-	public String addProfanity(CommandSender sender, String word, boolean isLiteral, String synonyms) {
+	public String addProfanity(CommandSender sender, String word, boolean isLiteral) {
 		if (word.length() < profanityWordMinimumLength) {
 			Config.M.blackListWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
 			return null;
@@ -104,16 +98,12 @@ public class ProfanityFilterController {
 		Profanity profanity = this._blacklist.getProfanity(word);
 		if ((profanity != null) && word.equalsIgnoreCase(profanity.getWord())) {
 			profanity.setIsLiteral(isLiteral);
-			if (synonyms != null) profanity.setSynonyms(synonyms.split("\\W+"));
-			this._blacklist.delayedSave();
 			return profanity.getWord();
 		}
 		if (profanity != null) {
 			Config.M.probablyDuplicateProfanity.sendMessage(sender, word, profanity.getWord());
 		}
 		profanity = this._blacklist.add(word, isLiteral);
-		if (synonyms != null) profanity.setSynonyms(synonyms.split("\\W+"));
-		this._blacklist.delayedSave();
 		return profanity.getWord();
 	}
 
@@ -134,7 +124,6 @@ public class ProfanityFilterController {
 			return null;
 		}
 		this._blacklist.remove(word);
-		this._blacklist.delayedSave();
 		return found;
 	}
 
@@ -158,8 +147,7 @@ public class ProfanityFilterController {
 				Config.M.acceptedWordWasBlacklisted.sendMessage(sender, word);
 				return null;
 			}
-			this._whitelist.add(word);
-			this._whitelist.delayedSave();
+			this._whitelist.create(word);
 			return profanity.getWord();
 		}
 		Config.M.acceptedWordWasNotBlacklisted.sendMessage(sender, word);
@@ -178,7 +166,6 @@ public class ProfanityFilterController {
 		}
 
 		this._whitelist.remove(normalized);
-		this._whitelist.delayedSave();
 		return normalized;
 	}
 

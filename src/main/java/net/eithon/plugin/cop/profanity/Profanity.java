@@ -3,17 +3,14 @@ package net.eithon.plugin.cop.profanity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 
-import net.eithon.library.json.JsonObject;
 import net.eithon.plugin.cop.Config;
+import net.eithon.plugin.cop.db.DbBlacklist;
+import net.eithon.plugin.cop.db.DbSimilar;
+import net.eithon.plugin.cop.db.DbWhitelist;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
-class Profanity extends JsonObject<Profanity> {
+class Profanity {
 	static final int PROFANITY_LEVEL_NONE = 0;
 	static final int PROFANITY_LEVEL_LITERAL = 1;
 	static final int PROFANITY_LEVEL_COMPOSED = 2;
@@ -21,46 +18,18 @@ class Profanity extends JsonObject<Profanity> {
 	static final int PROFANITY_LEVEL_MAX = 3;
 	static Metaphone3 metaphone3;
 
-	private static EnumMap<ProfanityType, Integer> profanityTypeToInteger;
-	private static HashMap<Integer, ProfanityType> integerToProfanityType;
-	private static EnumMap<ProfanityType, String[]> synonyms;
 	private static Comparator<Profanity> profanityComparator;
 
 	private String _word;
 	private String _primaryEncoded;
 	private String _secondaryEncoded;
-	private ProfanityType _type;
 	private boolean _isLiteral;
-	private List<String> _synonyms;
+	private DbBlacklist _dbBlacklist;
 
 	static void initialize() {
 		metaphone3 = new Metaphone3();
 		metaphone3.SetEncodeVowels(true);
 		metaphone3.SetEncodeExact(true);
-		profanityTypeToInteger = new EnumMap<Profanity.ProfanityType, Integer>(ProfanityType.class);
-		integerToProfanityType = new HashMap<Integer, Profanity.ProfanityType>();
-		synonyms = new EnumMap<Profanity.ProfanityType, String[]>(ProfanityType.class);
-		addProfanityType(ProfanityType.UNKNOWN, 0);
-		addProfanityType(ProfanityType.BODY_CONTENT, 1);
-		addProfanityType(ProfanityType.BODY_PART, 2);
-		addProfanityType(ProfanityType.LOCATION, 3);
-		addProfanityType(ProfanityType.OFFENSIVE, 4);
-		addProfanityType(ProfanityType.PROFESSION, 5);
-		addProfanityType(ProfanityType.RACIST, 6);
-		addProfanityType(ProfanityType.SEXUAL_NOUN, 7);
-		addProfanityType(ProfanityType.SEXUAL_VERB, 8);
-		addProfanityType(ProfanityType.DEROGATIVE, 9);
-		synonyms.put(ProfanityType.UNKNOWN, Config.V.categoryUnknown);
-		synonyms.put(ProfanityType.BODY_CONTENT, Config.V.categoryBodyContent);
-		synonyms.put(ProfanityType.BODY_PART, Config.V.categoryBodyPart);
-		synonyms.put(ProfanityType.LOCATION, Config.V.categoryLocation);
-		synonyms.put(ProfanityType.OFFENSIVE, Config.V.categoryOffensive);
-		synonyms.put(ProfanityType.PROFESSION, Config.V.categoryProfession);
-		synonyms.put(ProfanityType.RACIST, Config.V.categoryRacist);
-		synonyms.put(ProfanityType.SEXUAL_NOUN, Config.V.categorySexualNoun);
-		synonyms.put(ProfanityType.SEXUAL_VERB, Config.V.categorySexualVerb);
-		synonyms.put(ProfanityType.DEROGATIVE, Config.V.categoryDerogative);
-
 		profanityComparator = new Comparator<Profanity>(){
 			public int compare(Profanity p1, Profanity p2)
 			{
@@ -69,27 +38,28 @@ class Profanity extends JsonObject<Profanity> {
 		};
 	}
 
+	public static Profanity getFromRecord(DbBlacklist dbBlacklist) {
+		Profanity profanity = new Profanity(dbBlacklist.getWord(), dbBlacklist.getIsLiteral());
+		profanity._dbBlacklist = dbBlacklist;
+		return profanity;
+	}
+	
+	public static Profanity create(String word, boolean isLiteral) {
+		Profanity profanity = new Profanity(word, isLiteral);
+		profanity._dbBlacklist = DbBlacklist.create(Config.V.database, profanity._word, profanity._isLiteral);
+		return profanity;
+	}
+
 	Profanity(String word, boolean isLiteral) {
 		this._word = normalize(word);
-		this._type = ProfanityType.UNKNOWN;
 		this._isLiteral = isLiteral;
-		this._synonyms = new ArrayList<String>();
 		prepare();
 	}
 
 	Profanity() {
 	}
 
-	enum ProfanityType {
-		UNKNOWN, BODY_CONTENT, BODY_PART, LOCATION, OFFENSIVE, PROFESSION, RACIST, SEXUAL_NOUN, SEXUAL_VERB, DEROGATIVE
-	}
-
 	public static String normalize(String word) { return Leet.decode(word.toLowerCase()); }
-
-	private static void addProfanityType(ProfanityType type, Integer i) {
-		profanityTypeToInteger.put(type, i);
-		integerToProfanityType.put(i, type);
-	}
 
 	private void prepare() {
 		synchronized (metaphone3) {
@@ -106,31 +76,12 @@ class Profanity extends JsonObject<Profanity> {
 	String getSecondary() { return this._secondaryEncoded; }
 	boolean hasSecondary() { return this._secondaryEncoded != null; }
 	boolean isLiteral() { return this._isLiteral; }
-	ProfanityType getProfanityType() { return this._type; }
-	void setProfanityType(ProfanityType type) { this._type = type; }
 	boolean isSameWord(String word) {return this._word.equalsIgnoreCase(normalize(word)); }
 	int getProfanityLevel(String word) { 
 		if (isSameWord(word)) return PROFANITY_LEVEL_LITERAL;
 		return PROFANITY_LEVEL_SIMILAR;
 	}
-
-	String getSynonym() {
-		String[] array = getSynonyms();
-		int index = (int) (Math.random()*array.length);
-		return array[index];
-	}
-
-	String[] getSynonyms() {
-		String[] array = this._synonyms.size() > 0 ? this._synonyms.toArray(new String[0]) : synonyms.get(this._type);
-		if ((array == null) || (array.length == 0)) return new String[] {"****"};
-		return array;
-	}
-
-	@Override
-	public
-	Profanity factory() {
-		return new Profanity();
-	}
+	public long getDbId() { return (this._dbBlacklist == null) ? 0 : this._dbBlacklist.getDbId(); }
 
 	static List<Profanity> sortByWord(Collection<Profanity> collection) {
 		ArrayList<Profanity> array = new ArrayList<Profanity>(collection);
@@ -138,48 +89,9 @@ class Profanity extends JsonObject<Profanity> {
 		return array;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public
-	Object toJson() {
-		JSONObject json = new JSONObject();
-		json.put("word", this._word);
-		json.put("type", profanityTypeToInteger.get(this._type));
-		json.put("isLiteral", this._isLiteral ? 1 : 0);
-		JSONArray array = new JSONArray();
-		array.addAll(this._synonyms);
-		json.put("synonyms", array);
-		return json;
-	}
-
-	@Override
-	public
-	Profanity fromJson(Object json) {
-		JSONObject jsonObject = (JSONObject) json;
-		this._word = (String) jsonObject.get("word");
-		Long typeAsInteger = (Long) jsonObject.get("type");
-		Long isLiteralAsLong = (Long) jsonObject.get("isLiteral");
-		JSONArray array = (JSONArray) jsonObject.get("synonyms");
-		this._synonyms = new ArrayList<String>();
-		if (array != null) {
-			for (Object object : array) {
-				this._synonyms.add((String) object);
-			}
-		}
-		this._isLiteral = ((isLiteralAsLong == null) || (isLiteralAsLong.longValue() == 0)) ? false : true;
-		if (typeAsInteger == null) this._type = ProfanityType.UNKNOWN;
-		else this._type = integerToProfanityType.get(typeAsInteger.intValue());
-		this.prepare();
-		return this;
-	}
-
-	static Profanity getFromJson(Object json) {
-		return new Profanity().fromJson(json);
-	}
-
 	@Override
 	public String toString() {
-		String result = String.format("%s (%s, %d)", getWord(), this._isLiteral ? "literal" : "not literal", profanityTypeToInteger.get(this._type));
+		String result = String.format("%s (%s)", getWord(), this._isLiteral ? "literal" : "not literal");
 		if (hasSecondary()) result += String.format(" [%s, %s]", getPrimary(), getSecondary());
 		else result += String.format(" [%s]", getPrimary());
 		return result;
@@ -192,14 +104,17 @@ class Profanity extends JsonObject<Profanity> {
 		return (this._word.equalsIgnoreCase(that._word));
 	}
 
-	public void setIsLiteral(boolean isLiteral) { this._isLiteral = isLiteral; }
+	public void setIsLiteral(boolean isLiteral) { 
+		this._isLiteral = isLiteral;
+		this._dbBlacklist.update(this._isLiteral);
+	}
 
-	public void setSynonyms(String[] synonyms) {
-		this._synonyms = new ArrayList<String>();
-		if (synonyms != null) {
-			for (String synonym : synonyms) {
-				this._synonyms.add(synonym);
-			}
-		}
+	public void deleteFromDb() {
+		if (this._dbBlacklist == null) return;
+
+		DbSimilar.deleteByBlacklistId(Config.V.database, this._dbBlacklist.getDbId());
+		DbWhitelist.deleteByBlacklistId(Config.V.database, this._dbBlacklist.getDbId());
+		this._dbBlacklist.delete();
+		this._dbBlacklist = null;
 	}
 }
