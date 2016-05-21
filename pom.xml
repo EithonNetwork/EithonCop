@@ -2,9 +2,25 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.eithon.plugin</groupId>
 	<artifactId>EithonCop</artifactId>
-	<version>2.0</version>
+	<version>2.1</version>
 	<name>EithonCop</name>
 	<build>
+      <resources>
+		  <resource>
+			<directory>src/main/resources</directory>
+			<filtering>true</filtering>
+			<includes>
+			  <include>plugin.yml</include>
+			</includes>
+		  </resource>
+		  <resource>
+			<directory>src/main/resources</directory>
+			<filtering>false</filtering>
+			<excludes>
+			  <exclude>plugin.yml</exclude>
+			</excludes>
+		  </resource>
+    </resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -37,6 +53,7 @@
 			<version>[4.9,)</version>
 			<scope>provided</scope>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>com.dthielke</groupId>
 			<artifactId>HeroChat</artifactId>
@@ -44,6 +61,7 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/dependencies/HeroChat-5.6.7.jar</systemPath>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>

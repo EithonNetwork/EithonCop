@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 2.1 (2016-05-21)
+
+* CHANGE: Not dependent on HeroChat anymore
+
 ### 2.0 (2016-02-28)
 
 * NEW: Save profanities in a database

@@ -16,14 +16,12 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
-
-import com.dthielke.herochat.Channel;
-import com.dthielke.herochat.ChannelChatEvent;
 
 public final class EventListener implements Listener {
 
@@ -37,7 +35,7 @@ public final class EventListener implements Listener {
 		this._controller = controller;
 	}
 
-	/*
+
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onAsyncPlayerChatEventLowest(AsyncPlayerChatEvent e) {
 		String originalMessage = e.getMessage();
@@ -58,8 +56,9 @@ public final class EventListener implements Listener {
 		}
 		verbose("onAsyncPlayerChatEvent", "Leave:  \"%s\".", newMessage == null ? "null" : newMessage);
 	}
-	 */
+	
 
+	/* HeroChat
 	// Censor channel chats, mute channel chats
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onChannelChatEvent(ChannelChatEvent e) {
@@ -88,6 +87,7 @@ public final class EventListener implements Listener {
 		if (channel.getMembers().size() > 2) return false;
 		return channel.getName().startsWith("convo");
 	}
+	 */
 
 	// Mute certain commands
 	@EventHandler
