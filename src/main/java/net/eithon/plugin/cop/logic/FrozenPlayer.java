@@ -1,9 +1,13 @@
 package net.eithon.plugin.cop.logic;
 
-import net.eithon.library.extensions.EithonPlayer;
-import net.eithon.library.facades.PermissionsFacade;
+import java.util.UUID;
 
+import net.eithon.library.facades.PermissionsFacade;
+import net.eithon.library.time.TimeMisc;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -11,7 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 public class FrozenPlayer {
 
 	private static final String EITHONBUNGEE_ACCESS_SERVER = "eithonbungee.access.server";
-	private EithonPlayer _eithonPlayer;
+	private UUID _playerId;
 	private float _walkSpeed;
 	private float _flySpeed;
 	private int _fireTicks;
@@ -25,14 +29,15 @@ public class FrozenPlayer {
 
 	public FrozenPlayer(Player player) {
 		this._isFrozen = false;
-		this._eithonPlayer = new EithonPlayer(player);
+		this._playerId = player.getUniqueId();
 		this._location = player.getLocation();
 		freeze();
 		this._isFrozen = true;
 	}
 
-	public Player getPlayer() { return this._eithonPlayer.getPlayer();	}
-	public String getName() { return this._eithonPlayer.getName(); }
+	public Player getPlayer() { return Bukkit.getPlayer(this._playerId);	}
+	public OfflinePlayer getOfflinePlayer() { return Bukkit.getOfflinePlayer(this._playerId);	}
+	public String getName() { return getOfflinePlayer().getName(); }
 
 	public void freeze() {
 		Player player = getPlayer();
@@ -58,14 +63,14 @@ public class FrozenPlayer {
 		player.setFireTicks(0);
 		player.setFoodLevel(20);
 		PermissionsFacade.removePlayerPermissionAsync(player, EITHONBUNGEE_ACCESS_SERVER);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 128));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, (int) TimeMisc.secondsToTicks(10), 128));
 	}
 
 	public void thaw() {
-		if (!this._eithonPlayer.isOnline()) return;
+		Player player = getPlayer();
+		if (player == null) return;
 		this._isFrozen = false;
 		this._canTeleport = true;
-		Player player = getPlayer();
 		if (this._hasAccessServerPermission) PermissionsFacade.addPlayerPermissionAsync(player, EITHONBUNGEE_ACCESS_SERVER);
 		player.setWalkSpeed(this._walkSpeed);
 		player.setFlySpeed(this._flySpeed);
@@ -96,6 +101,7 @@ public class FrozenPlayer {
 		Player player = getPlayer();
 		if ((player == null) || !player.isOnline()) return;
 		if (this._location.distance(player.getLocation()) < 1.0) return;
+		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, (int) TimeMisc.secondsToTicks(10), 128));
 		try {
 			this._canTeleport = true;
 			player.teleport(this._location);
