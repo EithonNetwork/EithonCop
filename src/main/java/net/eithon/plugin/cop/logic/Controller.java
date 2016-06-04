@@ -130,13 +130,26 @@ public class Controller {
 	}
 
 	public void playerJoined(Player player) {
+		new BukkitRunnable() {
+			public void run() {
+				refreeze(player);
+			}
+		}.runTaskLaterAsynchronously(this._eithonPlugin, TimeMisc.secondsToTicks(1));
+		
+	}
+
+	void refreeze(Player player) {
 		FrozenPlayer frozenPlayer = this._frozenPlayers.get(player);
 		if (frozenPlayer == null) {
 			verbose("playerJoined", "Player=%s was not frozen", player.getName());
 			return;
 		}
-		verbose("playerJoined", "Calling refreeze");
-		frozenPlayer.refreeze();
+		new BukkitRunnable() {
+			public void run() {
+				verbose("playerJoined", "Calling refreeze");
+				frozenPlayer.refreeze();
+			}
+		}.runTask(this._eithonPlugin);
 	}
 
 	public boolean thawPlayer(CommandSender sender, OfflinePlayer player) {
@@ -201,16 +214,16 @@ public class Controller {
 	boolean teleportFrozenPlayers(final int count) {
 		if (count != this._repeatCount) return false;
 		for (FrozenPlayer frozenPlayer : this._frozenPlayers) {
-			try {
-				frozenPlayer.telePortBack();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			new BukkitRunnable() {
+				public void run() {
+					frozenPlayer.telePortBack();
+				}
+			}.runTask(this._eithonPlugin);
 		}
 		return true;
 	}
 
-	private void verbose(String method, String format, Object... args) {
+	void verbose(String method, String format, Object... args) {
 		String message = CoreMisc.safeFormat(format, args);
 		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Controller.%s: %s", method, message);
 	}

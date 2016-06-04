@@ -3,6 +3,7 @@ package net.eithon.plugin.cop.logic;
 import java.util.UUID;
 
 import net.eithon.library.facades.PermissionsFacade;
+import net.eithon.library.plugin.Logger;
 import net.eithon.library.time.TimeMisc;
 
 import org.bukkit.Bukkit;
@@ -54,16 +55,18 @@ public class FrozenPlayer {
 
 	public void refreeze() {
 		Player player = getPlayer();
+		if (player == null) return;
 		try {
 			player.setAllowFlight(true);
 			player.setFlying(true);
 		} catch (Exception e) {}
+		Logger.libraryInfo("FrozenPlayer.refreeze(): Set walk speed 0 for player %s", player.getName());
 		player.setWalkSpeed(0);
 		player.setFlySpeed(0);
 		player.setFireTicks(0);
 		player.setFoodLevel(20);
 		PermissionsFacade.removePlayerPermissionAsync(player, EITHONBUNGEE_ACCESS_SERVER);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, (int) TimeMisc.secondsToTicks(10), 128));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, (int) TimeMisc.secondsToTicks(5), 128));
 	}
 
 	public void thaw() {
@@ -100,8 +103,8 @@ public class FrozenPlayer {
 	public void telePortBack() {
 		Player player = getPlayer();
 		if ((player == null) || !player.isOnline()) return;
+		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, (int) TimeMisc.secondsToTicks(5), 128));
 		if (this._location.distance(player.getLocation()) < 1.0) return;
-		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, (int) TimeMisc.secondsToTicks(10), 128));
 		try {
 			this._canTeleport = true;
 			player.teleport(this._location);

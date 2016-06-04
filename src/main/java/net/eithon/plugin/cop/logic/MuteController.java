@@ -1,6 +1,5 @@
 package net.eithon.plugin.cop.logic;
 
-import java.util.Collection;
 import java.util.List;
 
 import net.eithon.library.core.CoreMisc;
