@@ -1,6 +1,7 @@
 package net.eithon.plugin.cop.logic;
 
 import net.eithon.library.extensions.EithonPlayer;
+import net.eithon.library.facades.PermissionsFacade;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -19,6 +20,7 @@ public class FrozenPlayer {
 	private boolean _canTeleport;
 	private boolean _allowFlight;
 	private boolean _isFrozen;
+	private boolean _hasAccessServerPermission;
 
 	public FrozenPlayer(Player player) {
 		this._isFrozen = false;
@@ -33,21 +35,28 @@ public class FrozenPlayer {
 
 	public void freeze() {
 		Player player = getPlayer();
+		this._hasAccessServerPermission = player.hasPermission("eithonbungee.access.server");
 		this._canTeleport = false;
 		this._allowFlight = player.getAllowFlight();
 		this._isFlying = player.isFlying();
+		this._walkSpeed = player.getWalkSpeed();
+		this._flySpeed = player.getFlySpeed();
+		this._fireTicks = player.getFireTicks();
+		this._foodLevel = player.getFoodLevel();
+		refreeze();
+	}
+
+	public void refreeze() {
+		Player player = getPlayer();
 		try {
 			player.setAllowFlight(true);
 			player.setFlying(true);
 		} catch (Exception e) {}
-		this._walkSpeed = player.getWalkSpeed();
 		player.setWalkSpeed(0);
-		this._flySpeed = player.getFlySpeed();
 		player.setFlySpeed(0);
-		this._fireTicks = player.getFireTicks();
 		player.setFireTicks(0);
-		this._foodLevel = player.getFoodLevel();
 		player.setFoodLevel(20);
+		PermissionsFacade.removePlayerPermissionAsync(player, "eithonbungee.access.server");
 		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 128));
 	}
 
@@ -56,6 +65,7 @@ public class FrozenPlayer {
 		this._isFrozen = false;
 		this._canTeleport = true;
 		Player player = getPlayer();
+		if (this._hasAccessServerPermission) PermissionsFacade.addPlayerPermissionAsync(player, "eithonbungee.access.server");
 		player.setWalkSpeed(this._walkSpeed);
 		player.setFlySpeed(this._flySpeed);
 		player.setFireTicks(this._fireTicks);
@@ -69,10 +79,15 @@ public class FrozenPlayer {
 
 	public static void restore(Player player, float walkSpeed, float flySpeed) {
 		if (!player.isOnline()) return;
-		player.setWalkSpeed(walkSpeed);
-		player.setFlySpeed(flySpeed);
+		try {
+			player.setWalkSpeed(walkSpeed);
+		} catch (Exception e) {}
+		try {
+			player.setFlySpeed(flySpeed);
+		} catch (Exception e) {}
 		player.setFireTicks(0);
 		player.setFoodLevel(20);
+		PermissionsFacade.addPlayerPermissionAsync(player, "eithonbungee.access.server");
 		player.removePotionEffect(PotionEffectType.JUMP);
 	}
 

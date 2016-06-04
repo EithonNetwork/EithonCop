@@ -122,7 +122,7 @@ public class Controller {
 
 	public boolean freezePlayer(CommandSender sender, Player player) {
 		if (this._frozenPlayers.hasInformation(player)) {
-			Config.M.playerAlreadyFrozen.sendMessage(sender, player.getName());
+			if (sender != null) Config.M.playerAlreadyFrozen.sendMessage(sender, player.getName());
 			return false;
 		}
 		this._frozenPlayers.put(player, new FrozenPlayer(player));
@@ -131,6 +131,12 @@ public class Controller {
 			repeatedlyTeleportFrozenPlayers(this._repeatCount);
 		}
 		return true;
+	}
+
+	public void playerJoined(Player player) {
+		FrozenPlayer frozenPlayer = this._frozenPlayers.get(player);
+		if (frozenPlayer == null) return;
+		frozenPlayer.refreeze();
 	}
 
 	public boolean thawPlayer(CommandSender sender, OfflinePlayer player) {

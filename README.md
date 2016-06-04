@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 2.1.1 (2016-06-04)
+
+* BUG: Frozen players could log out/in to avoid the freeze.
+
 ### 2.1 (2016-05-21)
 
 * CHANGE: Not dependent on HeroChat anymore
