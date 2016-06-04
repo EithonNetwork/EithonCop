@@ -151,10 +151,6 @@ public class CommandHandler {
 		return this._controller.getFrozenPlayerNames();
 	}
 
-	private String getSenderAsOnlinePlayer(EithonCommand command) {
-		return command.getPlayer().getName();
-	}
-
 	void blacklistAddCommand(EithonCommand command)
 	{
 		String profanity = command.getArgument("profanity").asLowerCase();
