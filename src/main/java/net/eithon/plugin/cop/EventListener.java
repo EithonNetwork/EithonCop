@@ -20,6 +20,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
@@ -107,6 +108,15 @@ public final class EventListener implements Listener {
 	// Frozen player that logs in again should be frozen again
 	@EventHandler(ignoreCancelled=true)
 	public void onPlayerJoinEvent(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		if (player == null) return;
+		verbose("onPlayerJoinEvent", "Player=%s", player.getName());
+		this._controller.playerJoined(event.getPlayer());
+	}
+
+	// Frozen player that is respawned again should be frozen again
+	@EventHandler(ignoreCancelled=true)
+	public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
 		Player player = event.getPlayer();
 		if (player == null) return;
 		verbose("onPlayerJoinEvent", "Player=%s", player.getName());

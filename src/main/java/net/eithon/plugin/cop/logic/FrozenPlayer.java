@@ -10,6 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class FrozenPlayer {
 
+	private static final String EITHONBUNGEE_ACCESS_SERVER = "eithonbungee.access.server";
 	private EithonPlayer _eithonPlayer;
 	private float _walkSpeed;
 	private float _flySpeed;
@@ -35,7 +36,7 @@ public class FrozenPlayer {
 
 	public void freeze() {
 		Player player = getPlayer();
-		this._hasAccessServerPermission = player.hasPermission("eithonbungee.access.server");
+		this._hasAccessServerPermission = player.hasPermission(EITHONBUNGEE_ACCESS_SERVER);
 		this._canTeleport = false;
 		this._allowFlight = player.getAllowFlight();
 		this._isFlying = player.isFlying();
@@ -56,7 +57,7 @@ public class FrozenPlayer {
 		player.setFlySpeed(0);
 		player.setFireTicks(0);
 		player.setFoodLevel(20);
-		PermissionsFacade.removePlayerPermissionAsync(player, "eithonbungee.access.server");
+		PermissionsFacade.removePlayerPermissionAsync(player, EITHONBUNGEE_ACCESS_SERVER);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 128));
 	}
 
@@ -65,7 +66,7 @@ public class FrozenPlayer {
 		this._isFrozen = false;
 		this._canTeleport = true;
 		Player player = getPlayer();
-		if (this._hasAccessServerPermission) PermissionsFacade.addPlayerPermissionAsync(player, "eithonbungee.access.server");
+		if (this._hasAccessServerPermission) PermissionsFacade.addPlayerPermissionAsync(player, EITHONBUNGEE_ACCESS_SERVER);
 		player.setWalkSpeed(this._walkSpeed);
 		player.setFlySpeed(this._flySpeed);
 		player.setFireTicks(this._fireTicks);
@@ -87,7 +88,7 @@ public class FrozenPlayer {
 		} catch (Exception e) {}
 		player.setFireTicks(0);
 		player.setFoodLevel(20);
-		PermissionsFacade.addPlayerPermissionAsync(player, "eithonbungee.access.server");
+		PermissionsFacade.addPlayerPermissionAsync(player, EITHONBUNGEE_ACCESS_SERVER);
 		player.removePotionEffect(PotionEffectType.JUMP);
 	}
 

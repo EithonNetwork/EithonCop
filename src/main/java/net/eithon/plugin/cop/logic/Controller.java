@@ -135,7 +135,11 @@ public class Controller {
 
 	public void playerJoined(Player player) {
 		FrozenPlayer frozenPlayer = this._frozenPlayers.get(player);
-		if (frozenPlayer == null) return;
+		if (frozenPlayer == null) {
+			verbose("playerJoined", "Player=%s was not frozen", player.getName());
+			return;
+		}
+		verbose("playerJoined", "Calling refreeze");
 		frozenPlayer.refreeze();
 	}
 
