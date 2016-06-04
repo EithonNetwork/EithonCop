@@ -4,7 +4,7 @@ import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.plugin.cop.logic.Controller;
 import net.eithon.plugin.cop.CommandHandler;
 
-public final class Plugin extends EithonPlugin {
+public final class EithonCopPlugin extends EithonPlugin {
 	private Controller _controller;
 	private EventListener _eventListener;
 

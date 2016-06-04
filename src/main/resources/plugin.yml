@@ -1,5 +1,5 @@
 name: EithonCop
-main: net.eithon.plugin.cop.Plugin
+main: net.eithon.plugin.cop.EithonCopPlugin
 version: ${project.version}
 author: vanbrayne
 depend: [EithonLibrary]

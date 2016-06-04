@@ -94,11 +94,14 @@ public class FrozenPlayer {
 
 	public void telePortBack() {
 		Player player = getPlayer();
-		if (!player.isOnline()) return;
+		if ((player == null) || !player.isOnline()) return;
 		if (this._location.distance(player.getLocation()) < 1.0) return;
-		this._canTeleport = true;
-		player.teleport(this._location);
-		this._canTeleport = false;
+		try {
+			this._canTeleport = true;
+			player.teleport(this._location);
+		} finally {
+			this._canTeleport = false;
+		}
 	}
 
 	public boolean canTeleport() { return this._canTeleport; }
