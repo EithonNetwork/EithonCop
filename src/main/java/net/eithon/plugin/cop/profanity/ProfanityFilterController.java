@@ -64,10 +64,10 @@ public class ProfanityFilterController {
 				FileMisc.appendLine(fileOut, "");
 			}
 		} catch (FileNotFoundException e) {
-			this._eithonPlugin.getEithonLogger().error("(1) Could not read from file %s: %s", fileIn.getName(), e.getMessage());
+			this._eithonPlugin.logError("(1) Could not read from file %s: %s", fileIn.getName(), e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			this._eithonPlugin.getEithonLogger().error("(2) Could not read from file %s: %s", fileIn.getName(), e.getMessage());
+			this._eithonPlugin.logError("(2) Could not read from file %s: %s", fileIn.getName(), e.getMessage());
 			e.printStackTrace();
 		}
 	}

@@ -15,10 +15,10 @@ public final class EithonCopPlugin extends EithonPlugin {
 		this._controller = new Controller(this);
 		CommandHandler commandHandler = new CommandHandler(this, this._controller);
 		this._eventListener = new EventListener(this, this._controller);
-		this.getEithonLogger().info("Event listener has been created");
+		this.logInfo("Event listener has been created");
 		EithonCopApi.initialize(this._controller);
 		super.activate(commandHandler.getCommandSyntax(), this._eventListener);
-		this.getEithonLogger().info("Event listener has been activated");
+		this.logInfo("Event listener has been activated");
 	}
 
 	@Override

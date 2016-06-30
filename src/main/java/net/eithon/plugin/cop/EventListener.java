@@ -99,7 +99,7 @@ public final class EventListener implements Listener {
 		verbose("onPlayerCommandPreprocessEvent", "Intercepted command \"%s\".", message);
 		Player player = event.getPlayer();
 		if (this._controller.isPlayerMutedForCommand(player, message)) {
-			this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.MAJOR, "Command \"%s\" will be cancelled for player %s.", 
+			this._eithonPlugin.dbgMajor( "Command \"%s\" will be cancelled for player %s.", 
 					message, player.getName());
 			event.setCancelled(true);
 		}
