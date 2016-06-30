@@ -184,6 +184,6 @@ class ProfanityFilter {
 	}
 
 	private void verbose(String method, String format, Object... args) {
-		this._controller.verbose(method, format, args);
+		this._controller.verboseLog("ProfanityFilter", method, format, args);
 	}
 }

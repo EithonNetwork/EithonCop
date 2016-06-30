@@ -1,8 +1,6 @@
 package net.eithon.plugin.cop;
 
 import net.eithon.library.extensions.EithonPlugin;
-import net.eithon.library.plugin.Logger;
-import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.plugin.cop.logic.Controller;
 
 import org.bukkit.entity.Entity;
@@ -29,11 +27,9 @@ public final class EventListener implements Listener {
 
 	private Controller _controller;
 	private EithonPlugin _eithonPlugin;
-	private Logger _eithonLogger;
 
 	public EventListener(EithonPlugin eithonPlugin, Controller controller) {
 		this._eithonPlugin = eithonPlugin;
-		this._eithonLogger = eithonPlugin.getEithonLogger();
 		this._controller = controller;
 	}
 
@@ -268,7 +264,6 @@ public final class EventListener implements Listener {
 	}
 
 	private void verbose(String method, String format, Object... args) {
-		String message = String.format(format, args);
-		this._eithonLogger.debug(DebugPrintLevel.VERBOSE, "EventListener.%s: %s", method, message);
+		this._eithonPlugin.dbgVerbose("EventListener", method, format, args);	
 	}
 }

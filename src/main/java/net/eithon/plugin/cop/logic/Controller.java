@@ -3,11 +3,9 @@ package net.eithon.plugin.cop.logic;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.eithon.library.core.CoreMisc;
 import net.eithon.library.core.PlayerCollection;
 import net.eithon.library.extensions.EithonPlayer;
 import net.eithon.library.extensions.EithonPlugin;
-import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 import net.eithon.plugin.cop.profanity.ProfanityFilterController;
@@ -224,7 +222,6 @@ public class Controller {
 	}
 
 	void verbose(String method, String format, Object... args) {
-		String message = CoreMisc.safeFormat(format, args);
-		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Controller.%s: %s", method, message);
+		this._eithonPlugin.dbgVerbose("Controller", method, format, args);	
 	}
 }
