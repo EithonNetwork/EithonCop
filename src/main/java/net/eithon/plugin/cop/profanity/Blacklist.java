@@ -51,7 +51,7 @@ class Blacklist {
 	Profanity remove(String word) {
 		Profanity profanity = getProfanity(word);
 		if ((profanity == null) || !profanity.isSameWord(word)) {
-			this._eithonPlugin.getEithonLogger().warning("Blacklist.add: Trying to remove a word that isn't blacklisted: \"%s\".", word);
+			this._eithonPlugin.logWarn("Blacklist.add: Trying to remove a word that isn't blacklisted: \"%s\".", word);
 			return null;
 		}
 		this._wordList.remove(word);
@@ -221,7 +221,7 @@ class Blacklist {
 		try {
 			FileMisc.appendLine(file, line);
 		} catch (IOException e) {
-			this._eithonPlugin.getEithonLogger().error("Could not write to file %s: %s", file.getName(), e.getMessage());
+			this._eithonPlugin.logError("Could not write to file %s: %s", file.getName(), e.getMessage());
 		}
 	}
 
@@ -238,7 +238,7 @@ class Blacklist {
 	void load() {
 		this._wordList = new HashMap<String, Profanity>();
 		List<DbBlacklist> list = DbBlacklist.findAll(Config.V.database);
-		this._eithonPlugin.getEithonLogger().info("Reading %d profanities from blacklist DB.", list.size());
+		this._eithonPlugin.logInfo("Reading %d profanities from blacklist DB.", list.size());
 		this._metaphoneList = new HashMap<String, Profanity>();
 		for (DbBlacklist dbBlacklist : list) {
 			Profanity profanity = null;
@@ -248,8 +248,8 @@ class Blacklist {
 				this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Loaded profanity %s", profanity.toString());
 				this.add(profanity);
 			} catch (Exception e) {
-				if (profanity != null) this._eithonPlugin.getEithonLogger().error("Could not load profanity %s", profanity.getWord());
-				this._eithonPlugin.getEithonLogger().error("%s", e.toString());
+				if (profanity != null) this._eithonPlugin.logError("Could not load profanity %s", profanity.getWord());
+				this._eithonPlugin.logError("%s", e.toString());
 				throw e;
 			}
 		}
@@ -262,7 +262,7 @@ class Blacklist {
 
 	private void minor(String format, Object... args) {
 		String message = CoreMisc.safeFormat(format, args);
-		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.MINOR, "Blacklist: %s", message);
+		this._eithonPlugin.dbgMinor( "Blacklist: %s", message);
 	}
 
 	public String[] getAllWords() {

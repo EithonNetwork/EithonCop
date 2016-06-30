@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 2.2 (2016-06-30)
+
+* CHANGE: Minecraft 1.10
+
 ### 2.1.2 (2016-06-04)
 
 * BUG: Frozen players could still change servers.

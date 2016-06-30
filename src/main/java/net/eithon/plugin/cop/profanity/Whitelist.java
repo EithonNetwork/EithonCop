@@ -89,14 +89,14 @@ class Whitelist {
 	void load() {
 		this._whitelist = new HashMap<String, Profanity>();
 		List<DbWhitelist> list = DbWhitelist.findAll(Config.V.database);
-		this._eithonPlugin.getEithonLogger().info("Reading %d whitelisted words from DB.", list.size());
+		this._eithonPlugin.logInfo("Reading %d whitelisted words from DB.", list.size());
 		for (DbWhitelist item : list) {
 			String word = item.getWord();
 			try {
 				add(word);
 			} catch (Exception e) {
-				if (word != null) this._eithonPlugin.getEithonLogger().error("Could not load word %s", word);
-				this._eithonPlugin.getEithonLogger().error("%s", e.toString());
+				if (word != null) this._eithonPlugin.logError("Could not load word %s", word);
+				this._eithonPlugin.logError("%s", e.toString());
 				throw e;
 			}
 		}
