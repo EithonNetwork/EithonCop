@@ -8,7 +8,6 @@ import java.util.List;
 import net.eithon.library.core.CoreMisc;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.file.FileMisc;
-import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.library.time.CoolDown;
 import net.eithon.plugin.cop.Config;
 import net.eithon.plugin.cop.db.DbBlacklist;
@@ -245,7 +244,7 @@ class Blacklist {
 			try {
 				profanity = Profanity.getFromRecord(dbBlacklist);
 				if (profanity == null) continue;
-				this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Loaded profanity %s", profanity.toString());
+				verbose("load", "Loaded profanity %s", profanity.toString());
 				this.add(profanity);
 			} catch (Exception e) {
 				if (profanity != null) this._eithonPlugin.logError("Could not load profanity %s", profanity.getWord());
@@ -270,7 +269,6 @@ class Blacklist {
 	}
 
 	private void verbose(String method, String format, Object... args) {
-		String message = CoreMisc.safeFormat(format, args);
-		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Blacklist.%s(): %s", method, message);
+		this._eithonPlugin.dbgVerbose("Blacklist", method, format, args);	
 	}
 }

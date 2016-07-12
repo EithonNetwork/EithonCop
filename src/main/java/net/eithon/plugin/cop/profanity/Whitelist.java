@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.eithon.library.extensions.EithonPlugin;
-import net.eithon.library.plugin.Logger.DebugPrintLevel;
 import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 import net.eithon.plugin.cop.db.DbWhitelist;
@@ -14,14 +13,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
 
 class Whitelist {
-	private static Comparator<String> stringComparator;
-
 	private EithonPlugin _eithonPlugin;
 	private Blacklist _blacklist;
 	private HashMap<String, Profanity> _whitelist;
 
 	static void initialize() {
-		stringComparator = new Comparator<String>(){
+		new Comparator<String>(){
 			public int compare(String f1, String f2)
 			{
 				return f1.compareTo(f2);
@@ -107,8 +104,7 @@ class Whitelist {
 	}
 
 	private void verbose(String method, String format, Object... args) {
-		String message = String.format(format, args);
-		this._eithonPlugin.getEithonLogger().debug(DebugPrintLevel.VERBOSE, "Whitelist.%s(): %s", method, message);
+		this._eithonPlugin.dbgVerbose("Whitelist", method, format, args);	
 	}
 }
 
