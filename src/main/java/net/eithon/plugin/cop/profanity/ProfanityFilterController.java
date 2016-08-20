@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import net.eithon.library.exceptions.FatalException;
+import net.eithon.library.exceptions.TryAgainException;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.file.FileMisc;
+import net.eithon.library.mysql.Database;
 import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 
@@ -24,11 +27,11 @@ public class ProfanityFilterController {
 	private Blacklist _blacklist;
 	private Whitelist _whitelist;
 
-	public ProfanityFilterController(EithonPlugin eithonPlugin){
+	public ProfanityFilterController(EithonPlugin eithonPlugin, Database database) throws FatalException{
 		this._eithonPlugin = eithonPlugin;
-		Profanity.initialize();
-		Blacklist.initialize();
-		Whitelist.initialize();
+		Profanity.initialize(database);
+		Blacklist.initialize(database);
+		Whitelist.initialize(database);
 		this._blacklist = new Blacklist(eithonPlugin);
 		this._blacklist.delayedLoad();
 		this._whitelist = new Whitelist(eithonPlugin, this._blacklist);
@@ -88,7 +91,7 @@ public class ProfanityFilterController {
 		return file;
 	}
 
-	public String addProfanity(CommandSender sender, String word, boolean isLiteral) {
+	public String addProfanity(CommandSender sender, String word, boolean isLiteral) throws FatalException, TryAgainException {
 		if (word.length() < profanityWordMinimumLength) {
 			Config.M.blackListWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
 			return null;
@@ -96,6 +99,7 @@ public class ProfanityFilterController {
 		Profanity profanity = this._blacklist.getProfanity(word);
 		if ((profanity != null) && word.equalsIgnoreCase(profanity.getWord())) {
 			profanity.setIsLiteral(isLiteral);
+			profanity.save();
 			return profanity.getWord();
 		}
 		if (profanity != null) {
@@ -105,7 +109,7 @@ public class ProfanityFilterController {
 		return profanity.getWord();
 	}
 
-	public String removeProfanity(CommandSender sender, String word) {
+	public String removeProfanity(CommandSender sender, String word) throws FatalException, TryAgainException {
 		if (word.length() < profanityWordMinimumLength) {
 			Config.M.blackListWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
 			return null;
@@ -129,7 +133,7 @@ public class ProfanityFilterController {
 		return Profanity.normalize(word);
 	}
 
-	public String addAccepted(CommandSender sender, String word) {
+	public String addAccepted(CommandSender sender, String word) throws FatalException, TryAgainException {
 		if (word.length() < profanityWordMinimumLength) {
 			Config.M.whitelistWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
 			return null;
@@ -152,7 +156,7 @@ public class ProfanityFilterController {
 		return null;
 	}
 
-	public String removeAccepted(CommandSender sender, String word) {
+	public String removeAccepted(CommandSender sender, String word) throws FatalException, TryAgainException {
 		if (word.length() < profanityWordMinimumLength) {
 			Config.M.whitelistWordMinimalLength.sendMessage(sender, profanityWordMinimumLength);
 			return null;

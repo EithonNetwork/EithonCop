@@ -1,9 +1,11 @@
 package net.eithon.plugin.cop.test;
 
-import static org.junit.Assert.assertEquals;
+import junit.framework.Assert;
 import net.eithon.library.mysql.Database;
-import net.eithon.plugin.cop.db.DbBlacklist;
-import net.eithon.plugin.cop.db.DbWhitelist;
+import net.eithon.plugin.cop.db.BlacklistRow;
+import net.eithon.plugin.cop.db.BlacklistTable;
+import net.eithon.plugin.cop.db.WhitelistRow;
+import net.eithon.plugin.cop.db.WhitelistTable;
 
 import org.junit.Test;
 
@@ -11,35 +13,63 @@ public class TestWhitelist {
 
 	@Test
 	public void create() {
-		String word = "a";
-		Database database = TestSupport.getDatabaseAndTruncateTables();
-		DbBlacklist blacklist = DbBlacklist.create(database, "x", false);
-		DbWhitelist whitelist = DbWhitelist.create(database, word, blacklist.getDbId());
-		assertEquals(word, whitelist.getWord());
-		assertEquals(blacklist.getDbId(), whitelist.getBlacklistId());
+		try {
+			String word = "a";
+			Database database = TestSupport.getDatabaseAndTruncateTables();
+			BlacklistTable blacklistTable = new BlacklistTable(database);
+			WhitelistTable whitelistTable = new WhitelistTable(database);
+			BlacklistRow blacklistRow = blacklistTable.create("x", false);
+			WhitelistRow whitelistRow = whitelistTable.create(word, blacklistRow.id);
+			Assert.assertEquals(word, whitelistRow.word);
+			Assert.assertEquals(blacklistRow.id, whitelistRow.blacklist_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}	
-	
+
 	@Test
 	public void getByName() {
-		String word = "a";
-		Database database = TestSupport.getDatabaseAndTruncateTables();
-		DbBlacklist blacklist = DbBlacklist.create(database, "x", false);
-		DbWhitelist whitelist = DbWhitelist.create(database, word, blacklist.getDbId());
-		whitelist = DbWhitelist.getByWord(database, word);
-		assertEquals(word, whitelist.getWord());
-		assertEquals(blacklist.getDbId(), whitelist.getBlacklistId());
+		try {
+			String word = "a";
+			Database database = TestSupport.getDatabaseAndTruncateTables();
+			BlacklistTable blacklistTable = new BlacklistTable(database);
+			WhitelistTable whitelistTable = new WhitelistTable(database);
+			BlacklistRow blacklistRow = blacklistTable.create("x", false);
+			WhitelistRow whitelistRow = whitelistTable.create(word, blacklistRow.id);
+			whitelistRow = whitelistTable.getByWord(word);
+			Assert.assertEquals(word, whitelistRow.word);
+			Assert.assertEquals(blacklistRow.id, whitelistRow.blacklist_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}	
-	
+
 	@Test
 	public void update() {
-		String word = "a";
-		Database database = TestSupport.getDatabaseAndTruncateTables();
-		DbBlacklist blacklist = DbBlacklist.create(database, "x", false);
-		DbWhitelist whitelist = DbWhitelist.create(database, word, blacklist.getDbId());
-		whitelist = DbWhitelist.getByWord(database, word);
-		whitelist.update();
-		whitelist = DbWhitelist.getByWord(database, word);
-		assertEquals(blacklist.getDbId(), whitelist.getBlacklistId());
+		try {
+			String word = "a";
+			Database database = TestSupport.getDatabaseAndTruncateTables();
+			BlacklistTable blacklistTable = new BlacklistTable(database);
+			WhitelistTable whitelistTable = new WhitelistTable(database);
+			BlacklistRow blacklistRow = blacklistTable.create("x", false);
+			Assert.assertNotNull(blacklistRow);
+			WhitelistRow whitelistRow = whitelistTable.create(word, blacklistRow.id);
+			Assert.assertNotNull(whitelistRow);
+			whitelistRow = whitelistTable.getByWord(word);
+			Assert.assertNotNull(whitelistRow);
+			word = "b";
+			whitelistRow.word = word;
+			whitelistTable.update(whitelistRow);
+			whitelistRow = whitelistTable.getByWord(word);
+			Assert.assertNotNull(whitelistRow);
+			Assert.assertEquals(blacklistRow.id, whitelistRow.blacklist_id);
+			Assert.assertEquals(word, whitelistRow.word);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 }

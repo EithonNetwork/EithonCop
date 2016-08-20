@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import net.eithon.library.core.PlayerCollection;
+import net.eithon.library.exceptions.FatalException;
+import net.eithon.library.exceptions.TryAgainException;
 import net.eithon.library.extensions.EithonPlayer;
 import net.eithon.library.extensions.EithonPlugin;
+import net.eithon.library.mysql.Database;
 import net.eithon.library.time.TimeMisc;
 import net.eithon.plugin.cop.Config;
 import net.eithon.plugin.cop.profanity.ProfanityFilterController;
@@ -25,9 +28,9 @@ public class Controller {
 	private int _repeatCount;
 	private boolean _needNewRepeat ;
 
-	public Controller(EithonPlugin eithonPlugin){
+	public Controller(EithonPlugin eithonPlugin, Database database) throws FatalException{
 		this._eithonPlugin = eithonPlugin;
-		this._profanityFilterController = new ProfanityFilterController(eithonPlugin);
+		this._profanityFilterController = new ProfanityFilterController(eithonPlugin, database);
 		this._spamController = new SpamController(eithonPlugin);
 		this._muteController = new MuteController(eithonPlugin);
 		this._frozenPlayers = new PlayerCollection<FrozenPlayer>();
@@ -38,11 +41,11 @@ public class Controller {
 		this._profanityFilterController.disable();
 	}
 
-	public String addProfanity(CommandSender sender, String word, boolean isLiteral) {
+	public String addProfanity(CommandSender sender, String word, boolean isLiteral) throws FatalException, TryAgainException {
 		return this._profanityFilterController.addProfanity(sender, word, isLiteral);
 	}
 
-	public String removeProfanity(CommandSender sender, String word) {
+	public String removeProfanity(CommandSender sender, String word) throws FatalException, TryAgainException {
 		return this._profanityFilterController.removeProfanity(sender, word);
 	}
 
@@ -50,11 +53,11 @@ public class Controller {
 		return this._profanityFilterController.normalize(word);
 	}
 
-	public String addAccepted(CommandSender sender, String word) {
+	public String addAccepted(CommandSender sender, String word) throws FatalException, TryAgainException {
 		return this._profanityFilterController.addAccepted(sender, word);
 	}
 
-	public String removeAccepted(CommandSender sender, String word) {
+	public String removeAccepted(CommandSender sender, String word) throws FatalException, TryAgainException {
 		return this._profanityFilterController.removeAccepted(sender, word);
 	}
 

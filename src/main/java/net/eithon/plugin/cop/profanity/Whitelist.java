@@ -4,20 +4,25 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import net.eithon.library.exceptions.FatalException;
+import net.eithon.library.exceptions.TryAgainException;
 import net.eithon.library.extensions.EithonPlugin;
+import net.eithon.library.mysql.Database;
 import net.eithon.library.time.TimeMisc;
-import net.eithon.plugin.cop.Config;
-import net.eithon.plugin.cop.db.DbWhitelist;
+import net.eithon.plugin.cop.db.WhitelistRow;
+import net.eithon.plugin.cop.db.WhitelistTable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
 
 class Whitelist {
+	private static WhitelistTable whitelistTable;
 	private EithonPlugin _eithonPlugin;
 	private Blacklist _blacklist;
 	private HashMap<String, Profanity> _whitelist;
 
-	static void initialize() {
+	static void initialize(Database database) throws FatalException {
+		whitelistTable = new WhitelistTable(database);
 		new Comparator<String>(){
 			public int compare(String f1, String f2)
 			{
@@ -33,10 +38,10 @@ class Whitelist {
 		this._whitelist = new HashMap<String, Profanity>();
 	}
 
-	public Profanity create(String word) {
+	public Profanity create(String word) throws FatalException, TryAgainException {
 		Profanity profanity = add(word);
 		if (profanity == null) return null;
-		DbWhitelist.create(Config.V.database, word, profanity.getDbId());
+		whitelistTable.create(word, profanity.getDbId());
 		return profanity;
 	}
 
@@ -58,11 +63,11 @@ class Whitelist {
 		return profanity;
 	}
 
-	public String remove(String word) {
+	public String remove(String word) throws FatalException, TryAgainException {
 		verbose("remove", "Enter: %s", word);
 		String normalized = Profanity.normalize(word);
 		this._whitelist.remove(normalized);
-		DbWhitelist.deleteByWord(Config.V.database, normalized);
+		whitelistTable.deleteByWord(normalized);
 		verbose("remove", "Removed: Leave %s", normalized);
 		return normalized;
 	}
@@ -78,17 +83,21 @@ class Whitelist {
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
 			public void run() {
-				load();
+				try {
+					load();
+				} catch (FatalException | TryAgainException e) {
+					e.printStackTrace();
+				}
 			}
 		}, TimeMisc.secondsToTicks(delaySeconds));		
 	}
 
-	void load() {
+	void load() throws FatalException, TryAgainException {
 		this._whitelist = new HashMap<String, Profanity>();
-		List<DbWhitelist> list = DbWhitelist.findAll(Config.V.database);
+		List<WhitelistRow> list = whitelistTable.findAll();
 		this._eithonPlugin.logInfo("Reading %d whitelisted words from DB.", list.size());
-		for (DbWhitelist item : list) {
-			String word = item.getWord();
+		for (WhitelistRow item : list) {
+			String word = item.word;
 			try {
 				add(word);
 			} catch (Exception e) {

@@ -1,6 +1,8 @@
 package net.eithon.plugin.cop;
 
+import net.eithon.library.exceptions.FatalException;
 import net.eithon.library.extensions.EithonPlugin;
+import net.eithon.library.mysql.Database;
 import net.eithon.plugin.cop.logic.Controller;
 import net.eithon.plugin.cop.CommandHandler;
 
@@ -12,7 +14,12 @@ public final class EithonCopPlugin extends EithonPlugin {
 	public void onEnable() {
 		super.onEnable();
 		Config.load(this);
-		this._controller = new Controller(this);
+		try {
+			this._controller = new Controller(this, new Database(
+					Config.V.databaseUrl, Config.V.databaseUsername, Config.V.databasePassword));
+		} catch (FatalException e) {
+			e.printStackTrace();
+		}
 		CommandHandler commandHandler = new CommandHandler(this, this._controller);
 		this._eventListener = new EventListener(this, this._controller);
 		this.logInfo("Event listener has been created");

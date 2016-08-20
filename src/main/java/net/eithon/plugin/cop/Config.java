@@ -3,8 +3,6 @@ package net.eithon.plugin.cop;
 import java.util.List;
 
 import net.eithon.library.extensions.EithonPlugin;
-import net.eithon.library.mysql.Database;
-import net.eithon.library.mysql.MySql;
 import net.eithon.library.plugin.ConfigurableCommand;
 import net.eithon.library.plugin.ConfigurableMessage;
 import net.eithon.library.plugin.Configuration;
@@ -53,7 +51,9 @@ public class Config {
 		public static int chatCoolDownAllowedTimes;
 		public static double freezeRestoreWalkSpeed;
 		public static double freezeRestoreFlySpeed;
-		public static Database database;
+		public static String databaseUrl;
+		public static String databaseUsername;
+		public static String databasePassword;
 		
 		static void load(Configuration config) {
 			profanityBuildingBlocks = config.getStringList("ProfanityBuildingBlocks").toArray(new String[0]);
@@ -93,17 +93,16 @@ public class Config {
 			// Freeze
 			freezeRestoreWalkSpeed = config.getDouble("freeze.FreezeRestoreWalkSpeed", 0.2);
 			freezeRestoreFlySpeed = config.getDouble("freeze.FreezeRestoreFlySpeed", 0.2);
-			database = getDatabase(config);
+			getDatabase(config);
 		}
 
-		private static Database getDatabase(Configuration config) {
+		private static void getDatabase(Configuration config) {
 			final String databaseHostname = config.getString("database.Hostname", null);
 			final String databasePort = config.getString("database.Port", null);
 			final String databaseName = config.getString("database.Name", null);
-			final String databaseUsername = config.getString("database.Username", null);
-			final String databasePassword = config.getString("database.Password", null);
-			return new MySql(databaseHostname, databasePort, databaseName,
-					databaseUsername, databasePassword);
+			databaseUrl = "jdbc:mysql://" + databaseHostname + ":" + databasePort + "/" + databaseName;
+			databaseUsername = config.getString("database.Username", null);
+			databasePassword = config.getString("database.Password", null);
 		}
 
 	}
