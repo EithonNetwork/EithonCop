@@ -10,27 +10,34 @@ eithon:
   #  3 = VERBOSE (all messages)
   #
   DebugLevel: 1
-
+  
 database:
-  Name: eithon_cop
-  Hostname: localhost
-  Port: 3306
-  Username: eithon_plugin
-  Password: 94SnHAGP3RV0mESN
+  Name: TST_e_cop
+  Hostname: rookgaard.eithon.net
+  Port: 3307
+  Username: TST_e_plugin
+  Password: u26WuNDKXsBU8y8f
 
 # TST
 #  Name: TST_e_cop
-#  Hostname: rookgard.eithon.net
+#  Hostname: rookgaard.eithon.net
 #  Port: 3307
 #  Username: TST_e_plugin
-#  Password: bWfRHZsAy42RdFBJ
+#  Password: u26WuNDKXsBU8y8f
 
 # DEV
 #  Name: DEV_e_cop
-#  Hostname: rookgard.eithon.net
+#  Hostname: rookgaard.eithon.net
 #  Port: 3307
 #  Username: DEV_e_plugin
 #  Password: J5FE9EFCD1GX8tjg
+
+# PRD
+#  Name: eithon_cop
+#  Hostname: localhost
+#  Port: 3306
+#  Username: eithon_plugin
+#  Password: 94SnHAGP3RV0mESN
 
 #
 # How tough should we be at stopping profanity?
