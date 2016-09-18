@@ -1,9 +1,12 @@
 package net.eithon.plugin.cop.test;
 
 import static org.junit.Assert.assertEquals;
+import junit.framework.Assert;
 import net.eithon.library.mysql.Database;
-import net.eithon.plugin.cop.db.DbBlacklist;
-import net.eithon.plugin.cop.db.DbSimilar;
+import net.eithon.plugin.cop.db.BlacklistRow;
+import net.eithon.plugin.cop.db.BlacklistTable;
+import net.eithon.plugin.cop.db.SimilarRow;
+import net.eithon.plugin.cop.db.SimilarTable;
 
 import org.junit.Test;
 
@@ -11,42 +14,64 @@ public class TestSimilar {
 
 	@Test
 	public void create() {
-		String word = "a";
-		boolean isVerified = false;
-		Database database = TestSupport.getDatabaseAndTruncateTables();
-		DbBlacklist blacklist = DbBlacklist.create(database, "x", false);
-		DbSimilar similar = DbSimilar.create(database, word, blacklist.getDbId(), isVerified);
-		assertEquals(word, similar.getWord());
-		assertEquals(blacklist.getDbId(), similar.getBlacklistId());
-		assertEquals(isVerified, similar.getIsVerified());
+		try {
+			String word = "a";
+			boolean isVerified = false;
+			Database database = TestSupport.getDatabaseAndTruncateTables();
+			BlacklistTable blacklistTable = new BlacklistTable(database);
+			SimilarTable similarTable = new SimilarTable(database);
+			BlacklistRow blacklistRow = blacklistTable.create("x", false);
+			SimilarRow similar = similarTable.create(word, blacklistRow.id, isVerified);
+			assertEquals(word, similar.word);
+			assertEquals(blacklistRow.id, similar.blacklist_id);
+			assertEquals(isVerified, similar.is_verified);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}	
-	
+
 	@Test
 	public void getByName() {
-		String word = "a";
-		boolean isVerified = false;
-		Database database = TestSupport.getDatabaseAndTruncateTables();
-		DbBlacklist blacklist = DbBlacklist.create(database, "x", false);
-		DbSimilar similar = DbSimilar.create(database, word, blacklist.getDbId(), isVerified);
-		similar = DbSimilar.getByWord(database, word);
-		assertEquals(word, similar.getWord());
-		assertEquals(blacklist.getDbId(), similar.getBlacklistId());
-		assertEquals(isVerified, similar.getIsVerified());
+		try {
+			String word = "a";
+			boolean isVerified = false;
+			Database database = TestSupport.getDatabaseAndTruncateTables();
+			BlacklistTable blacklistTable = new BlacklistTable(database);
+			SimilarTable similarTable = new SimilarTable(database);
+			BlacklistRow blacklistRow = blacklistTable.create("x", false);
+			SimilarRow similarRow = similarTable.create(word, blacklistRow.id, isVerified);
+			similarRow = similarTable.getByWord(word);
+			assertEquals(word, similarRow.word);
+			assertEquals(blacklistRow.id, similarRow.blacklist_id);
+			assertEquals(isVerified, similarRow.is_verified);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}	
-	
+
 	@Test
 	public void update() {
-		String word = "a";
-		boolean isVerified = false;
-		Database database = TestSupport.getDatabaseAndTruncateTables();
-		DbBlacklist blacklist = DbBlacklist.create(database, "x", false);
-		DbSimilar similar = DbSimilar.create(database, word, blacklist.getDbId(), isVerified);
-		similar = DbSimilar.getByWord(database, word);
-		isVerified = !isVerified;
-		similar.update(isVerified);
-		similar = DbSimilar.getByWord(database, word);
-		assertEquals(blacklist.getDbId(), similar.getBlacklistId());
-		assertEquals(isVerified, similar.getIsVerified());
+		try {
+			String word = "a";
+			boolean isVerified = false;
+			Database database = TestSupport.getDatabaseAndTruncateTables();
+			BlacklistTable blacklistTable = new BlacklistTable(database);
+			SimilarTable similarTable = new SimilarTable(database);
+			BlacklistRow blacklistRow = blacklistTable.create("x", false);
+			SimilarRow similarRow = similarTable.create(word, blacklistRow.id, isVerified);
+			similarRow = similarTable.getByWord(word);
+			isVerified = !isVerified;
+			similarRow.is_verified = isVerified;
+			similarTable.update(similarRow);
+			similarRow = similarTable.getByWord(word);
+			assertEquals(blacklistRow.id, similarRow.blacklist_id);
+			assertEquals(isVerified, similarRow.is_verified);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Assert.fail();
+		}
 	}
 
 }

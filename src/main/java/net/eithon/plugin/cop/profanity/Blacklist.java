@@ -6,12 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 
 import net.eithon.library.core.CoreMisc;
+import net.eithon.library.exceptions.FatalException;
+import net.eithon.library.exceptions.TryAgainException;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.file.FileMisc;
+import net.eithon.library.mysql.Database;
 import net.eithon.library.time.CoolDown;
 import net.eithon.plugin.cop.Config;
-import net.eithon.plugin.cop.db.DbBlacklist;
-import net.eithon.plugin.cop.db.DbSimilar;
+import net.eithon.plugin.cop.db.BlacklistRow;
+import net.eithon.plugin.cop.db.BlacklistTable;
+import net.eithon.plugin.cop.db.SimilarTable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -25,8 +29,12 @@ class Blacklist {
 	private CoolDown _offenders;
 
 	private static Metaphone3 metaphone3;
+	private static SimilarTable similarTable;
+	private static BlacklistTable blacklistTable;
 
-	static void initialize() {
+	static void initialize(Database database) throws FatalException {
+		similarTable = new SimilarTable(database);
+		blacklistTable = new BlacklistTable(database);
 		metaphone3 = new Metaphone3();
 		metaphone3.SetEncodeVowels(true);
 		metaphone3.SetEncodeExact(true);
@@ -41,13 +49,13 @@ class Blacklist {
 		this._offenders = new CoolDown("BlacklistNotedOffenders", Config.V.profanityOffenderCooldownInSeconds);
 	}
 
-	Profanity add(String word, boolean isLiteral) {
+	Profanity add(String word, boolean isLiteral) throws FatalException, TryAgainException {
 		Profanity profanity = Profanity.create(word, isLiteral);
 		add(profanity);
 		return profanity;
 	}
 
-	Profanity remove(String word) {
+	Profanity remove(String word) throws FatalException, TryAgainException {
 		Profanity profanity = getProfanity(word);
 		if ((profanity == null) || !profanity.isSameWord(word)) {
 			this._eithonPlugin.logWarn("Blacklist.add: Trying to remove a word that isn't blacklisted: \"%s\".", word);
@@ -108,13 +116,17 @@ class Blacklist {
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
 			public void run() {
-				saveSimilar(similarWord, profanity);
+				try {
+					saveSimilar(similarWord, profanity);
+				} catch (FatalException | TryAgainException e) {
+					e.printStackTrace();
+				}
 			}
 		});	
 	}
 
-	void saveSimilar(String similarWord, Profanity profanity) {
-		DbSimilar.create(Config.V.database, similarWord, profanity.getDbId());
+	void saveSimilar(String similarWord, Profanity profanity) throws FatalException, TryAgainException {
+		similarTable.create(similarWord, profanity.getDbId(), false);
 	}
 
 	private String markSimilar(String originalWord) {
@@ -229,17 +241,21 @@ class Blacklist {
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
 		scheduler.scheduleSyncDelayedTask(this._eithonPlugin, new Runnable() {
 			public void run() {
-				load();
+				try {
+					load();
+				} catch (FatalException | TryAgainException e) {
+					e.printStackTrace();
+				}
 			}
 		});		
 	}
 
-	void load() {
+	void load() throws FatalException, TryAgainException {
 		this._wordList = new HashMap<String, Profanity>();
-		List<DbBlacklist> list = DbBlacklist.findAll(Config.V.database);
+		List<BlacklistRow> list = blacklistTable.findAll();
 		this._eithonPlugin.logInfo("Reading %d profanities from blacklist DB.", list.size());
 		this._metaphoneList = new HashMap<String, Profanity>();
-		for (DbBlacklist dbBlacklist : list) {
+		for (BlacklistRow dbBlacklist : list) {
 			Profanity profanity = null;
 			try {
 				profanity = Profanity.getFromRecord(dbBlacklist);

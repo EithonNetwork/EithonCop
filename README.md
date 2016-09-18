@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 2.3 (2016-08-20)
+
+* CHANGE: Refactored the DB parts.
+
 ### 2.2 (2016-06-30)
 
 * CHANGE: Minecraft 1.10

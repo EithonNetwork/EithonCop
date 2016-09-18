@@ -6,6 +6,8 @@ import net.eithon.library.command.EithonCommandUtilities;
 import net.eithon.library.command.CommandSyntaxException;
 import net.eithon.library.command.EithonCommand;
 import net.eithon.library.command.ICommandSyntax;
+import net.eithon.library.exceptions.FatalException;
+import net.eithon.library.exceptions.TryAgainException;
 import net.eithon.library.extensions.EithonPlayer;
 import net.eithon.library.extensions.EithonPlugin;
 import net.eithon.library.time.TimeMisc;
@@ -151,7 +153,7 @@ public class CommandHandler {
 		return this._controller.getFrozenPlayerNames();
 	}
 
-	void blacklistAddCommand(EithonCommand command)
+	void blacklistAddCommand(EithonCommand command) throws FatalException, TryAgainException
 	{
 		String profanity = command.getArgument("profanity").asLowerCase();
 		if (profanity == null) return;
@@ -164,7 +166,7 @@ public class CommandHandler {
 		Config.M.profanityAdded.sendMessage(sender, word);
 	}
 
-	void blacklistRemoveCommand(EithonCommand command)
+	void blacklistRemoveCommand(EithonCommand command) throws FatalException, TryAgainException
 	{
 		String profanity = command.getArgument("profanity").asLowerCase();
 		if (profanity == null) return;
@@ -176,7 +178,7 @@ public class CommandHandler {
 		Config.M.profanityRemoved.sendMessage(sender, word);
 	}
 
-	void whitelistAddCommand(EithonCommand command)
+	void whitelistAddCommand(EithonCommand command) throws FatalException, TryAgainException
 	{
 		String acceptedWord = command.getArgument("accepted-word").asLowerCase();
 		if (acceptedWord == null) return;
@@ -191,7 +193,7 @@ public class CommandHandler {
 	}
 
 
-	void whitelistRemoveCommand(EithonCommand command)
+	void whitelistRemoveCommand(EithonCommand command) throws FatalException, TryAgainException
 	{
 		String acceptedWord = command.getArgument("accepted-word").asLowerCase();
 		if (acceptedWord == null) return;
