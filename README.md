@@ -4,6 +4,10 @@ A Cop plugin for Minecraft.
 
 ## Release history
 
+### 2.4 (2016-12-29)
+
+* CHANGE: Bukkit 1.11.
+
 ### 2.3 (2016-08-20)
 
 * CHANGE: Refactored the DB parts.
